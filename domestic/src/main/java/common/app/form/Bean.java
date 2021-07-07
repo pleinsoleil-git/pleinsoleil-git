@@ -1,4 +1,4 @@
 package common.app.form;
 
-public class Bean implements common.app.Bean {
+public interface Bean extends common.app.Bean {
 }
