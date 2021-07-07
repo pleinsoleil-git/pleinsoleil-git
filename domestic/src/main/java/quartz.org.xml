@@ -9,12 +9,11 @@
 			<job-class>a00100.app.job.a00100.crawl.rakuten.Action</job-class>
 		</job>
 		<trigger>
-			<simple>
+			<cron>
 				<name>test</name>
 				<job-name>test</job-name>
-				<repeat-count>0</repeat-count>
-				<repeat-interval>2000</repeat-interval>
-			</simple>
+				<cron-expression>0/1 * * * * ?</cron-expression>
+			</cron>
 		</trigger>
 	</schedule>
 </job-scheduling-data>
