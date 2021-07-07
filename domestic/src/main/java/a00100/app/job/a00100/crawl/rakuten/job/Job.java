@@ -23,7 +23,7 @@ public class Job {
 	}
 
 	public void execute() throws Exception {
-		try (val browser = WebBrowser.getInstance()) {
+		try {
 			for (val r : query()) {
 				(m_current = r).execute();
 			}
@@ -50,7 +50,9 @@ public class Job {
 		String m_webDriver;
 
 		void execute() throws Exception {
-			request();
+			try (val browser = WebBrowser.getInstance()) {
+				request();
+			}
 		}
 
 		void request() throws Exception {
