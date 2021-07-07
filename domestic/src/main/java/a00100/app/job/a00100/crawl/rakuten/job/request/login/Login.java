@@ -1,5 +1,7 @@
 package a00100.app.job.a00100.crawl.rakuten.job.request.login;
 
+import org.openqa.selenium.By;
+
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -45,6 +47,58 @@ public class Login extends WebClient {
 		public void navigate() throws Exception {
 			val driver = getWebDriver();
 			driver.get("https://travel.rakuten.co.jp/");
+		}
+
+		@Override
+		public WebClient submit() throws Exception {
+			pushLogin();
+			return new _00100();
+		}
+
+		void pushLogin() throws Exception {
+			val driver = getWebDriver();
+			val by = By.xpath("//a[contains(text(),'ログイン')]");
+
+			for (val element : driver.findElements(by)) {
+				element.click();
+				break;
+			}
+		}
+	}
+
+	static class _00100 extends _Current {
+		@Override
+		public WebClient submit() throws Exception {
+			setUserId();
+			setPassword();
+			pushLogin();
+			return null;
+		}
+
+		void setUserId() throws Exception {
+			val driver = getWebDriver();
+			val by = By.name("u");
+			val element = driver.findElement(by);
+
+			element.clear();
+			element.sendKeys("money.hideki.nakayama@gmail.com");
+		}
+
+		void setPassword() throws Exception {
+			val driver = getWebDriver();
+			val by = By.name("p");
+			val element = driver.findElement(by);
+
+			element.clear();
+			element.sendKeys("123Qwe@asd");
+		}
+
+		void pushLogin() throws Exception {
+			val driver = getWebDriver();
+			val by = By.xpath("//input[@type='submit' and contains(@value,'ログイン')]");
+			val element = driver.findElement(by);
+
+			element.click();
 		}
 	}
 }

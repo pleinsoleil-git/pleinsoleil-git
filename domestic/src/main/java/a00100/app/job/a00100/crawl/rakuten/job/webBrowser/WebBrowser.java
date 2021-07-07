@@ -93,7 +93,7 @@ public class WebBrowser implements AutoCloseable {
 		public void close() throws Exception {
 			if (m_webDriver != null) {
 				log.debug("Browser close!!");
-				m_webDriver.quit();
+				//m_webDriver.quit();
 			}
 
 			try (val x = new TempDirectory(m_directory)) {
