@@ -3,6 +3,7 @@ package a00100.app.job.a00100.crawl.rakuten.job;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import a00100.app.job.a00100.crawl.rakuten.job.request.Request;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -35,6 +36,11 @@ public class Job {
 
 	public static class _Current {
 		void execute() throws Exception {
+			request();
+		}
+
+		void request() throws Exception {
+			Request.getInstance().execute();
 		}
 	}
 }
