@@ -20,13 +20,13 @@ public class App {
 		m_model = model;
 	}
 
-	void initInstance() {
+	public void initInstance() {
 		log.debug("Init instance");
 
 		m_instances.set(this);
 	}
 
-	void exitInstance() {
+	public void exitInstance() {
 		log.debug("Exit instance");
 
 		try {
