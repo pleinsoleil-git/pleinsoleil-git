@@ -74,6 +74,11 @@ class Plan extends WebClient {
 		String m_planCode;
 		String m_roomCode;
 		String m_roomName;
+		String m_roomInfo;
+		String m_roomRemark;
+		String m_roomMeal;
+		String m_roomPeople;
+		String m_roomPayment;
 		WebElement m_element;
 
 		String getHotelCode() throws Exception {
@@ -108,8 +113,7 @@ class Plan extends WebClient {
 
 		String getRoomName() throws Exception {
 			if (m_roomName == null) {
-				//				val by = By.xpath("form/dl[@class='htlPlnTypDtl']");
-				val by = By.xpath("*[@data-locate='htlPlnRmTypInfo']/dl/dd/h6[@data-locate='roomType-name']");
+				val by = By.xpath("//*[@data-locate='roomType-name']");
 				val element = m_element.findElement(by);
 				m_roomName = element.getText();
 			}
@@ -117,9 +121,59 @@ class Plan extends WebClient {
 			return m_roomName;
 		}
 
+		String getRoomInfo() throws Exception {
+			if (m_roomInfo == null) {
+				val by = By.xpath("//*[@data-locate='roomType-Info']");
+				val element = m_element.findElement(by);
+				m_roomInfo = element.getText();
+			}
+
+			return m_roomInfo;
+		}
+
+		String getRoomRemark() throws Exception {
+			if (m_roomRemark == null) {
+				val by = By.xpath("//*[@data-locate='roomType-Remark']");
+				val element = m_element.findElement(by);
+				m_roomRemark = element.getText();
+			}
+
+			return m_roomRemark;
+		}
+
+		String getRoomMeal() throws Exception {
+			if (m_roomMeal == null) {
+				val by = By.xpath("//*[@data-locate='roomType-option-meal']");
+				val element = m_element.findElement(by);
+				m_roomMeal = element.getText();
+			}
+
+			return m_roomMeal;
+		}
+
+		String getRoomPeople() throws Exception {
+			if (m_roomPeople == null) {
+				val by = By.xpath("//*[@data-locate='roomType-option-people']");
+				val element = m_element.findElement(by);
+				m_roomPeople = element.getText();
+			}
+
+			return m_roomPeople;
+		}
+
+		String getRoomPayment() throws Exception {
+			if (m_roomPayment == null) {
+				val by = By.xpath("//*[@data-locate='roomType-option-payment']");
+				val element = m_element.findElement(by);
+				m_roomPayment = element.getText();
+			}
+
+			return m_roomPayment;
+		}
+
 		@Override
 		public WebClient submit() throws Exception {
-			log.info(getRoomName());
+			log.info(getRoomPayment());
 			return null;
 		}
 	}
