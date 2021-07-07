@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import a00100.app.job.a00100.crawl.rakuten.job.Job;
+import common.io.TempDirectory;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -90,6 +91,13 @@ public class WebBrowser implements AutoCloseable {
 
 		@Override
 		public void close() throws Exception {
+			if (m_webDriver != null) {
+				log.debug("Browser close!!");
+				m_webDriver.quit();
+			}
+
+			try (val x = new TempDirectory(m_directory)) {
+			}
 		}
 	}
 }
