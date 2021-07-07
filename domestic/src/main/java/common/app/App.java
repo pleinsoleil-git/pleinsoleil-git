@@ -21,4 +21,21 @@ public class App {
 		m_bean = bean;
 		m_model = model;
 	}
+
+	void initInstance() throws Exception {
+		log.debug("Init instance");
+
+		m_instances.set(this);
+	}
+
+	void exitInstance() {
+		log.debug("Exit instance");
+
+		try {
+		} catch (Exception e) {
+			log.error("", e);
+		} finally {
+			m_instances.remove();
+		}
+	}
 }

@@ -12,5 +12,16 @@ public class Job implements org.quartz.Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					m_app.initInstance();
+				} catch (Exception e) {
+				} finally {
+					m_app.exitInstance();
+				}
+			}
+		}.start();
 	}
 }
