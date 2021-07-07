@@ -60,6 +60,8 @@ class Plan extends WebClient {
 							m_element = element;
 						}
 					});
+
+				break;
 				}
 			}
 		};
@@ -102,16 +104,6 @@ class Plan extends WebClient {
 			}
 
 			return m_roomCode;
-		}
-
-		@Override
-		public WebClient execute() throws Exception {
-			System.out.println("====================================");
-
-			System.out.println(getHotelCode());
-			System.out.println(getPlanCode());
-			System.out.println(getRoomCode());
-			return super.execute();
 		}
 	}
 }
