@@ -30,8 +30,8 @@ public class Login extends WebClient {
 
 	public WebClient execute() throws Exception {
 		try {
-			for (WebClient client = new _00000(); client != null;) {
-				client = client.execute();
+			for (m_current = new _00000(); m_current != null;) {
+				m_current = (_Current) m_current.execute();
 			}
 
 			return Query.getInstance();
