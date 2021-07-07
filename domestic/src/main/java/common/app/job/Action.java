@@ -25,6 +25,7 @@ public class Action implements Job {
 			public void run() {
 				try {
 					m_app.initInstance();
+					((Model) m_app.getModel()).execute();
 				} catch (Exception e) {
 					printError(e);
 				} finally {

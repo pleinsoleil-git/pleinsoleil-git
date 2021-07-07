@@ -45,6 +45,7 @@ public class Action extends ActionSupport implements Parameterizable {
 	@Override
 	public void validate() {
 		try {
+			((Model) m_app.getModel()).validate();
 		} catch (Exception e) {
 			addActionError(e.getMessage());
 			printError(e);
@@ -58,6 +59,7 @@ public class Action extends ActionSupport implements Parameterizable {
 	@Override
 	public String execute() {
 		try {
+			return ((Model) m_app.getModel()).execute();
 		} catch (Exception e) {
 			addActionError(e.getMessage());
 			printError(e);

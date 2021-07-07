@@ -20,6 +20,10 @@ public class App {
 		m_model = model;
 	}
 
+	public static App getInstance() {
+		return m_instances.get();
+	}
+
 	public void initInstance() {
 		log.debug("Init instance");
 
