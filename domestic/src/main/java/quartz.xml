@@ -8,5 +8,13 @@
 			<name>test</name>
 			<job-class>a00100.job.Job</job-class>
 		</job>
+		<trigger>
+			<simple>
+				<name>test</name>
+				<job-name>test</job-name>
+				<repeat-count>0</repeat-count>
+				<repeat-interval>2000</repeat-interval>
+			</simple>
+		</trigger>
 	</schedule>
 </job-scheduling-data>
