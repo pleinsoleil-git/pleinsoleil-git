@@ -1,4 +1,4 @@
-package common.app.controller;
+package common.app;
 
 public interface Controller {
 }

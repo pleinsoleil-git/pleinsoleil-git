@@ -1,4 +1,4 @@
-package common.app.model;
+package common.app;
 
 public interface Model {
 }

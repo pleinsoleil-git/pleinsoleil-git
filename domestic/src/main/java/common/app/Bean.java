@@ -1,4 +1,4 @@
-package common.app.bean;
+package common.app;
 
 public interface Bean {
 }

@@ -1,7 +1,5 @@
 package common.app;
 
-import common.app.bean.Bean;
-import common.app.model.Model;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
 package common.app.job.controller;
 
-public class Controller implements common.app.controller.Controller {
+public class Controller implements common.app.Controller {
 }
