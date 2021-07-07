@@ -13,11 +13,11 @@ import common.app.App;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Form extends ActionSupport implements Parameterizable {
+public class Action extends ActionSupport implements Parameterizable {
 	final App m_app;
 	Map<String, String> m_params;
 
-	public Form(final App app) {
+	public Action(final App app) {
 		m_app = app;
 	}
 
