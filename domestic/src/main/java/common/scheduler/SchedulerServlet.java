@@ -3,12 +3,24 @@ package common.scheduler;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import lombok.extern.slf4j.Slf4j;
+import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.simpl.CascadingClassLoadHelper;
+import org.quartz.xml.XMLSchedulingDataProcessor;
 
-@Slf4j
+import lombok.val;
+
 public class SchedulerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
-System.out.println("@@@@@@@@@@@@@@@@@@@");
+		try {
+			val l = new CascadingClassLoadHelper();
+			val s = StdSchedulerFactory.getDefaultScheduler();
+			val p = new XMLSchedulingDataProcessor(l);
+
+			p.processFileAndScheduleJobs("quartz.xml", s);
+			s.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
