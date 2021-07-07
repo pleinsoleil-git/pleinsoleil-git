@@ -13,9 +13,11 @@ public class SchedulerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		try {
-			val l = new CascadingClassLoadHelper();
+			val h = new CascadingClassLoadHelper();
+			h.initialize();
+
 			val s = StdSchedulerFactory.getDefaultScheduler();
-			val p = new XMLSchedulingDataProcessor(l);
+			val p = new XMLSchedulingDataProcessor(h);
 
 			p.processFileAndScheduleJobs("quartz.xml", s);
 			s.start();
