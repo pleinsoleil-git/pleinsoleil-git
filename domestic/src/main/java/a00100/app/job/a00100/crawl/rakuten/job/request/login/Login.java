@@ -2,7 +2,7 @@ package a00100.app.job.a00100.crawl.rakuten.job.request.login;
 
 import org.openqa.selenium.By;
 
-import a00100.app.job.a00100.crawl.rakuten.job.request.hotel.Hotel;
+import a00100.app.job.a00100.crawl.rakuten.job.request.query.Query;
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -34,7 +34,7 @@ public class Login extends WebClient {
 				client = client.execute();
 			}
 
-			return Hotel.getInstance();
+			return Query.getInstance();
 		} finally {
 			m_instances.remove();
 		}
