@@ -8,7 +8,9 @@ import org.quartz.simpl.CascadingClassLoadHelper;
 import org.quartz.xml.XMLSchedulingDataProcessor;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SchedulerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
@@ -22,7 +24,7 @@ public class SchedulerServlet extends HttpServlet {
 			p.processFileAndScheduleJobs("quartz.xml", s);
 			s.start();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("", e);
 		}
 	}
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level [%thread] %logger{100} : %line %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="SYSTEM" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/domestic.system.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/archive/domestic.system-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{100} : %line %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="common" level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="SYSTEM" />
+	</logger>
+
+</configuration>
