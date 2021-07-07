@@ -1,5 +1,5 @@
 package common.app.job;
 
-public interface Model extends common.app.Model {
-	public void execute() throws Exception;
+public abstract class Model implements common.app.Model {
+	public abstract void execute() throws Exception;
 }

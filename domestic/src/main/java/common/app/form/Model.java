@@ -1,5 +1,10 @@
 package common.app.form;
 
-public interface Model extends common.app.Model {
-	public void execute() throws Exception;
+public class Model implements common.app.Model {
+	public void validate() throws Exception {
+	}
+
+	public String execute() throws Exception {
+		return Action.SUCCESS;
+	}
 }
