@@ -4,20 +4,31 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss} %-5level [%thread] %logger{100} : %line %msg%n</pattern>
+			<charset>UTF-8</charset>
+			<pattern>%-30(%d{HH:mm:ss} [%thread]) %-5level %logger{100} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
 	<appender name="SYSTEM" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${catalina.home}/logs/domestic.system.log</file>
+		<file>${catalina.home}/logs/travel5#ras.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${catalina.home}/logs/archive/domestic.system-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- daily rollover -->
+			<fileNamePattern>${catalina.home}/logs/archive/travel5#ras.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- keep 30 days' worth of history capped at 10MB total size -->
 			<maxHistory>30</maxHistory>
+			<totalSizeCap>10MB</totalSizeCap>
 		</rollingPolicy>
 		<encoder>
+			<charset>UTF-8</charset>
 			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{100} : %line %msg%n</pattern>
 		</encoder>
 	</appender>
+
+	<logger name="org.quartz" level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="SYSTEM" />
+	</logger>
 
 	<logger name="common" level="DEBUG">
 		<appender-ref ref="STDOUT" />
