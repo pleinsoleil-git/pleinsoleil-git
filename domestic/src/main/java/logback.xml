@@ -19,7 +19,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="common" level="INFO">
+	<logger name="common" level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SYSTEM" />
 	</logger>
