@@ -1,4 +1,4 @@
-package common.app;
+package common.app.job;
 
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import common.app.App;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
