@@ -10,10 +10,10 @@ import common.app.App;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Job implements org.quartz.Job {
+public class Action implements org.quartz.Job {
 	final App m_app;
 
-	public Job(final App app) {
+	public Action(final App app) {
 		m_app = app;
 	}
 
