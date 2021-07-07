@@ -1,4 +1,4 @@
-package common.app;
+package common.app.form;
 
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
@@ -9,6 +9,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.config.entities.Parameterizable;
 import com.opensymphony.xwork2.inject.Container;
 
+import common.app.App;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
