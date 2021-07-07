@@ -69,22 +69,48 @@ class Plan extends WebClient {
 	}
 
 	static class _00000 extends _Current {
-		String m_hotelNo;
+		String m_hotelCode;
+		String m_planCode;
+		String m_roomCode;
 		WebElement m_element;
 
-		String getHotelNo() throws Exception {
-			if (m_hotelNo == null) {
+		String getHotelCode() throws Exception {
+			if (m_hotelCode == null) {
 				val by = By.name("f_no");
 				val element = m_element.findElement(by);
-				m_hotelNo = element.getAttribute(Attributes.VALUE);
+				m_hotelCode = element.getAttribute(Attributes.VALUE);
 			}
 
-			return m_hotelNo;
+			return m_hotelCode;
+		}
+
+		String getPlanCode() throws Exception {
+			if (m_planCode == null) {
+				val by = By.name("f_camp_id");
+				val element = m_element.findElement(by);
+				m_planCode = element.getAttribute(Attributes.VALUE);
+			}
+
+			return m_planCode;
+		}
+
+		String getRoomCode() throws Exception {
+			if (m_roomCode == null) {
+				val by = By.name("f_syu");
+				val element = m_element.findElement(by);
+				m_roomCode = element.getAttribute(Attributes.VALUE);
+			}
+
+			return m_roomCode;
 		}
 
 		@Override
 		public WebClient execute() throws Exception {
-			System.out.println(getHotelNo());
+			System.out.println("====================================");
+
+			System.out.println(getHotelCode());
+			System.out.println(getPlanCode());
+			System.out.println(getRoomCode());
 			return super.execute();
 		}
 	}
