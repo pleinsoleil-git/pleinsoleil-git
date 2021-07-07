@@ -1,4 +1,7 @@
 package common.app;
 
-public interface Model {
+public class Model {
+	public static Model getInstance() {
+		return App.getInstance().getModel();
+	}
 }

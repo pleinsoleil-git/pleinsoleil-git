@@ -1,6 +1,6 @@
 package common.app.form;
 
-public class Model implements common.app.Model {
+public class Model extends common.app.Model {
 	public void validate() throws Exception {
 	}
 
