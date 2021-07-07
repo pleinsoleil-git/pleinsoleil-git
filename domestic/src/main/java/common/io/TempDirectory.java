@@ -23,7 +23,11 @@ public class TempDirectory implements AutoCloseable {
 		return new TempDirectory(Files.createTempDirectory(prefix).toFile());
 	}
 
-	File attach(final File dir) {
+	public File get() {
+		return m_dir;
+	}
+
+	public File attach(final File dir) {
 		try {
 			return m_dir;
 		} finally {
@@ -31,7 +35,7 @@ public class TempDirectory implements AutoCloseable {
 		}
 	}
 
-	File detach() {
+	public File detach() {
 		return attach(null);
 	}
 
