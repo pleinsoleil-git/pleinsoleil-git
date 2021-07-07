@@ -22,7 +22,7 @@ public class App {
 		m_model = model;
 	}
 
-	void initInstance() throws Exception {
+	void initInstance() {
 		log.debug("Init instance");
 
 		m_instances.set(this);
