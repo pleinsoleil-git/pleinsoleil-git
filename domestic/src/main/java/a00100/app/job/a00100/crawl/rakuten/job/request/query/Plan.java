@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.Attributes;
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -61,7 +60,7 @@ class Plan extends WebClient {
 						}
 					});
 
-				break;
+					break;
 				}
 			}
 		};
@@ -74,13 +73,14 @@ class Plan extends WebClient {
 		String m_hotelCode;
 		String m_planCode;
 		String m_roomCode;
+		String m_roomName;
 		WebElement m_element;
 
 		String getHotelCode() throws Exception {
 			if (m_hotelCode == null) {
 				val by = By.name("f_no");
 				val element = m_element.findElement(by);
-				m_hotelCode = element.getAttribute(Attributes.VALUE);
+				m_hotelCode = element.getAttribute("value");
 			}
 
 			return m_hotelCode;
@@ -90,7 +90,7 @@ class Plan extends WebClient {
 			if (m_planCode == null) {
 				val by = By.name("f_camp_id");
 				val element = m_element.findElement(by);
-				m_planCode = element.getAttribute(Attributes.VALUE);
+				m_planCode = element.getAttribute("value");
 			}
 
 			return m_planCode;
@@ -100,10 +100,27 @@ class Plan extends WebClient {
 			if (m_roomCode == null) {
 				val by = By.name("f_syu");
 				val element = m_element.findElement(by);
-				m_roomCode = element.getAttribute(Attributes.VALUE);
+				m_roomCode = element.getAttribute("value");
 			}
 
 			return m_roomCode;
+		}
+
+		String getRoomName() throws Exception {
+			if (m_roomName == null) {
+				//				val by = By.xpath("form/dl[@class='htlPlnTypDtl']");
+				val by = By.xpath("*[@data-locate='htlPlnRmTypInfo']/dl/dd/h6[@data-locate='roomType-name']");
+				val element = m_element.findElement(by);
+				m_roomName = element.getText();
+			}
+
+			return m_roomName;
+		}
+
+		@Override
+		public WebClient submit() throws Exception {
+			log.info(getRoomName());
+			return null;
 		}
 	}
 }
