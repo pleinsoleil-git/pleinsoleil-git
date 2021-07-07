@@ -1,6 +1,18 @@
 package a00100.app.job.a00100.crawl.rakuten.job.webBrowser;
 
+import java.io.File;
+
+import org.openqa.selenium.WebDriver;
+
 public class WebClient {
+	public WebDriver getWebDriver() throws Exception {
+		return WebBrowser.getCurrent().getWebDriver();
+	}
+
+	public File getDownloadDirectory() throws Exception {
+		return WebBrowser.getCurrent().getDownloadDirectory();
+	}
+
 	public WebClient execute() throws Exception {
 		navigate();
 		return submit();
