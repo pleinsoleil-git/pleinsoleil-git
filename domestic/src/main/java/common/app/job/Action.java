@@ -3,6 +3,7 @@ package common.app.job;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 
+import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -10,7 +11,7 @@ import common.app.App;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Action implements org.quartz.Job {
+public class Action implements Job {
 	final App m_app;
 
 	public Action(final App app) {
