@@ -10,9 +10,9 @@
 	</appender>
 
 	<appender name="SYSTEM" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${catalina.home}/logs/travel5#ras.log</file>
+		<file>${catalina.home}/logs/domestic.system.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${catalina.home}/logs/archive/domestic.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>${catalina.home}/logs/archive/domestic.system.%d{yyyy-MM-dd}.log</fileNamePattern>
 
 			<maxHistory>30</maxHistory>
 			<totalSizeCap>10MB</totalSizeCap>
