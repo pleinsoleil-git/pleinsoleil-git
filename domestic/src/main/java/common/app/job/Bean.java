@@ -1,4 +1,4 @@
-package common.app.job.bean;
+package common.app.job;
 
 public class Bean implements common.app.Bean {
 }
