@@ -35,7 +35,7 @@ public class Query extends WebClient {
 				m_current = (_Current) m_current.execute();
 			}
 
-			return null;
+			return Plan.getInstance();
 		} finally {
 			m_instances.remove();
 		}

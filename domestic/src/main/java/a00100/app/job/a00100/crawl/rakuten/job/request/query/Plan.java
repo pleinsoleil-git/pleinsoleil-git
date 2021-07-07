@@ -16,11 +16,11 @@ class Plan extends WebClient {
 	Plan() {
 	}
 
-	public static Plan getInstance() {
+	static Plan getInstance() {
 		return m_instances.get();
 	}
 
-	public static _Current getCurrent() {
+	static _Current getCurrent() {
 		return getInstance().m_current;
 	}
 
@@ -36,7 +36,7 @@ class Plan extends WebClient {
 		}
 	}
 
-	public static class _Current extends WebClient {
+	static class _Current extends WebClient {
 	}
 
 	static class _00000 extends _Current {
