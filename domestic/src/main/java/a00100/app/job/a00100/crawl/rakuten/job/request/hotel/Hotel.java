@@ -57,6 +57,7 @@ public class Hotel extends WebClient {
 			setCheckin();
 			setCheckout();
 			setRoom();
+			pushQuery();
 			return null;
 		}
 
@@ -98,7 +99,7 @@ public class Hotel extends WebClient {
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
 			element.sendKeys(Keys.DELETE);
-			element.sendKeys("2021/08/10");
+			element.sendKeys("2021/08/04");
 		}
 
 		void setRoom() throws Exception {
@@ -109,40 +110,15 @@ public class Hotel extends WebClient {
 			val by = By.id("dh-room");
 			val element = new Select(driver.findElement(by));
 
-			element.selectByValue("2");
-		}
-	}
-
-	static class _00100 extends _Current {
-		@Override
-		public WebClient submit() throws Exception {
-			setUserId();
-			setPassword();
-			pushLogin();
-			return null;
+			element.selectByValue("1");
 		}
 
-		void setUserId() throws Exception {
+		void pushQuery() throws Exception {
+			// --------------------------------------------------
+			// 【検索】押下
+			// --------------------------------------------------
 			val driver = getWebDriver();
-			val by = By.name("u");
-			val element = driver.findElement(by);
-
-			element.clear();
-			element.sendKeys("money.hideki.nakayama@gmail.com");
-		}
-
-		void setPassword() throws Exception {
-			val driver = getWebDriver();
-			val by = By.name("p");
-			val element = driver.findElement(by);
-
-			element.clear();
-			element.sendKeys("123Qwe@asd");
-		}
-
-		void pushLogin() throws Exception {
-			val driver = getWebDriver();
-			val by = By.xpath("//input[@type='submit' and contains(@value,'ログイン')]");
+			val by = By.id("dh-submit");
 			val element = driver.findElement(by);
 
 			element.click();
