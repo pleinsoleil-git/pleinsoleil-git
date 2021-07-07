@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.rakuten.job.request.hotel;
+package a00100.app.job.a00100.crawl.rakuten.job.request.query;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -9,19 +9,19 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m_", chain = true)
-public class Hotel extends WebClient {
-	static final ThreadLocal<Hotel> m_instances = new ThreadLocal<Hotel>() {
+public class Query extends WebClient {
+	static final ThreadLocal<Query> m_instances = new ThreadLocal<Query>() {
 		@Override
-		protected Hotel initialValue() {
-			return new Hotel();
+		protected Query initialValue() {
+			return new Query();
 		}
 	};
 	_Current m_current;
 
-	Hotel() {
+	Query() {
 	}
 
-	public static Hotel getInstance() {
+	public static Query getInstance() {
 		return m_instances.get();
 	}
 
