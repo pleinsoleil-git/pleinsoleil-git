@@ -3,7 +3,7 @@ package a00100.app.job.a00100.crawl.rakuten.job.request;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import a00100.app.job.a00100.crawl.rakuten.job.request.login.Login;
+import a00100.app.job.a00100.crawl.rakuten.job.request.hotel.Hotel;
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -37,7 +37,7 @@ public class Request {
 
 	public static class _Current {
 		void execute() throws Exception {
-			for (WebClient client = Login.getInstance(); client != null;) {
+			for (WebClient client = Hotel.getInstance(); client != null;) {
 				client = client.execute();
 			}
 		}
