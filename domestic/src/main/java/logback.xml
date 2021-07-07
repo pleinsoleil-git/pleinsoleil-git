@@ -24,7 +24,7 @@
 		<appender-ref ref="SYSTEM" />
 	</logger>
 
-	<logger name="a00100" level="INFO">
+	<logger name="a00100" level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SYSTEM" />
 	</logger>
