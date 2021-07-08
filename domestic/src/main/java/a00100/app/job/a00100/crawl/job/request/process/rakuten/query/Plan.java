@@ -31,8 +31,10 @@ class Plan extends WebClient {
 
 	public WebClient execute() throws Exception {
 		try {
-			for (WebClient client = new _00000(); client != null;) {
-				client = client.execute();
+			for (val r : query()) {
+				for (WebClient client = r; client != null;) {
+					client = client.execute();
+				}
 			}
 
 			return null;
@@ -96,7 +98,7 @@ class Plan extends WebClient {
 			{
 				val driver = getWebDriver();
 				val actions = new Actions(driver);
-				val by = By.xpath("//div[@class='planList')]/ul/li");
+				val by = By.xpath("//div[@class='planList']/ul/li");
 
 				for (val element : driver.findElements(by)) {
 					add(new _00000() {
@@ -116,8 +118,20 @@ class Plan extends WebClient {
 	static class _00000 extends WebClient {
 		WebElement m_element;
 
+		String getHotelCode() throws Exception {
+			val by = By.xpath("//input[@type='hidden' and @data-onetag-name='hotelid']");
+			val element = m_element.findElement(by);
+			return element.getAttribute("value");
+		}
+
+		String getHotelName() throws Exception {
+			val by = By.xpath("//a[contains(@class,'rtconds')]");
+			val element = m_element.findElement(by);
+			return element.getText();
+		}
+
 		public WebClient submit() throws Exception {
-			System.out.println("@@@@@@@@@@@@@@@@@");
+			System.out.println(getHotelName());
 			return null;
 		}
 
@@ -203,7 +217,7 @@ class Plan extends WebClient {
 
 		String getHotelName() throws Exception {
 			//val by = By.xpath("//a[contains(text(),'rtconds')]");
-			val by = By.xpath("//span[@class,'content_title')]");
+			val by = By.xpath("//span[@class='content_title')]");
 			val element = m_element.findElement(by);
 			return element.getText();
 		}
@@ -215,7 +229,7 @@ class Plan extends WebClient {
 		}
 
 		String getPlanName() throws Exception {
-			val by = By.xpath("//span[@class,'planList')]");
+			val by = By.xpath("//span[@class='planList')]");
 			val element = m_element.findElement(by);
 			return element.getText();
 		}
