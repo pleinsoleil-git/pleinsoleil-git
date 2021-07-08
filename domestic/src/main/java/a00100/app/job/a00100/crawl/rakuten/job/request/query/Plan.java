@@ -10,9 +10,7 @@ import org.openqa.selenium.interactions.Actions;
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Accessors(prefix = "m_", chain = true)
 class Plan extends WebClient {
 	static final ThreadLocal<Plan> m_instances = new ThreadLocal<Plan>() {
@@ -59,7 +57,7 @@ class Plan extends WebClient {
 					add(new _00000() {
 						{
 							// -------------------------------------------------------
-							// プランまでスクロール
+							// プランまでスクロールしないと金額が取得できない
 							// -------------------------------------------------------
 							actions.moveToElement(m_element = element);
 							actions.perform();
@@ -179,14 +177,8 @@ class Plan extends WebClient {
 		String getPrice() throws Exception {
 			if (m_price == null) {
 				val by = By.xpath(".//*[contains(@class,'originalPrice')]");
-				val element = m_element.findElements(by);
-
-				System.out.println(element.size());
-
-				for (val e : element) {
-					System.out.println(e.getText());
-				}
-				//m_price = element.getText();
+				val element = m_element.findElement(by);
+				m_price = element.getText();
 			}
 
 			return m_price;
