@@ -1,13 +1,10 @@
-DROP TABLE j_crawl_request CASCADE;
+DROP TABLE j_crawl_process CASCADE;
 
 
-CREATE TABLE j_crawl_request
+CREATE TABLE j_crawl_process
 (
 	id								BIGSERIAL,
-	foreign_id						BIGINT				REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
-	request_type					VARCHAR( 512 ),
-	request_name					VARCHAR( 1024 ),
-	execution_nums					NUMERIC,
+	foreign_id						BIGINT				REFERENCES j_crawl_request( id ) ON DELETE CASCADE,
 	priority						NUMERIC,
 	aborted							BOOLEAN			DEFAULT FALSE,
 	deleted							BOOLEAN			DEFAULT TRUE,
@@ -29,7 +26,7 @@ WITH
 );
 
 
-CREATE INDEX ON j_crawl_request
+CREATE INDEX ON j_crawl_process
 (
 	foreign_id
 )

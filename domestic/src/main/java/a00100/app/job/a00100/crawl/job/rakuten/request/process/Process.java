@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.job.rakuten.request;
+package a00100.app.job.a00100.crawl.job.rakuten.request.process;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -6,11 +6,9 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
-import a00100.app.job.a00100.crawl.job.Job;
+import a00100.app.job.a00100.crawl.job.rakuten.request.Request;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import lombok.Data;
@@ -20,19 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Accessors(prefix = "m_", chain = false)
-public class Request {
-	static final ThreadLocal<Request> m_instances = new ThreadLocal<Request>() {
+public class Process {
+	static final ThreadLocal<Process> m_instances = new ThreadLocal<Process>() {
 		@Override
-		protected Request initialValue() {
-			return new Request();
+		protected Process initialValue() {
+			return new Process();
 		}
 	};
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
 
-	Request() {
+	Process() {
 	}
 
-	public static Request getInstance() {
+	public static Process getInstance() {
 		return m_instances.get();
 	}
 
@@ -42,8 +40,8 @@ public class Request {
 
 	public void execute() throws Exception {
 		try {
-			val job = Job.getCurrent();
-			val executor = Executors.newFixedThreadPool(job.getExecutionNums().intValue());
+			val request = Request.getCurrent();
+			val executor = Executors.newFixedThreadPool(request.getExecutionNums().intValue());
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
@@ -75,24 +73,21 @@ public class Request {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
-				+ "SELECT ?::BIGINT AS job_id\n"
+				+ "SELECT ?::BIGINT AS request_id\n"
 			+ ")\n"
-			+ "SELECT j20.id,\n"
-				+ "j20.request_type AS requestType,\n"
-				+ "j20.request_name AS requestName,\n"
-				+ "j20.execution_nums AS executionNums\n"
+			+ "SELECT j20.id\n"
 			+ "FROM s_params AS t10\n"
-			+ "INNER JOIN j_crawl_job AS j10\n"
-				+ "ON j10.id = t10.job_id\n"
+			+ "INNER JOIN j_crawl_request AS j10\n"
+				+ "ON j10.id = t10.request_id\n"
 				+ "AND j10.aborted = FALSE\n"
-			+ "INNER JOIN j_crawl_request AS j20\n"
+			+ "INNER JOIN j_crawl_process AS j20\n"
 				+ "ON j20.foreign_id = j10.id\n"
 				+ "AND j20.aborted = FALSE\n"
 				+ "AND j20.deleted = FALSE\n"
 			+ "WHERE NOT EXISTS\n"
 			+ "(\n"
 				+ "SELECT NULL\n"
-				+ "FROM j_crawl_request_status AS j900\n"
+				+ "FROM j_crawl_process_status AS j900\n"
 				+ "WHERE j900.foreign_id = j20.id\n"
 			+ ")\n"
 			+ "ORDER BY j20.priority NULLS LAST,\n"
@@ -102,8 +97,8 @@ public class Request {
 		val rs = new BeanListHandler<_Task>(_Task.class);
 		return JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
 			{
-				val job = Job.getCurrent();
-				add(job.getId());
+				val request = Request.getCurrent();
+				add(request.getId());
 			}
 		});
 	}
@@ -111,9 +106,6 @@ public class Request {
 	@Data
 	public static class _Current {
 		Long m_id;
-		String m_requestType;
-		String m_requestName;
-		Long m_executionNums;
 
 		void execute() throws Exception {
 		}
@@ -135,35 +127,7 @@ public class Request {
 		}
 
 		void _execute() throws Exception {
-			log.info(String.format("Request[id=%d type=%s name=%s]", getId(), getRequestType(), getRequestName()));
-
-			if (aborted() == true) {
-			} else {
-			}
-		}
-
-		void process() throws Exception {
-			a00100.app.job.a00100.crawl.job.rakuten.request.process.Process.getInstance().execute();
-		}
-
-		boolean aborted() throws Exception {
-			String sql;
-			sql = "WITH s_params AS\n"
-				+ "(\n"
-					+ "SELECT ?::BIGINT AS request_id\n"
-				+ ")\n"
-				+ "SELECT j10.aborted\n"
-				+ "FROM s_params AS t10\n"
-				+ "INNER JOIN j_crawl_request AS j10\n"
-					+ "ON j10.id = t10.request_id\n";
-
-			val conn = Connection.getCurrent().getDefault();
-			val rs = new ScalarHandler<Boolean>();
-			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
-				{
-					add(getId());
-				}
-			}));
+			log.info(String.format("Process[id=%d]", getId()));
 		}
 	}
 }
