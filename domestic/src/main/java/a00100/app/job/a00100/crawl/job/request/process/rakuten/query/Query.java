@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import a00100.app.job.a00100.crawl.job.request.process.Process;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
+import common.lang.time.DateFormatUtils;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -91,7 +92,7 @@ public class Query extends WebClient {
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
 			element.sendKeys(Keys.DELETE);
-			element.sendKeys(process.getCheckInDate());
+			element.sendKeys(DateFormatUtils.DATE_NO_T_FORMAT.format(process.getCheckInDate()));
 		}
 
 		void setCheckout() throws Exception {
@@ -106,7 +107,7 @@ public class Query extends WebClient {
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
 			element.sendKeys(Keys.DELETE);
-			element.sendKeys(process.getCheckOutDate());
+			element.sendKeys(DateFormatUtils.DATE_NO_T_FORMAT.format(process.getCheckOutDate()));
 		}
 
 		void setRoom() throws Exception {

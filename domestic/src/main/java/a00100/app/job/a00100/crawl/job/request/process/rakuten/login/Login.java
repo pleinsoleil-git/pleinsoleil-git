@@ -17,7 +17,6 @@ public class Login extends WebClient {
 			return new Login();
 		}
 	};
-	_Current m_current;
 
 	Login() {
 	}
@@ -26,14 +25,10 @@ public class Login extends WebClient {
 		return m_instances.get();
 	}
 
-	public static _Current getCurrent() {
-		return getInstance().m_current;
-	}
-
 	public WebClient execute() throws Exception {
 		try {
-			for (m_current = new _00000(); m_current != null;) {
-				m_current = (_Current) m_current.execute();
+			for (WebClient client = new _00000(); client != null;) {
+				client = client.execute();
 			}
 
 			return Query.getInstance();
@@ -42,10 +37,34 @@ public class Login extends WebClient {
 		}
 	}
 
-	public static class _Current extends WebClient {
+	static class _00000 extends WebClient {
+		@Override
+		public void navigate() throws Exception {
+			val driver = getWebDriver();
+			driver.get("https://travel.rakuten.co.jp/");
+		}
+
+		@Override
+		public WebClient submit() throws Exception {
+			pushLogout();
+			return new _00100();
+		}
+
+		void pushLogout() throws Exception {
+			// --------------------------------------------------
+			// 【ログアウト】押下
+			// --------------------------------------------------
+			val driver = getWebDriver();
+			val by = By.xpath("//a[contains(text(),'ログアウト')]");
+
+			for (val element : driver.findElements(by)) {
+				element.click();
+				break;
+			}
+		}
 	}
 
-	static class _00000 extends _Current {
+	static class _00100 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			val process = Process.getCurrent();
@@ -57,24 +76,14 @@ public class Login extends WebClient {
 				return null;
 			}
 
-			return new _00100();
-		}
-	}
-
-	static class _00100 extends _Current {
-		@Override
-		public void navigate() throws Exception {
-			val driver = getWebDriver();
-			driver.get("https://travel.rakuten.co.jp/");
-		}
-
-		@Override
-		public WebClient submit() throws Exception {
 			pushLogin();
 			return new _00200();
 		}
 
 		void pushLogin() throws Exception {
+			// --------------------------------------------------
+			// 【ログイン】押下
+			// --------------------------------------------------
 			val driver = getWebDriver();
 			val by = By.xpath("//a[contains(text(),'ログイン')]");
 
@@ -85,7 +94,7 @@ public class Login extends WebClient {
 		}
 	}
 
-	static class _00200 extends _Current {
+	static class _00200 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			setUserId();
@@ -95,26 +104,35 @@ public class Login extends WebClient {
 		}
 
 		void setUserId() throws Exception {
+			// --------------------------------------------------
+			// ユーザID
+			// --------------------------------------------------
+			val process = Process.getCurrent();
 			val driver = getWebDriver();
 			val by = By.name("u");
 			val element = driver.findElement(by);
-			val process = Process.getCurrent();
 
 			element.clear();
 			element.sendKeys(process.getUserId());
 		}
 
 		void setPassword() throws Exception {
+			// --------------------------------------------------
+			// パスワード
+			// --------------------------------------------------
+			val process = Process.getCurrent();
 			val driver = getWebDriver();
 			val by = By.name("p");
 			val element = driver.findElement(by);
-			val process = Process.getCurrent();
 
 			element.clear();
 			element.sendKeys(process.getPassword());
 		}
 
 		void pushLogin() throws Exception {
+			// --------------------------------------------------
+			// 【ログイン】押下
+			// --------------------------------------------------
 			val driver = getWebDriver();
 			val by = By.xpath("//input[@type='submit' and contains(@value,'ログイン')]");
 			val element = driver.findElement(by);

@@ -1,6 +1,7 @@
 package a00100.app.job.a00100.crawl.job.request.process;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -129,8 +130,8 @@ public class Process {
 		String m_requestType;
 		String m_userId;
 		String m_password;
-		String m_checkInDate;
-		String m_checkOutDate;
+		Date m_checkInDate;
+		Date m_checkOutDate;
 		Long m_roomNums;
 		Long m_adultNums;
 		Long m_upperGradeNums;
