@@ -21,17 +21,12 @@ class Plan extends WebClient {
 			return new Plan();
 		}
 	};
-	_Current m_current;
 
 	Plan() {
 	}
 
 	static Plan getInstance() {
 		return m_instances.get();
-	}
-
-	static _Current getCurrent() {
-		return getInstance().m_current;
 	}
 
 	public WebClient execute() throws Exception {
@@ -78,11 +73,11 @@ class Plan extends WebClient {
 			for (val r : query()) {
 				int colNum = 1;
 				stmt.setString(colNum++, r.getHotelCode());
-				stmt.setString(colNum++, null);
+				stmt.setString(colNum++, r.getHotelName());
 				stmt.setString(colNum++, r.getPlanCode());
-				stmt.setString(colNum++, null);
+				stmt.setString(colNum++, r.getPlanName());
 				stmt.setString(colNum++, r.getRoomCode());
-				stmt.setString(colNum++, null);
+				stmt.setString(colNum++, r.getRoomName());
 				stmt.addBatch();
 			}
 
@@ -113,125 +108,91 @@ class Plan extends WebClient {
 		};
 	}
 
-	static class _Current extends WebClient {
-	}
-
-	static class _00000 extends _Current {
-		String m_hotelCode;
-		String m_planCode;
-		String m_roomCode;
-		String m_roomName;
-		String m_roomInfo;
-		String m_roomRemark;
-		String m_roomMeal;
-		String m_roomPeople;
-		String m_roomPayment;
-		String m_price;
+	static class _00000 extends WebClient {
 		WebElement m_element;
 
 		String getHotelCode() throws Exception {
-			if (m_hotelCode == null) {
-				val by = By.name("f_no");
-				val element = m_element.findElement(by);
-				m_hotelCode = element.getAttribute("value");
-			}
+			val by = By.name("f_no");
+			val element = m_element.findElement(by);
+			return element.getAttribute("value");
+		}
 
-			return m_hotelCode;
+		String getHotelName() throws Exception {
+			//val by = By.xpath("//a[contains(text(),'rtconds')]");
+			val by = By.xpath("//span[@class,'content_title')]");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getPlanCode() throws Exception {
-			if (m_planCode == null) {
-				val by = By.name("f_camp_id");
-				val element = m_element.findElement(by);
-				m_planCode = element.getAttribute("value");
-			}
+			val by = By.name("f_camp_id");
+			val element = m_element.findElement(by);
+			return element.getAttribute("value");
+		}
 
-			return m_planCode;
+		String getPlanName() throws Exception {
+			val by = By.xpath("//span[@class,'planList')]");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomCode() throws Exception {
-			if (m_roomCode == null) {
-				val by = By.name("f_syu");
-				val element = m_element.findElement(by);
-				m_roomCode = element.getAttribute("value");
-			}
-
-			return m_roomCode;
+			val by = By.name("f_syu");
+			val element = m_element.findElement(by);
+			return element.getAttribute("value");
 		}
 
 		String getRoomName() throws Exception {
-			if (m_roomName == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-name']");
-				val element = m_element.findElement(by);
-				m_roomName = element.getText();
-			}
-
-			return m_roomName;
+			val by = By.xpath(".//*[@data-locate='roomType-name']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomInfo() throws Exception {
-			if (m_roomInfo == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-Info']");
-				val element = m_element.findElement(by);
-				m_roomInfo = element.getText();
-			}
-
-			return m_roomInfo;
+			val by = By.xpath(".//*[@data-locate='roomType-Info']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomRemark() throws Exception {
-			if (m_roomRemark == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-Remark']");
-				val element = m_element.findElement(by);
-				m_roomRemark = element.getText();
-			}
-
-			return m_roomRemark;
+			val by = By.xpath(".//*[@data-locate='roomType-Remark']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomMeal() throws Exception {
-			if (m_roomMeal == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
-				val element = m_element.findElement(by);
-				m_roomMeal = element.getText();
-			}
-
-			return m_roomMeal;
+			val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomPeople() throws Exception {
-			if (m_roomPeople == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-option-people']");
-				val element = m_element.findElement(by);
-				m_roomPeople = element.getText();
-			}
-
-			return m_roomPeople;
+			val by = By.xpath(".//*[@data-locate='roomType-option-people']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		String getRoomPayment() throws Exception {
-			if (m_roomPayment == null) {
-				val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
-				val element = m_element.findElement(by);
-				m_roomPayment = element.getText();
-			}
-
-			return m_roomPayment;
+			val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
-		String getPrice() throws Exception {
-			if (m_price == null) {
-				val by = By.xpath(".//*[contains(@class,'originalPrice')]");
-				val element = m_element.findElement(by);
-				m_price = element.getText();
-			}
+		String getOriginalPrice() throws Exception {
+			val by = By.xpath(".//*[contains(@class,'originalPrice')]");
+			val element = m_element.findElement(by);
+			return element.getText();
+		}
 
-			return m_price;
+		String getDiscountedPrice() throws Exception {
+			val by = By.xpath(".//*[contains(@class,'discountedPrice')]");
+			val element = m_element.findElement(by);
+			return element.getText();
 		}
 
 		@Override
 		public WebClient submit() throws Exception {
-			//getPrice();
+			//getOriginalPrice();
 			return null;
 		}
 	}
