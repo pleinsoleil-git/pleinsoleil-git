@@ -51,7 +51,6 @@ public class Job {
 						m_currents.set(completion.take().get());
 						m_currents.get().execute();
 					}
-
 				} while (--taskNums > 0);
 
 				executor.shutdown();
