@@ -118,20 +118,20 @@ class Plan extends WebClient {
 	static class _00000 extends WebClient {
 		WebElement m_element;
 
-		String getHotelCode() throws Exception {
-			val by = By.xpath("//input[@type='hidden' and @data-onetag-name='hotelid']");
-			val element = m_element.findElement(by);
-			return element.getAttribute("value");
-		}
-
 		String getHotelName() throws Exception {
 			val by = By.xpath("//a[contains(@class,'rtconds')]");
 			val element = m_element.findElement(by);
 			return element.getText();
 		}
 
+		String getPlanName() throws Exception {
+			val by = By.xpath(".//child::*[1]");
+			val element = m_element.findElement(by);
+			return element.getText();
+		}
+
 		public WebClient submit() throws Exception {
-			System.out.println(getHotelName());
+			System.out.println(getPlanName());
 			return null;
 		}
 
