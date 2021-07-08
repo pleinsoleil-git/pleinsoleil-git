@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Accessors(prefix = "m_", chain = true)
-public class App {
+public abstract class App {
 	static final ThreadLocal<App> m_instances = new ThreadLocal<App>();
 
 	@Getter
@@ -19,6 +19,8 @@ public class App {
 		m_bean = bean;
 		m_model = model;
 	}
+
+	public abstract String getDataSourceName();
 
 	public static App getInstance() {
 		return m_instances.get();
