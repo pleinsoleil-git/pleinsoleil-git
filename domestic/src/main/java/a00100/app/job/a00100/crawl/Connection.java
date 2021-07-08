@@ -14,6 +14,7 @@ public class Connection implements AutoCloseable {
 	ConcurrentHashMap<Long, _Current> m_currents;
 
 	Connection() {
+		m_currents = new ConcurrentHashMap<Long, _Current>();
 	}
 
 	public static Connection getInstance() {
