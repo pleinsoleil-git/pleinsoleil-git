@@ -10,10 +10,12 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.job.JobType;
 import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.Rakuten;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
+import common.lang.NotSupportedException;
 import lombok.Data;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -141,7 +143,13 @@ public class Process {
 
 			if (aborted() == true) {
 			} else {
-				System.out.println(m_jobType);
+				switch (JobType.valueOf(getJobType())) {
+				case RAKUTEN:
+					rakuten();
+					break;
+				default:
+					throw new NotSupportedException();
+				}
 			}
 		}
 

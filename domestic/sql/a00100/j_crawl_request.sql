@@ -7,6 +7,8 @@ CREATE TABLE j_crawl_request
 	foreign_id						BIGINT				REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
 	request_type					VARCHAR( 512 ),
 	request_name					VARCHAR( 1024 ),
+	user_id							VARCHAR( 512 ),
+	password						VARCHAR( 512 ),
 	execution_nums					NUMERIC,
 	priority						NUMERIC,
 	aborted							BOOLEAN			DEFAULT FALSE,
