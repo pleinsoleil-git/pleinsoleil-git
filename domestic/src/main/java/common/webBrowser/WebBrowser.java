@@ -53,15 +53,16 @@ public class WebBrowser implements AutoCloseable {
 	}
 
 	public static _Current getCurrent() {
-		val _this = getInstance();
-		val key = Thread.currentThread().getId();
-		_Current value = _this.m_currents.get(key);
+		@SuppressWarnings("resource")
+		val c = getInstance().m_currents;
+		val k = Thread.currentThread().getId();
+		_Current v = c.get(k);
 
-		if (value == null) {
-			_this.m_currents.put(key, value = new _Current());
+		if (v == null) {
+			c.put(k, v = new _Current());
 		}
 
-		return value;
+		return v;
 	}
 
 	@Override
