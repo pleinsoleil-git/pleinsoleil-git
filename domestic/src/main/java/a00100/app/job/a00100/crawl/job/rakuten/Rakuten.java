@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.rakuten.job.rakuten;
+package a00100.app.job.a00100.crawl.job.rakuten;
 
 public class Rakuten {
 	static Rakuten m_instance;

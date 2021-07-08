@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import a00100.app.job.a00100.crawl.job.rakuten.Rakuten;
 import a00100.app.job.a00100.crawl.rakuten.job.request.Request;
 import common.jdbc.JDBCUtils;
 import common.lang.NotSupportedException;
@@ -137,6 +138,7 @@ public class Job {
 		}
 
 		void rakuten() throws Exception {
+			Rakuten.getInstance().execute();
 		}
 	}
 }
