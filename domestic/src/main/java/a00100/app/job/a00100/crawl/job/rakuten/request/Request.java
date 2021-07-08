@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.Job;
@@ -132,6 +134,30 @@ public class Request {
 
 		void _execute() throws Exception {
 			log.info(String.format("Request[id=%d type=%s name=%s]", getId(), getRequestType(), getRequestName()));
+
+			if (aborted() == true) {
+			} else {
+			}
+		}
+
+		boolean aborted() throws Exception {
+			String sql;
+			sql = "WITH s_params AS\n"
+				+ "(\n"
+					+ "SELECT ?::BIGINT AS request_id\n"
+				+ ")\n"
+				+ "SELECT j10.aborted\n"
+				+ "FROM s_params AS t10\n"
+				+ "INNER JOIN j_crawl_request AS j10\n"
+					+ "ON j10.id = t10.request_id\n";
+
+			val conn = Connection.getCurrent().getDefault();
+			val rs = new ScalarHandler<Boolean>();
+			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+				{
+					add(getId());
+				}
+			}));
 		}
 	}
 }
