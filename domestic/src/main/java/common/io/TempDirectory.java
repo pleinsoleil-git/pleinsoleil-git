@@ -23,7 +23,7 @@ public class TempDirectory implements AutoCloseable {
 		return new TempDirectory(Files.createTempDirectory(prefix).toFile());
 	}
 
-	public File get() {
+	public File getFile() {
 		return m_dir;
 	}
 

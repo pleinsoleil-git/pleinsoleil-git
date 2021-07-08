@@ -23,7 +23,7 @@ public class TempFile implements AutoCloseable {
 		return new TempFile(Files.createTempFile(prefix, suffix).toFile());
 	}
 
-	public File get() {
+	public File getFile() {
 		return m_file;
 	}
 
