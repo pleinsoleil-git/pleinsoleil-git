@@ -33,7 +33,7 @@ public class Job {
 	}
 
 	public void execute() throws Exception {
-		try {
+		try (val browser = WebBrowser.getInstance()) {
 			val executor = Executors.newFixedThreadPool(5);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
@@ -101,11 +101,6 @@ public class Job {
 		String m_webDriver;
 
 		void execute() throws Exception {
-			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
-
-			try (val browser = WebBrowser.getInstance()) {
-				//request();
-			}
 		}
 
 		void request() throws Exception {
@@ -127,6 +122,7 @@ public class Job {
 		}
 
 		void _execute() {
+			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
 		}
 	}
 }
