@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import common.webBrowser.WebClient;
+import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -59,8 +59,8 @@ class Plan extends WebClient {
 							// -------------------------------------------------------
 							// プランまでスクロールしないと金額が取得できない
 							// -------------------------------------------------------
-							actions.moveToElement(m_element = element);
-							actions.perform();
+							//actions.moveToElement(m_element = element);
+							//actions.perform();
 						}
 					});
 				}
@@ -186,7 +186,7 @@ class Plan extends WebClient {
 
 		@Override
 		public WebClient submit() throws Exception {
-			getPrice();
+			//getPrice();
 			return null;
 		}
 	}

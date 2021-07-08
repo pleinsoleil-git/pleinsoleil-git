@@ -1,7 +1,7 @@
 package a00100.app.job.a00100.crawl.job.request.process.rakuten;
 
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.login.Login;
-import common.webBrowser.WebClient;
+import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 
 public class Rakuten {
 	static final ThreadLocal<Rakuten> m_instances = new ThreadLocal<Rakuten>() {

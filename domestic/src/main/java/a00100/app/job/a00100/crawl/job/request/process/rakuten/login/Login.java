@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 
 import a00100.app.job.a00100.crawl.job.request.process.Process;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.query.Query;
-import common.webBrowser.WebClient;
+import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 

@@ -85,6 +85,11 @@ public class Process {
 				+ "j10.request_type AS requestType,\n"
 				+ "j10.user_id AS userId,\n"
 				+ "j10.password,\n"
+				+ "TO_CHAR( j10.check_in_date, 'YYYY/MM/DD' ) AS checkInDate,\n"
+				+ "TO_CHAR( j10.check_out_date, 'YYYY/MM/DD' ) AS checkOutDate,\n"
+				+ "j10.room_nums AS roomNums,\n"
+				+ "j10.adult_nums AS adultNums,\n"
+				+ "j10.child_nums AS childNums,\n"
 				+ "j30.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_request AS j10\n"
@@ -123,6 +128,11 @@ public class Process {
 		String m_requestType;
 		String m_userId;
 		String m_password;
+		String m_checkInDate;
+		String m_checkOutDate;
+		Long m_roomNums;
+		Long m_adultNums;
+		Long m_childNums;
 		String m_hotelCode;
 
 		void execute() throws Exception {

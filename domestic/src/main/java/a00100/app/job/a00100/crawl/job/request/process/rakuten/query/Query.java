@@ -5,7 +5,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
 import a00100.app.job.a00100.crawl.job.request.process.Process;
-import common.webBrowser.WebClient;
+import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -60,6 +60,8 @@ public class Query extends WebClient {
 			setCheckin();
 			setCheckout();
 			setRoom();
+			setAdult();
+			//setChild();
 			pushQuery();
 			return null;
 		}
@@ -84,11 +86,12 @@ public class Query extends WebClient {
 			val driver = getWebDriver();
 			val by = By.id("dh-checkin");
 			val element = driver.findElement(by);
+			val process = Process.getCurrent();
 
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
 			element.sendKeys(Keys.DELETE);
-			element.sendKeys("2021/08/03");
+			element.sendKeys(process.getCheckInDate());
 		}
 
 		void setCheckout() throws Exception {
@@ -98,11 +101,12 @@ public class Query extends WebClient {
 			val driver = getWebDriver();
 			val by = By.id("dh-checkout");
 			val element = driver.findElement(by);
+			val process = Process.getCurrent();
 
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
 			element.sendKeys(Keys.DELETE);
-			element.sendKeys("2021/08/04");
+			element.sendKeys(process.getCheckOutDate());
 		}
 
 		void setRoom() throws Exception {
@@ -112,8 +116,39 @@ public class Query extends WebClient {
 			val driver = getWebDriver();
 			val by = By.id("dh-room");
 			val element = new Select(driver.findElement(by));
+			val process = Process.getCurrent();
 
-			element.selectByValue("1");
+			element.selectByValue(String.format("%d", process.getRoomNums()));
+		}
+
+		void setAdult() throws Exception {
+			// --------------------------------------------------
+			// 大人人数
+			// --------------------------------------------------
+			val driver = getWebDriver();
+			val by = By.id("dhAdult1");
+			val element = new Select(driver.findElement(by));
+			val process = Process.getCurrent();
+
+			element.selectByValue(String.format("%d", process.getAdultNums()));
+		}
+
+		void setChild() throws Exception {
+			// --------------------------------------------------
+			// 子供人数
+			// --------------------------------------------------
+			val driver = getWebDriver();
+			val by = By.id("chldNum1");
+			val element = driver.findElement(by);
+
+			element.click();
+
+
+			val b = By.id("dh-s1");
+			val e = new Select(driver.findElement(b));
+			e.selectByValue("1");
+
+			element.click();
 		}
 
 		void pushQuery() throws Exception {

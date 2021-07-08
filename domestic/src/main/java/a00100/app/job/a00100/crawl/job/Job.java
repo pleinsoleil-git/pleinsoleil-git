@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import a00100.app.job.a00100.crawl.job.request.Request;
+import a00100.app.job.a00100.crawl.job.webBrowser.WebBrowser;
 import common.jdbc.JDBCUtils;
-import common.webBrowser.WebBrowser;
 import lombok.Data;
 import lombok.val;
 import lombok.experimental.Accessors;
