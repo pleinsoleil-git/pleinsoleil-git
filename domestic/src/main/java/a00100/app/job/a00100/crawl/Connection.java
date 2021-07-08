@@ -2,6 +2,7 @@ package a00100.app.job.a00100.crawl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import common.jdbc.JDBCConnection;
 import lombok.val;
 
 public class Connection implements AutoCloseable {
@@ -44,8 +45,17 @@ public class Connection implements AutoCloseable {
 	}
 
 	public static class _Current implements AutoCloseable {
+		JDBCConnection m_default;
+
+		public JDBCConnection getDefault() throws Exception {
+			return (m_default == null ? m_default = new JDBCConnection(App.DEFAULT_DSN) : m_default);
+		}
+
 		@Override
 		public void close() throws Exception {
+			if (m_default != null) {
+				m_default.close();
+			}
 		}
 	}
 }

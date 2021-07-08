@@ -8,6 +8,7 @@ CREATE TABLE j_crawl_request
 	request_type					VARCHAR( 512 ),
 	request_name					VARCHAR( 1024 ),
 	priority						NUMERIC,
+	aborted							BOOLEAN			DEFAULT FALSE,
 	deleted							BOOLEAN			DEFAULT TRUE,
 	created_at						TIMESTAMP( 0 )		DEFAULT CURRENT_TIMESTAMP,
 	updated_at						TIMESTAMP( 0 ),

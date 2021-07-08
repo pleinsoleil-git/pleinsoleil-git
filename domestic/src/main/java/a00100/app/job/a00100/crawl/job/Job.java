@@ -78,6 +78,7 @@ public class Job {
 				+ "ON j10.execution_date <= t10.execution_time::DATE\n"
 				+ "AND j10.execution_date + j10.execution_start_time <= t10.execution_time\n"
 				+ "AND j10.auto_run = TRUE\n"
+				+ "AND j10.aborted = FALSE\n"
 				+ "AND j10.deleted = FALSE\n"
 			+ "WHERE NOT EXISTS\n"
 			+ "(\n"
