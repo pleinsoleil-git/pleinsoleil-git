@@ -139,6 +139,7 @@ public class Request {
 
 			if (aborted() == true) {
 			} else {
+				process();
 			}
 		}
 
