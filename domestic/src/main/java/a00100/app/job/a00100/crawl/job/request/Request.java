@@ -156,7 +156,10 @@ public class Request {
 				+ "SELECT j10.aborted\n"
 				+ "FROM s_params AS t10\n"
 				+ "INNER JOIN j_crawl_request AS j10\n"
-					+ "ON j10.id = t10.request_id\n";
+					+ "ON j10.id = t10.request_id\n"
+				+ "INNER JOIN j_crawl_job AS j20\n"
+					+ "ON j20.id = j10.foreign_id\n"
+					+ "AND j20.aborted = FALSE\n";
 
 			val conn = Connection.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
