@@ -75,6 +75,9 @@
 					prefix="localhost_access_log" suffix=".txt" />
 
 				<Context docBase="domestic" path="/rakuten-travel/domestic" reloadable="false" source="org.eclipse.jst.jee.server:domestic">
+					<Resource auth="Container" name="jdbc/a00100/default" driverClassName="org.postgresql.Driver" type="javax.sql.DataSource"
+						username="postgres" password="a" maxIdle="0" maxTotal="100" maxWaitMillis="10000"
+						url="jdbc:postgresql://localhost:5432/rakuten-travel?currentSchema=domestic_00100" />
 				</Context>
 			</Host>
 		</Engine>
