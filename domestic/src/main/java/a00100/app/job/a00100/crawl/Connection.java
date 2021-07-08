@@ -11,10 +11,9 @@ public class Connection implements AutoCloseable {
 			return new Connection();
 		}
 	};
-	ConcurrentHashMap<Long, _Current> m_currents;
+	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
 
 	Connection() {
-		m_currents = new ConcurrentHashMap<Long, _Current>();
 	}
 
 	public static Connection getInstance() {
@@ -22,13 +21,11 @@ public class Connection implements AutoCloseable {
 	}
 
 	public static _Current getCurrent() {
-		@SuppressWarnings("resource")
-		val c = getInstance().m_currents;
 		val k = Thread.currentThread().getId();
-		_Current v = c.get(k);
+		_Current v = m_currents.get(k);
 
 		if (v == null) {
-			c.put(k, v = new _Current());
+			m_currents.put(k, v = new _Current());
 		}
 
 		return v;
@@ -41,6 +38,7 @@ public class Connection implements AutoCloseable {
 				v.close();
 			}
 		} finally {
+			m_currents.clear();
 			m_instances.remove();
 		}
 	}
