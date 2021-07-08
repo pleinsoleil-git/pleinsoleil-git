@@ -18,7 +18,6 @@ public class Query extends WebClient {
 			return new Query();
 		}
 	};
-	_Current m_current;
 
 	Query() {
 	}
@@ -27,14 +26,10 @@ public class Query extends WebClient {
 		return m_instances.get();
 	}
 
-	public static _Current getCurrent() {
-		return getInstance().m_current;
-	}
-
 	public WebClient execute() throws Exception {
 		try {
-			for (m_current = new _00000(); m_current != null;) {
-				m_current = (_Current) m_current.execute();
+			for (WebClient client = new _00000(); client != null;) {
+				client = client.execute();
 			}
 
 			return Plan.getInstance();
@@ -43,14 +38,11 @@ public class Query extends WebClient {
 		}
 	}
 
-	public static class _Current extends WebClient {
-	}
-
-	static class _00000 extends _Current {
+	static class _00000 extends WebClient {
 		@Override
 		public void navigate() throws Exception {
-			val driver = getWebDriver();
 			val process = Process.getCurrent();
+			val driver = getWebDriver();
 
 			driver.get(String.format("https://hotel.travel.rakuten.co.jp/hotelinfo/plan/%s", process.getHotelCode()));
 		}
@@ -63,7 +55,7 @@ public class Query extends WebClient {
 			setRoom();
 			setAdult();
 			setChild();
-			pushQuery();
+			//pushQuery();
 			return null;
 		}
 

@@ -105,7 +105,7 @@ class Plan extends WebClient {
 							// プランまでスクロールしないと金額が取得できない
 							// -------------------------------------------------------
 							actions.moveToElement(m_element = element);
-							actions.perform();
+							//actions.perform();
 						}
 					});
 				}
