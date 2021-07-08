@@ -1,6 +1,9 @@
 package a00100.app.job.a00100.crawl.rakuten.job;
 
 import java.util.Collection;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
@@ -16,27 +19,49 @@ import lombok.extern.slf4j.Slf4j;
 @Accessors(prefix = "m_", chain = false)
 public class Job {
 	static Job m_instance;
-	_Current m_current;
+	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
 
 	public static Job getInstance() {
 		return (m_instance == null ? m_instance = new Job() : m_instance);
 	}
 
 	public static _Current getCurrent() {
-		return getInstance().m_current;
+		return m_currents.get();
 	}
 
 	public void execute() throws Exception {
 		try {
-			for (val r : query()) {
-				(m_current = r).execute();
+			val executor = Executors.newFixedThreadPool(5);
+			val completion = new ExecutorCompletionService<_Task>(executor);
+
+			try {
+				int taskNums = 0;
+
+				do {
+					for (val r : query()) {
+						taskNums++;
+						completion.submit(r);
+					}
+
+					if (taskNums > 0) {
+						m_currents.set(completion.take().get());
+						m_currents.get().execute();
+					}
+
+				} while (--taskNums > 0);
+
+				executor.shutdown();
+			} catch (Exception e) {
+				executor.shutdownNow();
+				throw e;
 			}
 		} finally {
+			m_currents.remove();
 			m_instance = null;
 		}
 	}
 
-	Collection<_Current> query() throws Exception {
+	Collection<_Task> query() throws Exception {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
@@ -46,7 +71,7 @@ public class Job {
 				+ "j10.job_type AS jobType,\n"
 				+ "j10.job_name AS jobName\n"
 			+ "FROM s_params AS t10\n"
-			+ "INNER JOIN domestic_00101.j_crawl_job AS j10\n"
+			+ "INNER JOIN j_crawl_job AS j10\n"
 				+ "ON j10.execution_date <= t10.execution_time::DATE\n"
 				+ "AND j10.execution_date + j10.execution_start_time <= t10.execution_time\n"
 				+ "AND j10.auto_run = TRUE\n"
@@ -54,14 +79,14 @@ public class Job {
 			+ "WHERE NOT EXISTS\n"
 			+ "(\n"
 				+ "SELECT NULL\n"
-				+ "FROM domestic_00101.j_crawl_job_status AS j900\n"
+				+ "FROM j_crawl_job_status AS j900\n"
 				+ "WHERE j900.foreign_id = j10.id\n"
 			+ ")\n"
 			+ "ORDER BY j10.execution_date + j10.execution_start_time,\n"
 				+ "j10.priority NULLS LAST,\n"
 				+ "j10.id\n";
 
-		val rs = new BeanListHandler<_Current>(_Current.class);
+		val rs = new BeanListHandler<_Task>(_Task.class);
 		return JDBCUtils.query(sql, rs);
 	}
 
@@ -82,6 +107,23 @@ public class Job {
 
 		void request() throws Exception {
 			Request.getInstance().execute();
+		}
+	}
+
+	public static class _Task extends _Current implements Callable<_Task> {
+		@Override
+		public _Task call() throws Exception {
+			try {
+				m_currents.set(this);
+				_execute();
+			} finally {
+				m_currents.remove();
+			}
+
+			return this;
+		}
+
+		void _execute() {
 		}
 	}
 }
