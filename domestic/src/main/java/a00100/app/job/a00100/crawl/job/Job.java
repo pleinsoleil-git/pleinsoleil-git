@@ -9,6 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import a00100.app.job.a00100.crawl.rakuten.job.request.Request;
 import common.jdbc.JDBCUtils;
+import common.lang.NotSupportedException;
 import common.webBrowser.WebBrowser;
 import lombok.Data;
 import lombok.val;
@@ -110,10 +111,12 @@ public class Job {
 
 	public static class _Task extends _Current implements Callable<_Task> {
 		@Override
-		public _Task call() throws Exception {
+		public _Task call() {
 			try {
 				m_currents.set(this);
 				_execute();
+			} catch (Exception e) {
+				log.error("", e);
 			} finally {
 				m_currents.remove();
 			}
@@ -121,8 +124,19 @@ public class Job {
 			return this;
 		}
 
-		void _execute() {
+		void _execute() throws Exception {
 			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
+
+			switch (JobType.valueOf(getJobType())) {
+			case RAKUTEN:
+				rakuten();
+				break;
+			default:
+				throw new NotSupportedException();
+			}
+		}
+
+		void rakuten() throws Exception {
 		}
 	}
 }
