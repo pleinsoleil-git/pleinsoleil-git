@@ -98,7 +98,6 @@ public class Job {
 		Long m_id;
 		String m_jobType;
 		String m_jobName;
-		String m_webDriver;
 
 		void execute() throws Exception {
 		}
