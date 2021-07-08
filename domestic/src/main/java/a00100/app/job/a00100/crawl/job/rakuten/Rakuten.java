@@ -1,19 +1,28 @@
 package a00100.app.job.a00100.crawl.job.rakuten;
 
 public class Rakuten {
-	static Rakuten m_instance;
+	static final ThreadLocal<Rakuten> m_instances = new ThreadLocal<Rakuten>() {
+		@Override
+		protected Rakuten initialValue() {
+			return new Rakuten();
+		}
+	};
 
 	Rakuten() {
 	}
 
 	public static Rakuten getInstance() {
-		return (m_instance == null ? m_instance = new Rakuten() : m_instance);
+		return m_instances.get();
 	}
 
 	public void execute() throws Exception {
 		try {
+			request();
 		} finally {
-			m_instance = null;
+			m_instances.remove();
 		}
+	}
+
+	void request() throws Exception {
 	}
 }
