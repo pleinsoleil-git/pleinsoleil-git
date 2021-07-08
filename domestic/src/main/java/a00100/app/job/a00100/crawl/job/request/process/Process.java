@@ -149,9 +149,7 @@ public class Process {
 			} else {
 				switch (JobType.valueOf(getJobType())) {
 				case RAKUTEN:
-System.out.println(m_userId);
-System.out.println(m_password);
-					//rakuten();
+					rakuten();
 					break;
 				default:
 					throw new NotSupportedException();

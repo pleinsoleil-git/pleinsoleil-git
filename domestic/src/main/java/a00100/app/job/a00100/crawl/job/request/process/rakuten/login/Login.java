@@ -1,7 +1,9 @@
 package a00100.app.job.a00100.crawl.job.request.process.rakuten.login;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
+import a00100.app.job.a00100.crawl.job.request.process.Process;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.query.Query;
 import common.webBrowser.WebClient;
 import lombok.val;
@@ -45,6 +47,22 @@ public class Login extends WebClient {
 
 	static class _00000 extends _Current {
 		@Override
+		public WebClient submit() throws Exception {
+			val process = Process.getCurrent();
+			if (StringUtils.isEmpty(process.getUserId()) == true
+					&& StringUtils.isEmpty(process.getPassword()) == true) {
+				// --------------------------------------------------
+				// ユーザID、パスワードが指定されていないのでログインの必要なし
+				// --------------------------------------------------
+				return null;
+			}
+
+			return new _00100();
+		}
+	}
+
+	static class _00100 extends _Current {
+		@Override
 		public void navigate() throws Exception {
 			val driver = getWebDriver();
 			driver.get("https://travel.rakuten.co.jp/");
@@ -53,7 +71,7 @@ public class Login extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			pushLogin();
-			return new _00100();
+			return new _00200();
 		}
 
 		void pushLogin() throws Exception {
@@ -67,7 +85,7 @@ public class Login extends WebClient {
 		}
 	}
 
-	static class _00100 extends _Current {
+	static class _00200 extends _Current {
 		@Override
 		public WebClient submit() throws Exception {
 			setUserId();
@@ -80,18 +98,20 @@ public class Login extends WebClient {
 			val driver = getWebDriver();
 			val by = By.name("u");
 			val element = driver.findElement(by);
+			val process = Process.getCurrent();
 
 			element.clear();
-			element.sendKeys("money.hideki.nakayama@gmail.com");
+			element.sendKeys(process.getUserId());
 		}
 
 		void setPassword() throws Exception {
 			val driver = getWebDriver();
 			val by = By.name("p");
 			val element = driver.findElement(by);
+			val process = Process.getCurrent();
 
 			element.clear();
-			element.sendKeys("123Qwe@asd");
+			element.sendKeys(process.getPassword());
 		}
 
 		void pushLogin() throws Exception {
