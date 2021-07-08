@@ -2,8 +2,6 @@ package a00100.app.job.a00100.crawl.job.webBrowser;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -11,7 +9,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import common.io.TempDirectory;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +20,7 @@ public class WebBrowser implements AutoCloseable {
 			return new WebBrowser();
 		}
 	};
-	ConcurrentHashMap<Long, _Current> m_currents;
+	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
 
 	static {
 		File driver = null;
@@ -45,7 +42,6 @@ public class WebBrowser implements AutoCloseable {
 	}
 
 	WebBrowser() {
-		m_currents = new ConcurrentHashMap<Long, _Current>();
 	}
 
 	public static WebBrowser getInstance() {
@@ -53,13 +49,11 @@ public class WebBrowser implements AutoCloseable {
 	}
 
 	public static _Current getCurrent() {
-		@SuppressWarnings("resource")
-		val c = getInstance().m_currents;
 		val k = Thread.currentThread().getId();
-		_Current v = c.get(k);
+		_Current v = m_currents.get(k);
 
 		if (v == null) {
-			c.put(k, v = new _Current());
+			m_currents.put(k, v = new _Current());
 		}
 
 		return v;
@@ -72,12 +66,12 @@ public class WebBrowser implements AutoCloseable {
 				v.close();
 			}
 		} finally {
+			m_currents.clear();
 			m_instances.remove();
 		}
 	}
 
 	public static class _Current implements AutoCloseable {
-		File m_directory;
 		WebDriver m_webDriver;
 
 		public WebDriver getWebDriver() throws Exception {
@@ -85,14 +79,6 @@ public class WebBrowser implements AutoCloseable {
 				m_webDriver = new ChromeDriver(new ChromeOptions() {
 					{
 						addArguments("--incognito"); // シークレットモード
-						setExperimentalOption("prefs", new HashMap<String, Object>() {
-							{
-								// ==================================================
-								// ダウンロード先を設定
-								// ==================================================
-								put("download.default_directory", getDownloadDirectory().getPath());
-							}
-						});
 					}
 				});
 			}
@@ -100,23 +86,11 @@ public class WebBrowser implements AutoCloseable {
 			return m_webDriver;
 		}
 
-		public File getDownloadDirectory() throws Exception {
-			if (m_directory == null) {
-				m_directory = Files.createTempDirectory(null).toFile();
-				log.debug(String.format("download.default_directory[%s]", m_directory.getPath()));
-			}
-
-			return m_directory;
-		}
-
 		@Override
 		public void close() throws Exception {
 			if (m_webDriver != null) {
 				log.debug("Browser close!!");
 				//m_webDriver.quit();
-			}
-
-			try (val x = new TempDirectory(m_directory)) {
 			}
 		}
 	}

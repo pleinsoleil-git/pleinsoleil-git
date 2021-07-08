@@ -7,7 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
+import common.jdbc.JDBCUtils;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -34,15 +36,58 @@ class Plan extends WebClient {
 
 	public WebClient execute() throws Exception {
 		try {
-			for (val r : query()) {
-				for (m_current = r; m_current != null;) {
-					m_current = (_Current) m_current.execute();
-				}
-			}
-
+			insert();
 			return null;
 		} finally {
 			m_instances.remove();
+		}
+	}
+
+	void insert() throws Exception {
+		val conn = Connection.getCurrent().getDefault();
+		try (val stmt = JDBCUtils.createStatement(conn)) {
+			String sql;
+			sql = "WITH s_params AS\n"
+				+ "(\n"
+					+ "SELECT ?::VARCHAR AS hotel_code,\n"
+						+ "?::VARCHAR AS hotel_name,\n"
+						+ "?::VARCHAR AS plan_code,\n"
+						+ "?::VARCHAR AS plan_name,\n"
+						+ "?::VARCHAR AS room_code,\n"
+						+ "?::VARCHAR AS room_name\n"
+				+ ")\n"
+				+ "INSERT INTO t_price_rakuten\n"
+				+ "(\n"
+					+ "hotel_code,\n"
+					+ "hotel_name,\n"
+					+ "plan_code,\n"
+					+ "plan_name,\n"
+					+ "room_code,\n"
+					+ "room_name\n"
+				+ ")\n"
+				+ "SELECT t10.hotel_code,\n"
+					+ "t10.hotel_name,\n"
+					+ "t10.plan_code,\n"
+					+ "t10.plan_name,\n"
+					+ "t10.room_code,\n"
+					+ "t10.room_name\n"
+				+ "FROM s_params AS t10\n";
+
+			stmt.parse(sql);
+
+			for (val r : query()) {
+				int colNum = 1;
+				stmt.setString(colNum++, r.getHotelCode());
+				stmt.setString(colNum++, null);
+				stmt.setString(colNum++, r.getPlanCode());
+				stmt.setString(colNum++, null);
+				stmt.setString(colNum++, r.getRoomCode());
+				stmt.setString(colNum++, null);
+				stmt.addBatch();
+			}
+
+			stmt.executeBatchAndClear();
+			JDBCUtils.commit(conn);
 		}
 	}
 
@@ -59,8 +104,8 @@ class Plan extends WebClient {
 							// -------------------------------------------------------
 							// プランまでスクロールしないと金額が取得できない
 							// -------------------------------------------------------
-							//actions.moveToElement(m_element = element);
-							//actions.perform();
+							actions.moveToElement(m_element = element);
+							actions.perform();
 						}
 					});
 				}
