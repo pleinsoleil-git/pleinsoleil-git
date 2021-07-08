@@ -8,6 +8,7 @@ CREATE TABLE j_crawl_job
 	job_name						VARCHAR( 1024 ),
 	execution_date					DATE,
 	execution_start_time			TIME,
+	execution_nums					NUMERIC,
 	priority						NUMERIC,
 	auto_run						BOOLEAN			DEFAULT TRUE,
 	aborted							BOOLEAN			DEFAULT FALSE,

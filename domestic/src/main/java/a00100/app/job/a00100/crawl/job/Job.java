@@ -72,7 +72,8 @@ public class Job {
 			+ ")\n"
 			+ "SELECT j10.id,\n"
 				+ "j10.job_type AS jobType,\n"
-				+ "j10.job_name AS jobName\n"
+				+ "j10.job_name AS jobName,\n"
+				+ "j10.execution_nums AS executionNums\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_job AS j10\n"
 				+ "ON j10.execution_date <= t10.execution_time::DATE\n"
@@ -99,6 +100,7 @@ public class Job {
 		Long m_id;
 		String m_jobType;
 		String m_jobName;
+		Long m_executionNums;
 
 		void execute() throws Exception {
 		}
