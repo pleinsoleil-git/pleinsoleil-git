@@ -10,7 +10,7 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
-import a00100.app.job.a00100.crawl.job.job.request.Request;
+import a00100.app.job.a00100.crawl.job.request.Request;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import lombok.Data;

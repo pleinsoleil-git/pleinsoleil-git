@@ -1,6 +1,6 @@
 package a00100.app.job.a00100.crawl.job.rakuten;
 
-import a00100.app.job.a00100.crawl.job.job.request.Request;
+import a00100.app.job.a00100.crawl.job.request.Request;
 
 public class Rakuten {
 	static final ThreadLocal<Rakuten> m_instances = new ThreadLocal<Rakuten>() {
