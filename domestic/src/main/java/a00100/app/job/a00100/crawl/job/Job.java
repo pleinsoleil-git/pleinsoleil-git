@@ -7,9 +7,8 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import a00100.app.job.a00100.crawl.job.rakuten.Rakuten;
+import a00100.app.job.a00100.crawl.job.request.Request;
 import common.jdbc.JDBCUtils;
-import common.lang.NotSupportedException;
 import common.webBrowser.WebBrowser;
 import lombok.Data;
 import lombok.val;
@@ -124,17 +123,11 @@ public class Job {
 		void _execute() throws Exception {
 			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
 
-			switch (JobType.valueOf(getJobType())) {
-			case RAKUTEN:
-				rakuten();
-				break;
-			default:
-				throw new NotSupportedException();
-			}
+			request();
 		}
 
-		void rakuten() throws Exception {
-			Rakuten.getInstance().execute();
+		void request() throws Exception {
+			Request.getInstance().execute();
 		}
 	}
 }

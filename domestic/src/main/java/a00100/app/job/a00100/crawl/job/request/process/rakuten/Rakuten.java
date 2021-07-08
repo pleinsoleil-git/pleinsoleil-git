@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.job.rakuten;
+package a00100.app.job.a00100.crawl.job.request.process.rakuten;
 
 import a00100.app.job.a00100.crawl.job.request.Request;
 
