@@ -25,16 +25,21 @@ public class Login extends WebClient {
 		return m_instances.get();
 	}
 
+	@Override
 	public WebClient execute() throws Exception {
 		try {
 			for (WebClient client = new _00000(); client != null;) {
 				client = client.execute();
 			}
 
-			return Query.getInstance();
+			return next();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	WebClient next() {
+		return Query.getInstance();
 	}
 
 	static class _00000 extends WebClient {
@@ -46,8 +51,15 @@ public class Login extends WebClient {
 
 		@Override
 		public WebClient submit() throws Exception {
-			pushLogout();
 			return new _00100();
+		}
+	}
+
+	static class _00100 extends WebClient {
+		@Override
+		public WebClient submit() throws Exception {
+			pushLogout();
+			return new _00200();
 		}
 
 		void pushLogout() throws Exception {
@@ -64,7 +76,7 @@ public class Login extends WebClient {
 		}
 	}
 
-	static class _00100 extends WebClient {
+	static class _00200 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			val process = Process.getCurrent();
@@ -77,7 +89,7 @@ public class Login extends WebClient {
 			}
 
 			pushLogin();
-			return new _00200();
+			return new _00300();
 		}
 
 		void pushLogin() throws Exception {
@@ -94,7 +106,7 @@ public class Login extends WebClient {
 		}
 	}
 
-	static class _00200 extends WebClient {
+	static class _00300 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			setUserId();

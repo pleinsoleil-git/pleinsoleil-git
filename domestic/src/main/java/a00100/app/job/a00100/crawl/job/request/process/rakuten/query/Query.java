@@ -26,16 +26,21 @@ public class Query extends WebClient {
 		return m_instances.get();
 	}
 
+	@Override
 	public WebClient execute() throws Exception {
 		try {
 			for (WebClient client = new _00000(); client != null;) {
 				client = client.execute();
 			}
 
-			return Plan.getInstance();
+			return next();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	WebClient next() {
+		return Plan.getInstance();
 	}
 
 	static class _00000 extends WebClient {
@@ -43,10 +48,16 @@ public class Query extends WebClient {
 		public void navigate() throws Exception {
 			val process = Process.getCurrent();
 			val driver = getWebDriver();
-
 			driver.get(String.format("https://hotel.travel.rakuten.co.jp/hotelinfo/plan/%s", process.getHotelCode()));
 		}
 
+		@Override
+		public WebClient submit() throws Exception {
+			return new _00100();
+		}
+	}
+
+	static class _00100 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			pushDate();
@@ -55,7 +66,7 @@ public class Query extends WebClient {
 			setRoom();
 			setAdult();
 			setChild();
-			//pushQuery();
+			pushQuery();
 			return null;
 		}
 

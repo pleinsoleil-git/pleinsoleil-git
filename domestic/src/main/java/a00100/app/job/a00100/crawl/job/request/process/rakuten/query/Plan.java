@@ -31,7 +31,10 @@ class Plan extends WebClient {
 
 	public WebClient execute() throws Exception {
 		try {
-			insert();
+			for (WebClient client = new _00000(); client != null;) {
+				client = client.execute();
+			}
+
 			return null;
 		} finally {
 			m_instances.remove();
@@ -72,6 +75,7 @@ class Plan extends WebClient {
 
 			for (val r : query()) {
 				int colNum = 1;
+/*
 				stmt.setString(colNum++, r.getHotelCode());
 				stmt.setString(colNum++, r.getHotelName());
 				stmt.setString(colNum++, r.getPlanCode());
@@ -79,6 +83,7 @@ class Plan extends WebClient {
 				stmt.setString(colNum++, r.getRoomCode());
 				stmt.setString(colNum++, r.getRoomName());
 				stmt.addBatch();
+*/
 			}
 
 			stmt.executeBatchAndClear();
@@ -91,7 +96,7 @@ class Plan extends WebClient {
 			{
 				val driver = getWebDriver();
 				val actions = new Actions(driver);
-				val by = By.xpath("//ul[contains(@class,'htlPlnRmTypLst')]/li");
+				val by = By.xpath("//div[@class='planList')]/ul/li");
 
 				for (val element : driver.findElements(by)) {
 					add(new _00000() {
@@ -109,6 +114,85 @@ class Plan extends WebClient {
 	}
 
 	static class _00000 extends WebClient {
+		WebElement m_element;
+
+		public WebClient submit() throws Exception {
+			System.out.println("@@@@@@@@@@@@@@@@@");
+			return null;
+		}
+
+		void insert() throws Exception {
+			val conn = Connection.getCurrent().getDefault();
+			try (val stmt = JDBCUtils.createStatement(conn)) {
+				String sql;
+				sql = "WITH s_params AS\n"
+					+ "(\n"
+						+ "SELECT ?::VARCHAR AS hotel_code,\n"
+							+ "?::VARCHAR AS hotel_name,\n"
+							+ "?::VARCHAR AS plan_code,\n"
+							+ "?::VARCHAR AS plan_name,\n"
+							+ "?::VARCHAR AS room_code,\n"
+							+ "?::VARCHAR AS room_name\n"
+					+ ")\n"
+					+ "INSERT INTO t_price_rakuten\n"
+					+ "(\n"
+						+ "hotel_code,\n"
+						+ "hotel_name,\n"
+						+ "plan_code,\n"
+						+ "plan_name,\n"
+						+ "room_code,\n"
+						+ "room_name\n"
+					+ ")\n"
+					+ "SELECT t10.hotel_code,\n"
+						+ "t10.hotel_name,\n"
+						+ "t10.plan_code,\n"
+						+ "t10.plan_name,\n"
+						+ "t10.room_code,\n"
+						+ "t10.room_name\n"
+					+ "FROM s_params AS t10\n";
+
+				stmt.parse(sql);
+
+				for (val r : query()) {
+					int colNum = 1;
+					stmt.setString(colNum++, r.getHotelCode());
+					stmt.setString(colNum++, r.getHotelName());
+					stmt.setString(colNum++, r.getPlanCode());
+					stmt.setString(colNum++, r.getPlanName());
+					stmt.setString(colNum++, r.getRoomCode());
+					stmt.setString(colNum++, r.getRoomName());
+					stmt.addBatch();
+				}
+
+				stmt.executeBatchAndClear();
+				JDBCUtils.commit(conn);
+			}
+		}
+
+		Collection<_00100> query() throws Exception {
+			return new ArrayList<_00100>() {
+				{
+					val driver = getWebDriver();
+					val actions = new Actions(driver);
+					val by = By.xpath(".//ul[contains(@class,'htlPlnRmTypLst')]/li");
+
+					for (val element : m_element.findElements(by)) {
+						add(new _00100() {
+							{
+								// -------------------------------------------------------
+								// プランまでスクロールしないと金額が取得できない
+								// -------------------------------------------------------
+								actions.moveToElement(m_element = element);
+								//actions.perform();
+							}
+						});
+					}
+				}
+			};
+		}
+	}
+
+	static class _00100 extends WebClient {
 		WebElement m_element;
 
 		String getHotelCode() throws Exception {
