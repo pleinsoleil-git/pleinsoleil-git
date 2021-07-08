@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
-import common.selenium.WebClient;
+import common.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 

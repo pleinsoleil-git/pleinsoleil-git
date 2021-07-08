@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import a00100.app.job.a00100.crawl.rakuten.job.request.query.Query;
-import common.selenium.WebClient;
+import common.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 

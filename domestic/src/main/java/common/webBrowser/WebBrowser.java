@@ -1,4 +1,4 @@
-package common.selenium;
+package common.webBrowser;
 
 import java.io.File;
 import java.io.FilenameFilter;
