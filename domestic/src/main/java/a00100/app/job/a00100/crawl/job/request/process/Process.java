@@ -82,7 +82,9 @@ public class Process {
 			+ ")\n"
 			+ "SELECT j30.id,\n"
 				+ "j20.job_type AS jobType,\n"
-				+ "j10.request_type AS requestType\n"
+				+ "j10.request_type AS requestType,\n"
+				+ "j10.user_id AS userId,\n"
+				+ "j10.password\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_request AS j10\n"
 				+ "ON j10.id = t10.request_id\n"
@@ -118,6 +120,8 @@ public class Process {
 		Long m_id;
 		String m_jobType;
 		String m_requestType;
+		String m_userId;
+		String m_password;
 
 		void execute() throws Exception {
 		}
@@ -145,7 +149,9 @@ public class Process {
 			} else {
 				switch (JobType.valueOf(getJobType())) {
 				case RAKUTEN:
-					rakuten();
+System.out.println(m_userId);
+System.out.println(m_password);
+					//rakuten();
 					break;
 				default:
 					throw new NotSupportedException();
