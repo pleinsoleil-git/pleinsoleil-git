@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.rakuten.job.request.query;
+package a00100.app.job.a00100.crawl.job.request.process.rakuten.query;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
