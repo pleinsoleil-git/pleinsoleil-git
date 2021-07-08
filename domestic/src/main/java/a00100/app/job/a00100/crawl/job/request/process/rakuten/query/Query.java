@@ -61,7 +61,7 @@ public class Query extends WebClient {
 			setCheckout();
 			setRoom();
 			setAdult();
-			//setChild();
+			setChild();
 			pushQuery();
 			return null;
 		}
@@ -83,10 +83,10 @@ public class Query extends WebClient {
 			// --------------------------------------------------
 			// チェックイン
 			// --------------------------------------------------
+			val process = Process.getCurrent();
 			val driver = getWebDriver();
 			val by = By.id("dh-checkin");
 			val element = driver.findElement(by);
-			val process = Process.getCurrent();
 
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
@@ -98,10 +98,10 @@ public class Query extends WebClient {
 			// --------------------------------------------------
 			// チェックアウト
 			// --------------------------------------------------
+			val process = Process.getCurrent();
 			val driver = getWebDriver();
 			val by = By.id("dh-checkout");
 			val element = driver.findElement(by);
-			val process = Process.getCurrent();
 
 			element.sendKeys(Keys.ESCAPE);
 			element.sendKeys(Keys.CONTROL, "a");
@@ -113,24 +113,28 @@ public class Query extends WebClient {
 			// --------------------------------------------------
 			// ご利用部屋数
 			// --------------------------------------------------
-			val driver = getWebDriver();
-			val by = By.id("dh-room");
-			val element = new Select(driver.findElement(by));
 			val process = Process.getCurrent();
+			if (process.getRoomNums() != null) {
+				val driver = getWebDriver();
+				val by = By.id("dh-room");
+				val element = new Select(driver.findElement(by));
 
-			element.selectByValue(String.format("%d", process.getRoomNums()));
+				element.selectByValue(String.format("%d", process.getRoomNums()));
+			}
 		}
 
 		void setAdult() throws Exception {
 			// --------------------------------------------------
 			// 大人人数
 			// --------------------------------------------------
-			val driver = getWebDriver();
-			val by = By.id("dhAdult1");
-			val element = new Select(driver.findElement(by));
 			val process = Process.getCurrent();
+			if (process.getAdultNums() != null) {
+				val driver = getWebDriver();
+				val by = By.id("dhAdult1");
+				val element = new Select(driver.findElement(by));
 
-			element.selectByValue(String.format("%d", process.getAdultNums()));
+				element.selectByValue(String.format("%d", process.getAdultNums()));
+			}
 		}
 
 		void setChild() throws Exception {
@@ -142,13 +146,37 @@ public class Query extends WebClient {
 			val element = driver.findElement(by);
 
 			element.click();
-
-
-			val b = By.id("dh-s1");
-			val e = new Select(driver.findElement(b));
-			e.selectByValue("1");
-
+			setUpperGrade();
+			setLowerGrade();
 			element.click();
+		}
+
+		void setUpperGrade() throws Exception {
+			// --------------------------------------------------
+			// 高学年
+			// --------------------------------------------------
+			val process = Process.getCurrent();
+			if (process.getUpperGradeNums() != null) {
+				val driver = getWebDriver();
+				val by = By.id("dh-s1");
+				val element = new Select(driver.findElement(by));
+
+				element.selectByValue(String.format("%d", process.getUpperGradeNums()));
+			}
+		}
+
+		void setLowerGrade() throws Exception {
+			// --------------------------------------------------
+			// 低学年
+			// --------------------------------------------------
+			val process = Process.getCurrent();
+			if (process.getLowerGradeNums() != null) {
+				val driver = getWebDriver();
+				val by = By.id("dh-s2");
+				val element = new Select(driver.findElement(by));
+
+				element.selectByValue(String.format("%d", process.getLowerGradeNums()));
+			}
 		}
 
 		void pushQuery() throws Exception {

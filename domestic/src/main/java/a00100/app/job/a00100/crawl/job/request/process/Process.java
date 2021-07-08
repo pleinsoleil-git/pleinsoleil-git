@@ -89,7 +89,8 @@ public class Process {
 				+ "TO_CHAR( j10.check_out_date, 'YYYY/MM/DD' ) AS checkOutDate,\n"
 				+ "j10.room_nums AS roomNums,\n"
 				+ "j10.adult_nums AS adultNums,\n"
-				+ "j10.child_nums AS childNums,\n"
+				+ "j10.upper_grade_nums AS upperGradeNums,\n"
+				+ "j10.lower_grade_nums AS lowerGradeNums,\n"
 				+ "j30.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_request AS j10\n"
@@ -132,7 +133,8 @@ public class Process {
 		String m_checkOutDate;
 		Long m_roomNums;
 		Long m_adultNums;
-		Long m_childNums;
+		Long m_upperGradeNums;
+		Long m_lowerGradeNums;
 		String m_hotelCode;
 
 		void execute() throws Exception {
