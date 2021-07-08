@@ -1,5 +1,7 @@
 package a00100.app.job.a00100.crawl.job.rakuten;
 
+import a00100.app.job.a00100.crawl.job.rakuten.request.Request;
+
 public class Rakuten {
 	static final ThreadLocal<Rakuten> m_instances = new ThreadLocal<Rakuten>() {
 		@Override
@@ -24,5 +26,6 @@ public class Rakuten {
 	}
 
 	void request() throws Exception {
+		Request.getInstance().execute();
 	}
 }

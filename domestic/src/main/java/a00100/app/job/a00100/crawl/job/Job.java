@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import a00100.app.job.a00100.crawl.job.rakuten.Rakuten;
-import a00100.app.job.a00100.crawl.rakuten.job.request.Request;
 import common.jdbc.JDBCUtils;
 import common.lang.NotSupportedException;
 import common.webBrowser.WebBrowser;
@@ -103,10 +102,6 @@ public class Job {
 		String m_webDriver;
 
 		void execute() throws Exception {
-		}
-
-		void request() throws Exception {
-			Request.getInstance().execute();
 		}
 	}
 

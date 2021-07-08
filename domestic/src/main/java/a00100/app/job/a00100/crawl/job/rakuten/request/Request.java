@@ -17,6 +17,7 @@ public class Request {
 
 	public void execute() throws Exception {
 		try {
+			System.out.println("aaaaaaaaaaaaa");
 		} finally {
 			m_instances.remove();
 		}
