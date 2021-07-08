@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
@@ -51,16 +52,19 @@ class Plan extends WebClient {
 		return new ArrayList<_00000>() {
 			{
 				val driver = getWebDriver();
+				val actions = new Actions(driver);
 				val by = By.xpath("//ul[contains(@class,'htlPlnRmTypLst')]/li");
 
 				for (val element : driver.findElements(by)) {
 					add(new _00000() {
 						{
-							m_element = element;
+							// -------------------------------------------------------
+							// プランまでスクロール
+							// -------------------------------------------------------
+							actions.moveToElement(m_element = element);
+							actions.perform();
 						}
 					});
-
-					break;
 				}
 			}
 		};
@@ -79,6 +83,7 @@ class Plan extends WebClient {
 		String m_roomMeal;
 		String m_roomPeople;
 		String m_roomPayment;
+		String m_price;
 		WebElement m_element;
 
 		String getHotelCode() throws Exception {
@@ -113,7 +118,7 @@ class Plan extends WebClient {
 
 		String getRoomName() throws Exception {
 			if (m_roomName == null) {
-				val by = By.xpath("//*[@data-locate='roomType-name']");
+				val by = By.xpath(".//*[@data-locate='roomType-name']");
 				val element = m_element.findElement(by);
 				m_roomName = element.getText();
 			}
@@ -123,7 +128,7 @@ class Plan extends WebClient {
 
 		String getRoomInfo() throws Exception {
 			if (m_roomInfo == null) {
-				val by = By.xpath("//*[@data-locate='roomType-Info']");
+				val by = By.xpath(".//*[@data-locate='roomType-Info']");
 				val element = m_element.findElement(by);
 				m_roomInfo = element.getText();
 			}
@@ -133,7 +138,7 @@ class Plan extends WebClient {
 
 		String getRoomRemark() throws Exception {
 			if (m_roomRemark == null) {
-				val by = By.xpath("//*[@data-locate='roomType-Remark']");
+				val by = By.xpath(".//*[@data-locate='roomType-Remark']");
 				val element = m_element.findElement(by);
 				m_roomRemark = element.getText();
 			}
@@ -143,7 +148,7 @@ class Plan extends WebClient {
 
 		String getRoomMeal() throws Exception {
 			if (m_roomMeal == null) {
-				val by = By.xpath("//*[@data-locate='roomType-option-meal']");
+				val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
 				val element = m_element.findElement(by);
 				m_roomMeal = element.getText();
 			}
@@ -153,7 +158,7 @@ class Plan extends WebClient {
 
 		String getRoomPeople() throws Exception {
 			if (m_roomPeople == null) {
-				val by = By.xpath("//*[@data-locate='roomType-option-people']");
+				val by = By.xpath(".//*[@data-locate='roomType-option-people']");
 				val element = m_element.findElement(by);
 				m_roomPeople = element.getText();
 			}
@@ -163,7 +168,7 @@ class Plan extends WebClient {
 
 		String getRoomPayment() throws Exception {
 			if (m_roomPayment == null) {
-				val by = By.xpath("//*[@data-locate='roomType-option-payment']");
+				val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
 				val element = m_element.findElement(by);
 				m_roomPayment = element.getText();
 			}
@@ -171,9 +176,25 @@ class Plan extends WebClient {
 			return m_roomPayment;
 		}
 
+		String getPrice() throws Exception {
+			if (m_price == null) {
+				val by = By.xpath(".//*[contains(@class,'originalPrice')]");
+				val element = m_element.findElements(by);
+
+				System.out.println(element.size());
+
+				for (val e : element) {
+					System.out.println(e.getText());
+				}
+				//m_price = element.getText();
+			}
+
+			return m_price;
+		}
+
 		@Override
 		public WebClient submit() throws Exception {
-			log.info(getRoomPayment());
+			getPrice();
 			return null;
 		}
 	}
