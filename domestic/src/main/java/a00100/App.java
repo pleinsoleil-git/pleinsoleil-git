@@ -1,4 +1,4 @@
-package a00100.app;
+package a00100;
 
 import common.app.Bean;
 import common.app.Model;

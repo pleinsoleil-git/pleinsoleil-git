@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Accessors(prefix = "m_", chain = true)
+@Accessors(prefix = "m_", chain = false)
 public class JDBCStatement implements AutoCloseable {
 	Connection m_connection;
 	PreparedStatement m_statement;

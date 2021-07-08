@@ -8,7 +8,7 @@ import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@Accessors(prefix = "m_", chain = true)
+@Accessors(prefix = "m_", chain = false)
 public class Request {
 	static Request m_instance;
 	_Current m_current;

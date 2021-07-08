@@ -7,7 +7,7 @@ import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@Accessors(prefix = "m_", chain = true)
+@Accessors(prefix = "m_", chain = false)
 public class Login extends WebClient {
 	static final ThreadLocal<Login> m_instances = new ThreadLocal<Login>() {
 		@Override
