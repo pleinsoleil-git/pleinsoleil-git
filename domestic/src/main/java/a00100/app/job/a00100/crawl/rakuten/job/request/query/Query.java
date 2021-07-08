@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
-import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
+import common.selenium.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 

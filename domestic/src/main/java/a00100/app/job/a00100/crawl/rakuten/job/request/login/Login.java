@@ -3,7 +3,7 @@ package a00100.app.job.a00100.crawl.rakuten.job.request.login;
 import org.openqa.selenium.By;
 
 import a00100.app.job.a00100.crawl.rakuten.job.request.query.Query;
-import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
+import common.selenium.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 

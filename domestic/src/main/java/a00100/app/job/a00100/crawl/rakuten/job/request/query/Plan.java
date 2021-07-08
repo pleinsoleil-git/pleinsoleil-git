@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import a00100.app.job.a00100.crawl.rakuten.job.webBrowser.WebClient;
+import common.selenium.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
