@@ -21,6 +21,9 @@ public class Job {
 	static Job m_instance;
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
 
+	Job() {
+	}
+
 	public static Job getInstance() {
 		return (m_instance == null ? m_instance = new Job() : m_instance);
 	}
