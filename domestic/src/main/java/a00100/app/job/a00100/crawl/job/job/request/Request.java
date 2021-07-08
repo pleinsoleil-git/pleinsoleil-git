@@ -144,7 +144,7 @@ public class Request {
 		}
 
 		void process() throws Exception {
-			a00100.app.job.a00100.crawl.job.rakuten.request.process.Process.getInstance().execute();
+			a00100.app.job.a00100.crawl.job.request.process.Process.getInstance().execute();
 		}
 
 		boolean aborted() throws Exception {
