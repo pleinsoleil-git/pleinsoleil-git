@@ -107,7 +107,7 @@ class Plan extends WebClient {
 							// プランまでスクロールしないと金額が取得できない
 							// -------------------------------------------------------
 							actions.moveToElement(m_element = element);
-							//actions.perform();
+							actions.perform();
 						}
 					});
 				}
@@ -167,12 +167,15 @@ class Plan extends WebClient {
 
 				stmt.parse(sql);
 
+				val hotelName = getHotelName();
+				val planName = getPlanName();
+
 				for (val r : query()) {
 					int colNum = 1;
 					stmt.setString(colNum++, r.getHotelCode());
-					stmt.setString(colNum++, r.getHotelName());
+					stmt.setString(colNum++, hotelName);
 					stmt.setString(colNum++, r.getPlanCode());
-					stmt.setString(colNum++, r.getPlanName());
+					stmt.setString(colNum++, planName);
 					stmt.setString(colNum++, r.getRoomCode());
 					stmt.setString(colNum++, r.getRoomName());
 					stmt.addBatch();
@@ -215,23 +218,10 @@ class Plan extends WebClient {
 			return element.getAttribute("value");
 		}
 
-		String getHotelName() throws Exception {
-			//val by = By.xpath("//a[contains(text(),'rtconds')]");
-			val by = By.xpath("//span[@class='content_title')]");
-			val element = m_element.findElement(by);
-			return element.getText();
-		}
-
 		String getPlanCode() throws Exception {
 			val by = By.name("f_camp_id");
 			val element = m_element.findElement(by);
 			return element.getAttribute("value");
-		}
-
-		String getPlanName() throws Exception {
-			val by = By.xpath("//span[@class='planList')]");
-			val element = m_element.findElement(by);
-			return element.getText();
 		}
 
 		String getRoomCode() throws Exception {
