@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
+import a00100.app.job.a00100.crawl.job.request.process.Process;
 import common.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -48,7 +49,9 @@ public class Query extends WebClient {
 		@Override
 		public void navigate() throws Exception {
 			val driver = getWebDriver();
-			driver.get("https://hotel.travel.rakuten.co.jp/hotelinfo/plan/138037");
+			val process = Process.getCurrent();
+
+			driver.get(String.format("https://hotel.travel.rakuten.co.jp/hotelinfo/plan/%s", process.getHotelCode()));
 		}
 
 		@Override
