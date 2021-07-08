@@ -17,7 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class WebBrowser implements AutoCloseable {
-	static WebBrowser m_instance;
+	static final ThreadLocal<WebBrowser> m_instances = new ThreadLocal<WebBrowser>() {
+		@Override
+		protected WebBrowser initialValue() {
+			return new WebBrowser();
+		}
+	};
 	ConcurrentHashMap<Long, _Current> m_currents;
 
 	static {
@@ -44,18 +49,19 @@ public class WebBrowser implements AutoCloseable {
 	}
 
 	public static WebBrowser getInstance() {
-		return (m_instance == null ? m_instance = new WebBrowser() : m_instance);
+		return m_instances.get();
 	}
 
 	public static _Current getCurrent() {
-		val k = Thread.currentThread().getId();
-		_Current v = m_instance.m_currents.get(k);
+		val _this = getInstance();
+		val key = Thread.currentThread().getId();
+		_Current value = _this.m_currents.get(key);
 
-		if (v == null) {
-			m_instance.m_currents.put(k, v = new _Current());
+		if (value == null) {
+			_this.m_currents.put(key, value = new _Current());
 		}
 
-		return v;
+		return value;
 	}
 
 	@Override
@@ -65,8 +71,7 @@ public class WebBrowser implements AutoCloseable {
 				v.close();
 			}
 		} finally {
-			m_currents.clear();
-			m_instance = null;
+			m_instances.remove();
 		}
 	}
 
