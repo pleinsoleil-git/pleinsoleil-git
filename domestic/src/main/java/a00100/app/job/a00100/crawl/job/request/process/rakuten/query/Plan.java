@@ -131,7 +131,10 @@ class Plan extends WebClient {
 		}
 
 		public WebClient submit() throws Exception {
-			System.out.println(getPlanName());
+			for (val r : query()) {
+				r.execute();
+			}
+
 			return null;
 		}
 
@@ -200,7 +203,7 @@ class Plan extends WebClient {
 								// プランまでスクロールしないと金額が取得できない
 								// -------------------------------------------------------
 								actions.moveToElement(m_element = element);
-								//actions.perform();
+								actions.perform();
 							}
 						});
 					}
@@ -280,7 +283,7 @@ class Plan extends WebClient {
 
 		@Override
 		public WebClient submit() throws Exception {
-			//getOriginalPrice();
+			System.out.println(getDiscountedPrice());
 			return null;
 		}
 	}
