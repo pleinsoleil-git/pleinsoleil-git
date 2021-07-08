@@ -2,7 +2,7 @@ package a00100.app.job.a00100.crawl.rakuten;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import a00100.app.job.a00100.crawl.rakuten.job.Job;
+import a00100.app.job.a00100.crawl.job.Job;
 import lombok.val;
 
 public class Model extends a00100.app.job.Model {

@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.crawl.rakuten.job;
+package a00100.app.job.a00100.crawl.job;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
