@@ -159,7 +159,7 @@ class Plan extends WebClient {
 								// プランまでスクロールしないと金額が取得できない
 								// -------------------------------------------------------
 								actions.moveToElement(m_rootElement = element);
-								//actions.perform();
+								actions.perform();
 							}
 						});
 					}
@@ -292,12 +292,6 @@ class Plan extends WebClient {
 		String getDiscountedPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'discountedPrice')]");
 			return getText(getRootElement(), by);
-		}
-
-		@Override
-		public WebClient submit() throws Exception {
-			System.out.println(getReserveUrl());
-			return null;
 		}
 	}
 }
