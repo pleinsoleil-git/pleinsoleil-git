@@ -391,14 +391,11 @@ class Plan extends WebClient {
 
 		String getPerPersonPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'prcPerPerson')]");
-			val value = WebElementUtils.getText(getRootElement(), by);
-
-			if (StringUtils.isNotEmpty(value) == true) {
-				val p = Pattern.compile(".*?(\\d+).*?([\\d,]+)");
-				val m = p.matcher(value);
-				if (m.find() == true) {
-					return StringUtils.remove(m.group(2), ',');
-				}
+			val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), "人");
+			for (int i = 1; i < values.length;) {
+				val p = Pattern.compile("[^\\d]+");
+				val m = p.matcher(values[i]);
+				return m.replaceAll("");
 			}
 
 			return null;
