@@ -14,6 +14,7 @@ import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.JobType;
 import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.Rakuten;
+import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import common.lang.NotSupportedException;
@@ -137,19 +138,26 @@ public class Process {
 		Long m_upperGradeNums;
 		Long m_lowerGradeNums;
 		String m_hotelCode;
+		Status m_status;
+
+		public Status getStatus() {
+			return (m_status == null ? m_status = new Status() : m_status);
+		}
 
 		void execute() throws Exception {
+			try (val status = getStatus()) {
+			}
 		}
 	}
 
 	public static class _Task extends _Current implements Callable<_Task> {
 		@Override
 		public _Task call() {
+			log.info(String.format("Process[id=%d]", getId()));
+
 			try {
 				m_currents.set(this);
 				_execute();
-			} catch (Exception e) {
-				log.error("", e);
 			} finally {
 				m_currents.remove();
 			}
@@ -157,18 +165,27 @@ public class Process {
 			return this;
 		}
 
-		void _execute() throws Exception {
-			log.info(String.format("Process[id=%d]", getId()));
+		void _execute() {
+			val status = getStatus();
 
-			if (aborted() == true) {
-			} else {
-				switch (JobType.valueOf(getJobType())) {
-				case RAKUTEN:
-					rakuten();
-					break;
-				default:
-					throw new NotSupportedException();
+			try {
+				if (aborted() == true) {
+					status.setStatus(JobStatus.ABORT);
+				} else {
+					switch (JobType.valueOf(getJobType())) {
+					case RAKUTEN:
+						rakuten();
+						break;
+					default:
+						throw new NotSupportedException();
+					}
+
+					status.setStatus(JobStatus.SUCCESS);
 				}
+			} catch (Exception e) {
+				status.setStatus(JobStatus.FAILD);
+				status.setErrorMessage(e.getMessage());
+				log.error("", e);
 			}
 		}
 

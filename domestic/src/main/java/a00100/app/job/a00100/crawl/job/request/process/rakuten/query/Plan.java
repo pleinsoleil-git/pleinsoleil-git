@@ -182,7 +182,6 @@ class Plan extends WebClient {
 				}
 
 				stmt.executeBatchAndClear();
-				JDBCUtils.commit(conn);
 			}
 		}
 
