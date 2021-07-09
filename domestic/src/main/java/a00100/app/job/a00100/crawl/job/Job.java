@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.lang3.StringUtils;
 
 import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebBrowser;
@@ -34,6 +35,9 @@ public class Job {
 
 	public void execute() throws Exception {
 		try (val browser = WebBrowser.getInstance()) {
+			// --------------------------------------------------
+			delete();
+			// --------------------------------------------------
 			val executor = Executors.newFixedThreadPool(5);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
@@ -60,6 +64,23 @@ public class Job {
 		} finally {
 			m_currents.remove();
 			m_instance = null;
+		}
+	}
+
+	void delete(final String tableName) throws Exception {
+		log.info(String.format("Delete table %s", tableName));
+		JDBCUtils.truncateTable(tableName, true);
+		JDBCUtils.commit();
+	}
+
+	void delete() throws Exception {
+		log.info(StringUtils.repeat("=", 50));
+		log.info("リリース時には無効にすること！！");
+
+		for (val t : new String[] {
+				"t_price_rakuten",
+		}) {
+			delete(t);
 		}
 	}
 

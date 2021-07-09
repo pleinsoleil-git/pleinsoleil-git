@@ -90,10 +90,7 @@ class Plan extends WebClient {
 		}
 
 		public WebClient submit() throws Exception {
-			for (val r : query()) {
-				r.execute();
-			}
-
+			insert();
 			return null;
 		}
 
