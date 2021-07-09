@@ -209,6 +209,8 @@ class Plan extends WebClient {
 		String getReserveUrl() throws Exception {
 			val params = new ArrayList<String>() {
 				{
+					add("f_dhr_rsv_pgm=ry_kensaku");
+
 					for (val entry : new LinkedHashMap<String, String>() {
 						{
 							for (val v : new String[][] {
@@ -224,8 +226,11 @@ class Plan extends WebClient {
 									{ "f_y4", null },
 									{ "f_heya_su", null },
 									{ "f_ninzu", null },
+									{ "f_teikei", null },
 									{ "f_camp_id", null },
 									{ "f_otona_su", null },
+									{ "f_id_yami", null },
+									{ "f_service", null },
 							}) {
 								put(v[0], v[1]);
 							}
@@ -233,7 +238,7 @@ class Plan extends WebClient {
 					}.entrySet()) {
 						val by = By.xpath(String.format(".//input[@type='hidden' and @name='%s']", entry.getKey()));
 						val value = getValue(getFormElement(), by);
-						add(String.format("%s=%s", StringUtils.defaultString(entry.getValue(), entry.getKey()), value));
+						add(String.format("%s=%s", StringUtils.defaultString(entry.getValue(), entry.getKey()), StringUtils.defaultString(value)));
 					}
 				}
 			};
