@@ -18,7 +18,6 @@ public class Connection implements AutoCloseable {
 		}
 	};
 	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
-	static final ConcurrentHashMap<Long, JDBCConnection> m_connections = new ConcurrentHashMap<Long, JDBCConnection>();
 
 	Connection() {
 	}
@@ -51,23 +50,27 @@ public class Connection implements AutoCloseable {
 	}
 
 	public static class _Current implements AutoCloseable {
-		JDBCConnection m_default;
+		JDBCConnection m_app;
 
 		public JDBCConnection getDefault() {
-			return (m_default == null ? m_default = new JDBCConnection(a00100.App.DEFAULT_DSN) : m_default);
+			return (m_app == null ? m_app = new JDBCConnection(a00100.App.DEFAULT_DSN) : m_app);
+		}
+
+		public JDBCConnection getApp() {
+			return (m_app == null ? m_app = new JDBCConnection(a00100.App.DEFAULT_DSN) : m_app);
 		}
 
 		@Override
 		public void close() throws Exception {
-			if (m_default != null) {
-				m_default.close();
+			if (m_app != null) {
+				m_app.close();
 			}
 		}
 	}
 
 	public static class App {
 		static JDBCConnection getConnection() {
-			return Connection.getCurrent().getDefault();
+			return Connection.getCurrent().getApp();
 		}
 
 		public static <T> List<T> query(final String sql, final BeanListHandler<T> rs) throws Exception {
