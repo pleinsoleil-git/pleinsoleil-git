@@ -55,14 +55,12 @@ public class Status implements AutoCloseable {
 			+ "ORDER BY j30.status, j30.id\n"
 			+ "LIMIT 1\n";
 
-		val conn = Connection.getCurrent().getDefault();
 		Connection.App.execute(sql, new JDBCParameterList() {
 			{
 				val job = Job.getCurrent();
 				add(job.getId());
 			}
 		});
-		JDBCUtils.commit(conn);
 	}
 
 	void faild() throws Exception {
@@ -97,6 +95,5 @@ public class Status implements AutoCloseable {
 				add(m_errorMessage);
 			}
 		});
-		JDBCUtils.commit(conn);
 	}
 }

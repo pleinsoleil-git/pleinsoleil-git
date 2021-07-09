@@ -78,11 +78,25 @@ public class Connection implements AutoCloseable {
 		}
 
 		public static int execute(final String sql, final Collection<Object> params) throws Exception {
-			return JDBCUtils.execute(getConnection().getConnection(), sql, params.toArray());
+			return execute(sql, params, true);
+		}
+
+		public static int execute(final String sql, final Collection<Object> params, final boolean commit) throws Exception {
+			try {
+				return JDBCUtils.execute(getConnection().getConnection(), sql, params.toArray());
+			} finally {
+				if (commit == true) {
+					commit();
+				}
+			}
 		}
 
 		public static void commit() throws Exception {
 			JDBCUtils.commit(getConnection().getConnection());
+		}
+
+		public static void rollback() throws Exception {
+			JDBCUtils.rollback(getConnection().getConnection());
 		}
 	}
 }
