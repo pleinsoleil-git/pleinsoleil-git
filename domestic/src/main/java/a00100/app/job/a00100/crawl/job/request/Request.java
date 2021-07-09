@@ -12,6 +12,8 @@ import org.apache.commons.lang3.BooleanUtils;
 import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.Job;
 import a00100.app.job.a00100.crawl.job.request.process.Process;
+import a00100.app.job.a00100.crawl.job.request.process.Status;
+import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import lombok.Data;
@@ -115,14 +117,23 @@ public class Request {
 		String m_requestType;
 		String m_requestName;
 		Long m_executionNums;
+		Status m_status;
+
+		public Status getStatus() {
+			return (m_status == null ? m_status = new Status() : m_status);
+		}
 
 		void execute() throws Exception {
+			try (val status = getStatus()) {
+			}
 		}
 	}
 
 	public static class _Task extends _Current implements Callable<_Task> {
 		@Override
 		public _Task call() {
+			log.info(String.format("Request[id=%d type=%s name=%s]", getId(), getRequestType(), getRequestName()));
+
 			try {
 				m_currents.set(this);
 				_execute();
@@ -135,12 +146,20 @@ public class Request {
 			return this;
 		}
 
-		void _execute() throws Exception {
-			log.info(String.format("Request[id=%d type=%s name=%s]", getId(), getRequestType(), getRequestName()));
+		void _execute() {
+			val status = getStatus();
 
-			if (aborted() == true) {
-			} else {
-				process();
+			try {
+				if (aborted() == true) {
+					status.setStatus(JobStatus.ABORT);
+				} else {
+					process();
+					status.setStatus(JobStatus.SUCCESS);
+				}
+			} catch (Exception e) {
+				status.setStatus(JobStatus.FAILD);
+				status.setErrorMessage(e.getMessage());
+				log.error("", e);
 			}
 		}
 
