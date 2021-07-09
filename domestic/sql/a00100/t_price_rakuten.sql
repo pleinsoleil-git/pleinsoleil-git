@@ -15,8 +15,11 @@ CREATE TABLE t_price_rakuten
 	room_option_meal				VARCHAR( 1024 ),
 	room_option_people				VARCHAR( 1024 ),
 	room_option_payment				VARCHAR( 1024 ),
-	original_price					NUMERIC,
-	discounted_price				NUMERIC,
+	point_rate						VARCHAR( 1024 ),
+	price							VARCHAR( 1024 ),
+	original_price					VARCHAR( 1024 ),
+	discounted_price				VARCHAR( 1024 ),
+	per_person_price				VARCHAR( 1024 ),
 	created_at						TIMESTAMP( 0 )		DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY
 	(

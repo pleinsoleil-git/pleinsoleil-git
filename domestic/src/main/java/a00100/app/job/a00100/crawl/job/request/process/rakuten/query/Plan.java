@@ -108,8 +108,11 @@ class Plan extends WebClient {
 							+ "?::VARCHAR AS room_option_meal,\n"
 							+ "?::VARCHAR AS room_option_people,\n"
 							+ "?::VARCHAR AS room_option_payment,\n"
-							+ "?::NUMERIC AS original_price,\n"
-							+ "?::NUMERIC AS discounted_price\n"
+							+ "?::VARCHAR AS point_rate,\n"
+							+ "?::VARCHAR AS price,\n"
+							+ "?::VARCHAR AS original_price,\n"
+							+ "?::VARCHAR AS discounted_price,\n"
+							+ "?::VARCHAR AS per_person_price\n"
 					+ ")\n"
 					+ "INSERT INTO t_price_rakuten\n"
 					+ "(\n"
@@ -124,8 +127,11 @@ class Plan extends WebClient {
 						+ "room_option_meal,\n"
 						+ "room_option_people,\n"
 						+ "room_option_payment,\n"
+						+ "point_rate,\n"
+						+ "price,\n"
 						+ "original_price,\n"
-						+ "discounted_price\n"
+						+ "discounted_price,\n"
+						+ "per_person_price\n"
 					+ ")\n"
 					+ "SELECT t10.hotel_code,\n"
 						+ "t10.hotel_name,\n"
@@ -133,13 +139,16 @@ class Plan extends WebClient {
 						+ "t10.plan_name,\n"
 						+ "t10.room_code,\n"
 						+ "t10.room_name,\n"
-						+ "t10.room_info,\n"
 						+ "t10.room_remark,\n"
+						+ "t10.room_info,\n"
 						+ "t10.room_option_meal,\n"
 						+ "t10.room_option_people,\n"
 						+ "t10.room_option_payment,\n"
+						+ "t10.point_rate,\n"
+						+ "t10.price,\n"
 						+ "t10.original_price,\n"
-						+ "t10.discounted_price\n"
+						+ "t10.discounted_price,\n"
+						+ "t10.per_person_price\n"
 					+ "FROM s_params AS t10\n";
 
 				stmt.parse(sql);
@@ -160,8 +169,11 @@ class Plan extends WebClient {
 					stmt.setString(colNum++, r.getRoomOptionMeal());
 					stmt.setString(colNum++, r.getRoomOptionPeople());
 					stmt.setString(colNum++, r.getRoomOptionPayment());
+					stmt.setString(colNum++, r.getPointRate());
+					stmt.setString(colNum++, r.getPrice());
 					stmt.setString(colNum++, r.getOriginalPrice());
 					stmt.setString(colNum++, r.getDiscountedPrice());
+					stmt.setString(colNum++, r.getPerPersonPrice());
 					stmt.addBatch();
 				}
 
@@ -325,14 +337,40 @@ class Plan extends WebClient {
 			}, StringUtils.SPACE);
 		}
 
+		String getPointRate() throws Exception {
+			val by = By.xpath(".//*[@data-locate='plan-point-info']");
+			val value = WebElementUtils.getText(getRootElement(), by);
+
+			if (StringUtils.isNotEmpty(value) == true) {
+				val p = Pattern.compile("[^\\d]+");
+				val m = p.matcher(value);
+				return m.replaceAll("");
+			}
+
+			return null;
+		}
+
+		String getPrice() throws Exception {
+			val by = By.xpath(".//*[contains(@class,'ndPrice')]");
+			val value = WebElementUtils.getText(getRootElement(), by);
+
+			if (StringUtils.isNotEmpty(value) == true) {
+				val p = Pattern.compile("[^\\d]+");
+				val m = p.matcher(value);
+				return m.replaceAll("");
+			}
+
+			return null;
+		}
+
 		String getOriginalPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'originalPrice')]");
 			val value = WebElementUtils.getText(getRootElement(), by);
-			val p = Pattern.compile("[\\d,]+");
-			val m = p.matcher(value);
 
-			if (m.find() == true) {
-				return StringUtils.remove(m.group(), ',');
+			if (StringUtils.isNotEmpty(value) == true) {
+				val p = Pattern.compile("[^\\d]+");
+				val m = p.matcher(value);
+				return m.replaceAll("");
 			}
 
 			return null;
@@ -341,11 +379,26 @@ class Plan extends WebClient {
 		String getDiscountedPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'discountedPrice')]");
 			val value = WebElementUtils.getText(getRootElement(), by);
-			val p = Pattern.compile("[\\d,]+");
-			val m = p.matcher(value);
 
-			if (m.find() == true) {
-				return StringUtils.remove(m.group(), ',');
+			if (StringUtils.isNotEmpty(value) == true) {
+				val p = Pattern.compile("[^\\d]+");
+				val m = p.matcher(value);
+				return m.replaceAll("");
+			}
+
+			return null;
+		}
+
+		String getPerPersonPrice() throws Exception {
+			val by = By.xpath(".//*[contains(@class,'prcPerPerson')]");
+			val value = WebElementUtils.getText(getRootElement(), by);
+
+			if (StringUtils.isNotEmpty(value) == true) {
+				val p = Pattern.compile(".*?(\\d+).*?([\\d,]+)");
+				val m = p.matcher(value);
+				if (m.find() == true) {
+					return StringUtils.remove(m.group(2), ',');
+				}
 			}
 
 			return null;
