@@ -317,7 +317,9 @@ class Plan extends WebClient {
 					val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
 					val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), StringUtils.SPACE);
 					for (int i = 1; i < values.length; i++) {
-						add(values[i]);
+						for (val v : StringUtils.split(values[i], "／")) {
+							add(v);
+						}
 					}
 				}
 			}, StringUtils.SPACE);
