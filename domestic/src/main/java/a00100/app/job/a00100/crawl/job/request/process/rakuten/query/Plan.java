@@ -71,16 +71,22 @@ class Plan extends WebClient {
 	static class _00000 extends WebClient {
 		WebElement m_element;
 
-		String getHotelName() throws Exception {
-			val by = By.xpath("//a[contains(@class,'rtconds')]");
-			val element = m_element.findElement(by);
-			return element.getText();
+		String getText(final By by) {
+			for (val e : m_element.findElements(by)) {
+				return e.getText();
+			}
+
+			return null;
 		}
 
-		String getPlanName() throws Exception {
+		String getHotelName() {
+			val by = By.xpath("//a[contains(@class,'rtconds')]");
+			return getText(by);
+		}
+
+		String getPlanName() {
 			val by = By.xpath(".//child::*[1]");
-			val element = m_element.findElement(by);
-			return element.getText();
+			return getText(by);
 		}
 
 		public WebClient submit() throws Exception {
