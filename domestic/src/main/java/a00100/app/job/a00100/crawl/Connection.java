@@ -77,6 +77,10 @@ public class Connection implements AutoCloseable {
 			return JDBCUtils.query(getConnection().getConnection(), sql, rs);
 		}
 
+		public static <T> List<T> query(final String sql, final BeanListHandler<T> rs, final Collection<Object> params) throws Exception {
+			return JDBCUtils.query(getConnection().getConnection(), sql, rs, params.toArray());
+		}
+
 		public static int execute(final String sql, final Collection<Object> params) throws Exception {
 			return execute(sql, params, true);
 		}

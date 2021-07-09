@@ -1,6 +1,8 @@
 package a00100.app.job.a00100.crawl.job;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Job {
 	static Job m_instance;
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
+	Set<Long> m_runningIds;
 
 	Job() {
 	}
@@ -38,28 +41,34 @@ public class Job {
 		return m_currents.get();
 	}
 
+	Set<Long> getRunningIds() {
+		return (m_runningIds == null ? m_runningIds = new HashSet<>() : m_runningIds);
+	}
+
 	public void execute() throws Exception {
 		try (val browser = WebBrowser.getInstance()) {
 			// --------------------------------------------------
 			// delete();
 			// --------------------------------------------------
-			val executor = Executors.newFixedThreadPool(5);
+			val executor = Executors.newFixedThreadPool(1);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
-				int taskNums = 0;
+				val ids = getRunningIds();
 
 				do {
 					for (val r : query()) {
-						taskNums++;
+						ids.add(r.getId());
 						completion.submit(r);
 					}
 
-					if (taskNums > 0) {
-						m_currents.set(completion.take().get());
-						m_currents.get().execute();
+					if (ids.size() > 0) {
+						val job = completion.take().get();
+						m_currents.set(job);
+						job.execute();
+						ids.remove(job.getId());
 					}
-				} while (--taskNums > 0);
+				} while (ids.size() > 0);
 
 				executor.shutdown();
 			} catch (Exception e) {
@@ -114,13 +123,28 @@ public class Job {
 				+ "SELECT NULL\n"
 				+ "FROM j_crawl_job_status AS j900\n"
 				+ "WHERE j900.foreign_id = j10.id\n"
-			+ ")\n"
-			+ "ORDER BY j10.execution_date + j10.execution_start_time,\n"
+			+ ")\n";
+
+		val ids = getRunningIds();
+		if (ids.isEmpty() == false) {
+			sql += "AND j10.id NOT IN\n"
+				+ "(\n"
+					+ StringUtils.repeat("?::BIGINT", ",\n", ids.size())
+				+ ")\\n";
+		}
+
+		sql += "ORDER BY j10.execution_date + j10.execution_start_time,\n"
 				+ "j10.priority NULLS LAST,\n"
 				+ "j10.id\n";
 
 		val rs = new BeanListHandler<_Task>(_Task.class);
-		return Connection.App.query(sql, rs);
+		return Connection.App.query(sql, rs, new JDBCParameterList() {
+			{
+				for (val id : ids) {
+					add(id);
+				}
+			}
+		});
 	}
 
 	@Data
