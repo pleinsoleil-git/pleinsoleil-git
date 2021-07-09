@@ -49,9 +49,9 @@ public class Status implements AutoCloseable {
 			+ "INNER JOIN j_crawl_job AS j10\n"
 				+ "ON j10.id = t10.job_id\n"
 			+ "INNER JOIN j_crawl_request AS j20\n"
-				+ "ON j20.id = j10.id\n"
+				+ "ON j20.foreign_id = j10.id\n"
 			+ "INNER JOIN j_crawl_request_status AS j30\n"
-				+ "ON j30.foreign_id = j30.id\n"
+				+ "ON j30.foreign_id = j20.id\n"
 			+ "ORDER BY j30.status, j30.id\n"
 			+ "LIMIT 1\n";
 
