@@ -6,10 +6,15 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebBrowser;
+import common.app.job.JobStatus;
+import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import lombok.Data;
 import lombok.val;
@@ -36,7 +41,7 @@ public class Job {
 	public void execute() throws Exception {
 		try (val browser = WebBrowser.getInstance()) {
 			// --------------------------------------------------
-			 delete();
+			// delete();
 			// --------------------------------------------------
 			val executor = Executors.newFixedThreadPool(5);
 			val completion = new ExecutorCompletionService<_Task>(executor);
@@ -124,14 +129,23 @@ public class Job {
 		String m_jobType;
 		String m_jobName;
 		Long m_executionNums;
+		Status m_status;
+
+		public Status getStatus() {
+			return (m_status == null ? m_status = new Status() : m_status);
+		}
 
 		void execute() throws Exception {
+			try (val status = getStatus()) {
+			}
 		}
 	}
 
 	public static class _Task extends _Current implements Callable<_Task> {
 		@Override
 		public _Task call() {
+			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
+
 			try {
 				m_currents.set(this);
 				_execute();
@@ -144,14 +158,46 @@ public class Job {
 			return this;
 		}
 
-		void _execute() throws Exception {
-			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
+		void _execute() {
+			val status = getStatus();
 
-			request();
+			try {
+				if (aborted() == true) {
+					status.setStatus(JobStatus.ABORT);
+				} else {
+					request();
+					status.setStatus(JobStatus.SUCCESS);
+				}
+			} catch (Exception e) {
+				status.setStatus(JobStatus.FAILD);
+				status.setErrorMessage(e.getMessage());
+				log.error("", e);
+			}
 		}
 
 		void request() throws Exception {
 			Request.getInstance().execute();
+		}
+
+		boolean aborted() throws Exception {
+			String sql;
+			sql = "WITH s_params AS\n"
+				+ "(\n"
+					+ "SELECT ?::BIGINT AS job_id\n"
+				+ ")\n"
+				+ "SELECT j10.aborted\n"
+				+ "FROM s_params AS t10\n"
+				+ "INNER JOIN j_crawl_job AS j10\n"
+					+ "ON j10.id = t10.job_id\n"
+					+ "AND j10.aborted = FALSE\n";
+
+			val conn = Connection.getCurrent().getDefault();
+			val rs = new ScalarHandler<Boolean>();
+			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+				{
+					add(getId());
+				}
+			}));
 		}
 	}
 }
