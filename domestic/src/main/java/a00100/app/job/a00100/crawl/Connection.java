@@ -10,20 +10,20 @@ import common.jdbc.JDBCConnection;
 import common.jdbc.JDBCUtils;
 import lombok.val;
 
-public class ConnectionA implements AutoCloseable {
-	static final ThreadLocal<ConnectionA> m_instances = new ThreadLocal<ConnectionA>() {
+public class Connection implements AutoCloseable {
+	static final ThreadLocal<Connection> m_instances = new ThreadLocal<Connection>() {
 		@Override
-		protected ConnectionA initialValue() {
-			return new ConnectionA();
+		protected Connection initialValue() {
+			return new Connection();
 		}
 	};
 	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
 	static final ConcurrentHashMap<Long, JDBCConnection> m_connections = new ConcurrentHashMap<Long, JDBCConnection>();
 
-	ConnectionA() {
+	Connection() {
 	}
 
-	public static ConnectionA getInstance() {
+	public static Connection getInstance() {
 		return m_instances.get();
 	}
 
@@ -67,7 +67,7 @@ public class ConnectionA implements AutoCloseable {
 
 	public static class App {
 		static JDBCConnection getConnection() {
-			return ConnectionA.getCurrent().getDefault();
+			return Connection.getCurrent().getDefault();
 		}
 
 		public static <T> List<T> query(final String sql, final BeanListHandler<T> rs) throws Exception {

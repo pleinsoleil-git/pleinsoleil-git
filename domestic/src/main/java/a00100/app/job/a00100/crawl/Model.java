@@ -10,7 +10,7 @@ public class Model extends a00100.app.job.Model {
 
 	public void execute() throws Exception {
 		if (isExecutable() == true) {
-			try (val conn = ConnectionA.getInstance()) {
+			try (val conn = Connection.getInstance()) {
 				job();
 			} finally {
 				m_running.set(false);

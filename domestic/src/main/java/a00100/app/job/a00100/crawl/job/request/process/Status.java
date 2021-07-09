@@ -1,6 +1,6 @@
 package a00100.app.job.a00100.crawl.job.request.process;
 
-import a00100.app.job.a00100.crawl.ConnectionA;
+import a00100.app.job.a00100.crawl.Connection;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -38,7 +38,7 @@ public class Status implements AutoCloseable {
 				+ "t10.error_message\n"
 			+ "FROM s_params AS t10\n";
 
-		val conn = ConnectionA.getCurrent().getDefault();
+		val conn = Connection.getCurrent().getDefault();
 		JDBCUtils.execute(conn, sql, new JDBCParameterList() {
 			{
 				val process = Process.getCurrent();
