@@ -108,11 +108,11 @@ class Plan extends WebClient {
 							+ "?::VARCHAR AS room_option_meal,\n"
 							+ "?::VARCHAR AS room_option_people,\n"
 							+ "?::VARCHAR AS room_option_payment,\n"
-							+ "?::VARCHAR AS point_rate,\n"
-							+ "?::VARCHAR AS price,\n"
-							+ "?::VARCHAR AS original_price,\n"
-							+ "?::VARCHAR AS discounted_price,\n"
-							+ "?::VARCHAR AS per_person_price\n"
+							+ "?::NUMERIC AS point_rate,\n"
+							+ "?::NUMERIC AS price,\n"
+							+ "?::NUMERIC AS original_price,\n"
+							+ "?::NUMERIC AS discounted_price,\n"
+							+ "?::NUMERIC AS per_person_price\n"
 					+ ")\n"
 					+ "INSERT INTO t_price_rakuten\n"
 					+ "(\n"
@@ -233,7 +233,18 @@ class Plan extends WebClient {
 		String getReserveUrl() throws Exception {
 			val params = new ArrayList<String>() {
 				{
-					add("f_dhr_rsv_pgm=ry_kensaku");
+					for (val entry : new LinkedHashMap<String, String>() {
+						{
+							for (val v : new String[][] {
+									{ "f_dhr_rsv_pgm", "ry_kensaku" },
+									{ "f_adult_su", "1" },
+							}) {
+								put(v[0], v[1]);
+							}
+						}
+					}.entrySet()) {
+						add(String.format("%s=%s", entry.getKey(), entry.getValue()));
+					}
 
 					for (val entry : new LinkedHashMap<String, String>() {
 						{
@@ -267,7 +278,7 @@ class Plan extends WebClient {
 				}
 			};
 
-			return StringUtils.join(params, "&");
+			return "https://rsvh.travel.rakuten.co.jp/rsv/RsvLogin.do?" + StringUtils.join(params, "&");
 		}
 
 		String getRoomCode() throws Exception {
@@ -298,6 +309,7 @@ class Plan extends WebClient {
 				{
 					val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
 					val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), StringUtils.SPACE);
+
 					for (int i = 1; i < values.length; i++) {
 						add(values[i]);
 					}
@@ -313,6 +325,7 @@ class Plan extends WebClient {
 				{
 					val by = By.xpath(".//*[@data-locate='roomType-option-people']");
 					val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), StringUtils.SPACE);
+
 					for (int i = 1; i < values.length; i++) {
 						add(values[i]);
 					}
@@ -328,6 +341,7 @@ class Plan extends WebClient {
 				{
 					val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
 					val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), StringUtils.SPACE);
+
 					for (int i = 1; i < values.length; i++) {
 						for (val v : StringUtils.split(values[i], "／")) {
 							add(v);
@@ -392,6 +406,7 @@ class Plan extends WebClient {
 		String getPerPersonPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'prcPerPerson')]");
 			val values = StringUtils.split(WebElementUtils.getText(getRootElement(), by), "人");
+
 			for (int i = 1; i < values.length;) {
 				val p = Pattern.compile("[^\\d]+");
 				val m = p.matcher(values[i]);
