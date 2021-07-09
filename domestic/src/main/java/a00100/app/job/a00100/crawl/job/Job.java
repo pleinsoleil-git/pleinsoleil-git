@@ -120,7 +120,7 @@ public class Job {
 				+ "j10.id\n";
 
 		val rs = new BeanListHandler<_Task>(_Task.class);
-		return JDBCUtils.query(sql, rs);
+		return Connection.App.query(sql, rs);
 	}
 
 	@Data
@@ -148,7 +148,7 @@ public class Job {
 
 			try {
 				m_currents.set(this);
-				_execute();
+				//_execute();
 			} catch (Exception e) {
 				log.error("", e);
 			} finally {

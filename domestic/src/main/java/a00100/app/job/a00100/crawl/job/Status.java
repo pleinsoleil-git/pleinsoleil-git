@@ -56,7 +56,7 @@ public class Status implements AutoCloseable {
 			+ "LIMIT 1\n";
 
 		val conn = Connection.getCurrent().getDefault();
-		JDBCUtils.execute(conn, sql, new JDBCParameterList() {
+		Connection.App.execute(sql, new JDBCParameterList() {
 			{
 				val job = Job.getCurrent();
 				add(job.getId());
