@@ -32,10 +32,7 @@ public class Status implements AutoCloseable {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
-				+ "SELECT ?::BIGINT AS request_id,\n"
-					+ "?::NUMERIC AS status,\n"
-					+ "?::VARCHAR AS error_code,\n"
-					+ "?::VARCHAR AS error_message\n"
+				+ "SELECT ?::BIGINT AS request_id\n"
 			+ ")\n"
 			+ "INSERT INTO j_crawl_request_status\n"
 			+ "(\n"
@@ -63,9 +60,6 @@ public class Status implements AutoCloseable {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
-				add(m_status.original());
-				add(m_errorCode);
-				add(m_errorMessage);
 			}
 		});
 		JDBCUtils.commit(conn);
