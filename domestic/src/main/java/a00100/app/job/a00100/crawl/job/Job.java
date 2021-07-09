@@ -36,7 +36,7 @@ public class Job {
 	public void execute() throws Exception {
 		try (val browser = WebBrowser.getInstance()) {
 			// --------------------------------------------------
-			delete();
+			// delete();
 			// --------------------------------------------------
 			val executor = Executors.newFixedThreadPool(5);
 			val completion = new ExecutorCompletionService<_Task>(executor);
