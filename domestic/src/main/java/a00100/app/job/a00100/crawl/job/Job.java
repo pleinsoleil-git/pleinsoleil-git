@@ -78,6 +78,9 @@ public class Job {
 		log.info("リリース時には無効にすること！！");
 
 		for (val t : new String[] {
+				"j_crawl_process_status",
+				"j_crawl_request_status",
+				"j_crawl_job_status",
 				"t_price_rakuten",
 		}) {
 			delete(t);
