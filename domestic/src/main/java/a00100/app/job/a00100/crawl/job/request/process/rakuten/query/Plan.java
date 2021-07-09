@@ -2,6 +2,7 @@ package a00100.app.job.a00100.crawl.job.request.process.rakuten.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import common.jdbc.JDBCUtils;
 import common.lang.StringUtils;
+import lombok.Getter;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -153,7 +155,7 @@ class Plan extends WebClient {
 								// -------------------------------------------------------
 								// プランまでスクロールしないと金額が取得できない
 								// -------------------------------------------------------
-								actions.moveToElement(m_element = element);
+								actions.moveToElement(m_rootElement = element);
 								//actions.perform();
 							}
 						});
@@ -164,13 +166,15 @@ class Plan extends WebClient {
 	}
 
 	static class _00100 extends WebClient {
+		@Getter
+		WebElement m_rootElement;
+
 		WebElement m_formElement;
-		WebElement m_element;
 
 		WebElement getFormElement() {
 			if (m_formElement == null) {
 				val by = By.xpath(".//form");
-				m_formElement = m_element.findElement(by);
+				m_formElement = getRootElement().findElement(by);
 			}
 
 			return m_formElement;
@@ -203,29 +207,38 @@ class Plan extends WebClient {
 		}
 
 		String getReserveUrl() throws Exception {
-			return StringUtils.join(new ArrayList<String>() {
+			val params = new ArrayList<String>() {
 				{
-					val form = m_element.findElement(By.xpath(".//form"));
-
-					for (val name : new String[] {
-							"f_no",
-							"f_syu",
-							"f_hi1",
-							"f_hi2",
-							"f_s1",
-							"f_s2",
-							"f_y1",
-							"f_y2",
-							"f_y3",
-							"f_y4",
-							"f_heya_su",
-							"f_ninzu",
-							"f_camp_id",
-							"f_otona_su",
-					}) {
+					for (val entry : new LinkedHashMap<String, String>() {
+						{
+							for (val v : new String[][] {
+									{ "f_no", null },
+									{ "f_syu", null },
+									{ "f_hi1", null },
+									{ "f_hi2", null },
+									{ "f_s1", null },
+									{ "f_s2", null },
+									{ "f_y1", null },
+									{ "f_y2", null },
+									{ "f_y3", null },
+									{ "f_y4", null },
+									{ "f_heya_su", null },
+									{ "f_ninzu", null },
+									{ "f_camp_id", null },
+									{ "f_otona_su", null },
+							}) {
+								put(v[0], v[1]);
+							}
+						}
+					}.entrySet()) {
+						val by = By.xpath(String.format(".//input[@type='hidden' and @name='%s']", entry.getKey()));
+						val value = getValue(getFormElement(), by);
+						add(String.format("%s=%s", StringUtils.defaultString(entry.getValue(), entry.getKey()), value));
 					}
 				}
-			}, "&");
+			};
+
+			return StringUtils.join(params, "&");
 		}
 
 		String getRoomCode() throws Exception {
@@ -235,48 +248,47 @@ class Plan extends WebClient {
 
 		String getRoomName() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-name']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getRoomInfo() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-Info']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getRoomRemark() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-Remark']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getRoomMeal() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getRoomPeople() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-option-people']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getRoomPayment() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getOriginalPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'originalPrice')]");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		String getDiscountedPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'discountedPrice')]");
-			return getText(m_element, by);
+			return getText(getRootElement(), by);
 		}
 
 		@Override
 		public WebClient submit() throws Exception {
-			System.out.println(getPlanCode());
-			System.out.println(getRoomName());
+			System.out.println(getReserveUrl());
 			return null;
 		}
 	}
