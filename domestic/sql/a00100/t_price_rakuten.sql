@@ -10,6 +10,11 @@ CREATE TABLE t_price_rakuten
 	plan_name						VARCHAR( 1024 ),
 	room_code						VARCHAR( 512 ),
 	room_name						VARCHAR( 1024 ),
+	room_info						VARCHAR,
+	room_remark						VARCHAR,
+	room_option_meal				VARCHAR( 1024 ),
+	original_price					NUMERIC,
+	discounted_price				NUMERIC,
 	created_at						TIMESTAMP( 0 )		DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY
 	(

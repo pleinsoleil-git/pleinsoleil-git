@@ -3,6 +3,7 @@ package a00100.app.job.a00100.crawl.job.request.process.rakuten.query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -63,6 +64,8 @@ class Plan extends WebClient {
 							actions.perform();
 						}
 					});
+
+				break;
 				}
 			}
 		};
@@ -105,7 +108,12 @@ class Plan extends WebClient {
 							+ "?::VARCHAR AS plan_code,\n"
 							+ "?::VARCHAR AS plan_name,\n"
 							+ "?::VARCHAR AS room_code,\n"
-							+ "?::VARCHAR AS room_name\n"
+							+ "?::VARCHAR AS room_name,\n"
+							+ "?::VARCHAR AS room_info,\n"
+							+ "?::VARCHAR AS room_remark,\n"
+							+ "?::VARCHAR AS room_option_meal,\n"
+							+ "?::NUMERIC AS original_price,\n"
+							+ "?::NUMERIC AS discounted_price\n"
 					+ ")\n"
 					+ "INSERT INTO t_price_rakuten\n"
 					+ "(\n"
@@ -114,14 +122,24 @@ class Plan extends WebClient {
 						+ "plan_code,\n"
 						+ "plan_name,\n"
 						+ "room_code,\n"
-						+ "room_name\n"
+						+ "room_name,\n"
+						+ "room_info,\n"
+						+ "room_remark,\n"
+						+ "room_option_meal,\n"
+						+ "original_price,\n"
+						+ "discounted_price\n"
 					+ ")\n"
 					+ "SELECT t10.hotel_code,\n"
 						+ "t10.hotel_name,\n"
 						+ "t10.plan_code,\n"
 						+ "t10.plan_name,\n"
 						+ "t10.room_code,\n"
-						+ "t10.room_name\n"
+						+ "t10.room_name,\n"
+						+ "t10.room_info,\n"
+						+ "t10.room_remark,\n"
+						+ "t10.room_option_meal,\n"
+						+ "t10.original_price,\n"
+						+ "t10.discounted_price\n"
 					+ "FROM s_params AS t10\n";
 
 				stmt.parse(sql);
@@ -137,6 +155,11 @@ class Plan extends WebClient {
 					stmt.setString(colNum++, planName);
 					stmt.setString(colNum++, r.getRoomCode());
 					stmt.setString(colNum++, r.getRoomName());
+					stmt.setString(colNum++, r.getRoomInfo());
+					stmt.setString(colNum++, r.getRoomRemark());
+					stmt.setString(colNum++, r.getRoomOptionMeal());
+					stmt.setString(colNum++, r.getOriginalPrice());
+					stmt.setString(colNum++, r.getDiscountedPrice());
 					stmt.addBatch();
 				}
 
@@ -184,11 +207,12 @@ class Plan extends WebClient {
 		}
 
 		String getText(final WebElement element, final By by) {
+			String v=null;
 			for (val e : element.findElements(by)) {
-				return e.getText();
+				v=e.getText();
 			}
 
-			return null;
+			return v;
 		}
 
 		String getValue(final WebElement element, final By by) {
@@ -269,29 +293,55 @@ class Plan extends WebClient {
 			return getText(getRootElement(), by);
 		}
 
-		String getRoomMeal() throws Exception {
-			val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
-			return getText(getRootElement(), by);
+		String getRoomOptionMeal() throws Exception {
+			// --------------------------------------------------
+			// 食事以降を取得
+			// --------------------------------------------------
+			return StringUtils.join(new ArrayList<String>() {
+				{
+					val by = By.xpath(".//*[@data-locate='roomType-option-meal']");
+					val values = StringUtils.split(getText(getRootElement(), by), StringUtils.SPACE);
+					for (int i = 1; i < values.length; i++) {
+						add(values[i]);
+					}
+				}
+			}, StringUtils.SPACE);
 		}
 
-		String getRoomPeople() throws Exception {
+		String getRoomOptionPeople() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-option-people']");
 			return getText(getRootElement(), by);
 		}
 
-		String getRoomPayment() throws Exception {
+		String getRoomOptionPayment() throws Exception {
 			val by = By.xpath(".//*[@data-locate='roomType-option-payment']");
 			return getText(getRootElement(), by);
 		}
 
 		String getOriginalPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'originalPrice')]");
-			return getText(getRootElement(), by);
+			val value = getText(getRootElement(), by);
+			val p = Pattern.compile("[\\d,]+");
+			val m = p.matcher(value);
+
+			if (m.find() == true) {
+				return StringUtils.remove(m.group(), ',');
+			}
+
+			return null;
 		}
 
 		String getDiscountedPrice() throws Exception {
 			val by = By.xpath(".//*[contains(@class,'discountedPrice')]");
-			return getText(getRootElement(), by);
+			val value = getText(getRootElement(), by);
+			val p = Pattern.compile("[\\d,]+");
+			val m = p.matcher(value);
+
+			if (m.find() == true) {
+				return StringUtils.remove(m.group(), ',');
+			}
+
+			return null;
 		}
 	}
 }
