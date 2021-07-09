@@ -12,7 +12,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.Job;
 import a00100.app.job.a00100.crawl.job.request.process.Process;
-import a00100.app.job.a00100.crawl.job.request.process.Status;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
