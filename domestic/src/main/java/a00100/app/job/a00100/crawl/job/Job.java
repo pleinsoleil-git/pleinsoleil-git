@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Accessors(prefix = "m_", chain = false)
 public class Job {
+	static int MAX_THREAD_NUM = 5;
 	static Job m_instance;
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
 	Set<Long> m_runningIds;
@@ -50,7 +51,7 @@ public class Job {
 			// --------------------------------------------------
 			// delete();
 			// --------------------------------------------------
-			val executor = Executors.newFixedThreadPool(1);
+			val executor = Executors.newFixedThreadPool(MAX_THREAD_NUM);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
@@ -109,8 +110,7 @@ public class Job {
 			+ ")\n"
 			+ "SELECT j10.id,\n"
 				+ "j10.job_type AS jobType,\n"
-				+ "j10.job_name AS jobName,\n"
-				+ "j10.execution_nums AS executionNums\n"
+				+ "j10.job_name AS jobName\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_job AS j10\n"
 				+ "ON j10.execution_date <= t10.execution_time::DATE\n"
@@ -130,7 +130,7 @@ public class Job {
 			sql += "AND j10.id NOT IN\n"
 				+ "(\n"
 					+ StringUtils.repeat("?::BIGINT", ",\n", ids.size())
-				+ ")\\n";
+				+ ")\n";
 		}
 
 		sql += "ORDER BY j10.execution_date + j10.execution_start_time,\n"
@@ -152,7 +152,6 @@ public class Job {
 		Long m_id;
 		String m_jobType;
 		String m_jobName;
-		Long m_executionNums;
 		Status m_status;
 
 		public Status getStatus() {
@@ -172,7 +171,7 @@ public class Job {
 
 			try {
 				m_currents.set(this);
-				//_execute();
+				run();
 			} catch (Exception e) {
 				log.error("", e);
 			} finally {
@@ -182,14 +181,14 @@ public class Job {
 			return this;
 		}
 
-		void _execute() {
+		void run() {
 			val status = getStatus();
 
 			try {
 				if (aborted() == true) {
 					status.setStatus(JobStatus.ABORT);
 				} else {
-					request();
+					//request();
 					status.setStatus(JobStatus.SUCCESS);
 				}
 			} catch (Exception e) {
@@ -215,9 +214,8 @@ public class Job {
 					+ "ON j10.id = t10.job_id\n"
 					+ "AND j10.aborted = FALSE\n";
 
-			val conn = Connection.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
-			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+			return BooleanUtils.isTrue(Connection.App.query(sql, rs, new JDBCParameterList() {
 				{
 					add(getId());
 				}

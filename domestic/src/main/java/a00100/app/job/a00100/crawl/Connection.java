@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import common.jdbc.JDBCConnection;
@@ -73,12 +74,17 @@ public class Connection implements AutoCloseable {
 			return Connection.getCurrent().getApp();
 		}
 
+		public static <T> T query(final String sql, final ResultSetHandler<T> rs, final Collection<Object> params)
+				throws Exception {
+			return JDBCUtils.query(getConnection(), sql, rs, params);
+		}
+
 		public static <T> List<T> query(final String sql, final BeanListHandler<T> rs) throws Exception {
-			return JDBCUtils.query(getConnection().getConnection(), sql, rs);
+			return JDBCUtils.query(getConnection(), sql, rs);
 		}
 
 		public static <T> List<T> query(final String sql, final BeanListHandler<T> rs, final Collection<Object> params) throws Exception {
-			return JDBCUtils.query(getConnection().getConnection(), sql, rs, params.toArray());
+			return JDBCUtils.query(getConnection(), sql, rs, params.toArray());
 		}
 
 		public static int execute(final String sql, final Collection<Object> params) throws Exception {
@@ -87,7 +93,7 @@ public class Connection implements AutoCloseable {
 
 		public static int execute(final String sql, final Collection<Object> params, final boolean commit) throws Exception {
 			try {
-				return JDBCUtils.execute(getConnection().getConnection(), sql, params.toArray());
+				return JDBCUtils.execute(getConnection(), sql, params.toArray());
 			} finally {
 				if (commit == true) {
 					commit();
@@ -96,11 +102,11 @@ public class Connection implements AutoCloseable {
 		}
 
 		public static void commit() throws Exception {
-			JDBCUtils.commit(getConnection().getConnection());
+			JDBCUtils.commit(getConnection());
 		}
 
 		public static void rollback() throws Exception {
-			JDBCUtils.rollback(getConnection().getConnection());
+			JDBCUtils.rollback(getConnection());
 		}
 	}
 }

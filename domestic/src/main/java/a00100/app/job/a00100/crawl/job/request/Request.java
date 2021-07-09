@@ -44,8 +44,7 @@ public class Request {
 
 	public void execute() throws Exception {
 		try {
-			val job = Job.getCurrent();
-			val executor = Executors.newFixedThreadPool(job.getExecutionNums().intValue());
+			val executor = Executors.newFixedThreadPool(5);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
