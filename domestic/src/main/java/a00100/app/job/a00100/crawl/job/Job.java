@@ -10,7 +10,7 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.ConnectionA;
 import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebBrowser;
 import common.app.job.JobStatus;
@@ -120,7 +120,7 @@ public class Job {
 				+ "j10.id\n";
 
 		val rs = new BeanListHandler<_Task>(_Task.class);
-		return Connection.App.query(sql, rs);
+		return ConnectionA.App.query(sql, rs);
 	}
 
 	@Data
@@ -191,7 +191,7 @@ public class Job {
 					+ "ON j10.id = t10.job_id\n"
 					+ "AND j10.aborted = FALSE\n";
 
-			val conn = Connection.getCurrent().getDefault();
+			val conn = ConnectionA.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
 			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
 				{

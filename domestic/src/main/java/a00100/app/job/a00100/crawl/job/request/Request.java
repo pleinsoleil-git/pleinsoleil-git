@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
-import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.ConnectionA;
 import a00100.app.job.a00100.crawl.job.Job;
 import a00100.app.job.a00100.crawl.job.request.process.Process;
 import common.app.job.JobStatus;
@@ -100,7 +100,7 @@ public class Request {
 			+ "ORDER BY j20.priority NULLS LAST,\n"
 				+ "j20.id\n";
 
-		val conn = Connection.getCurrent().getDefault();
+		val conn = ConnectionA.getCurrent().getDefault();
 		val rs = new BeanListHandler<_Task>(_Task.class);
 		return JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
 			{
@@ -180,7 +180,7 @@ public class Request {
 					+ "ON j20.id = j10.foreign_id\n"
 					+ "AND j20.aborted = FALSE\n";
 
-			val conn = Connection.getCurrent().getDefault();
+			val conn = ConnectionA.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
 			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
 				{

@@ -10,20 +10,20 @@ import common.jdbc.JDBCConnection;
 import common.jdbc.JDBCUtils;
 import lombok.val;
 
-public class Connection implements AutoCloseable {
-	static final ThreadLocal<Connection> m_instances = new ThreadLocal<Connection>() {
+public class ConnectionA implements AutoCloseable {
+	static final ThreadLocal<ConnectionA> m_instances = new ThreadLocal<ConnectionA>() {
 		@Override
-		protected Connection initialValue() {
-			return new Connection();
+		protected ConnectionA initialValue() {
+			return new ConnectionA();
 		}
 	};
 	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
 	static final ConcurrentHashMap<Long, JDBCConnection> m_connections = new ConcurrentHashMap<Long, JDBCConnection>();
 
-	Connection() {
+	ConnectionA() {
 	}
 
-	public static Connection getInstance() {
+	public static ConnectionA getInstance() {
 		return m_instances.get();
 	}
 

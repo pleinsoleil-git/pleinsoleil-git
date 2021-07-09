@@ -1,6 +1,6 @@
 package a00100.app.job.a00100.crawl.job.request.process.rakuten;
 
-import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.ConnectionA;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.login.Login;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import common.jdbc.JDBCUtils;
@@ -27,7 +27,7 @@ public class Rakuten {
 				client = client.execute();
 			}
 
-			val conn = Connection.getCurrent().getDefault();
+			val conn = ConnectionA.getCurrent().getDefault();
 			JDBCUtils.rollback(conn);
 		} finally {
 			m_instances.remove();

@@ -1,6 +1,6 @@
 package a00100.app.job.a00100.crawl.job;
 
-import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.ConnectionA;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -55,8 +55,8 @@ public class Status implements AutoCloseable {
 			+ "ORDER BY j30.status, j30.id\n"
 			+ "LIMIT 1\n";
 
-		val conn = Connection.getCurrent().getDefault();
-		Connection.App.execute(sql, new JDBCParameterList() {
+		val conn = ConnectionA.getCurrent().getDefault();
+		ConnectionA.App.execute(sql, new JDBCParameterList() {
 			{
 				val job = Job.getCurrent();
 				add(job.getId());
@@ -87,7 +87,7 @@ public class Status implements AutoCloseable {
 				+ "t10.error_message\n"
 			+ "FROM s_params AS t10\n";
 
-		val conn = Connection.getCurrent().getDefault();
+		val conn = ConnectionA.getCurrent().getDefault();
 		JDBCUtils.execute(conn, sql, new JDBCParameterList() {
 			{
 				val job = Job.getCurrent();

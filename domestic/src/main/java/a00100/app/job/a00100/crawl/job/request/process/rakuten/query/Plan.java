@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import a00100.app.job.a00100.crawl.Connection;
+import a00100.app.job.a00100.crawl.ConnectionA;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebClient;
 import a00100.app.job.a00100.crawl.job.webBrowser.WebElementUtils;
 import common.jdbc.JDBCUtils;
@@ -92,7 +92,7 @@ class Plan extends WebClient {
 		}
 
 		void insert() throws Exception {
-			val conn = Connection.getCurrent().getDefault();
+			val conn = ConnectionA.getCurrent().getDefault();
 			try (val stmt = JDBCUtils.createStatement(conn)) {
 				String sql;
 				sql = "WITH s_params AS\n"
