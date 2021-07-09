@@ -101,6 +101,7 @@ class Plan extends WebClient {
 							+ "?::VARCHAR AS hotel_name,\n"
 							+ "?::VARCHAR AS plan_code,\n"
 							+ "?::VARCHAR AS plan_name,\n"
+							+ "?::VARCHAR AS plan_url,\n"
 							+ "?::VARCHAR AS room_code,\n"
 							+ "?::VARCHAR AS room_name,\n"
 							+ "?::VARCHAR AS room_info,\n"
@@ -120,6 +121,7 @@ class Plan extends WebClient {
 						+ "hotel_name,\n"
 						+ "plan_code,\n"
 						+ "plan_name,\n"
+						+ "plan_url,\n"
 						+ "room_code,\n"
 						+ "room_name,\n"
 						+ "room_info,\n"
@@ -137,6 +139,7 @@ class Plan extends WebClient {
 						+ "t10.hotel_name,\n"
 						+ "t10.plan_code,\n"
 						+ "t10.plan_name,\n"
+						+ "t10.plan_url,\n"
 						+ "t10.room_code,\n"
 						+ "t10.room_name,\n"
 						+ "t10.room_remark,\n"
@@ -162,6 +165,7 @@ class Plan extends WebClient {
 					stmt.setString(colNum++, hotelName);
 					stmt.setString(colNum++, r.getPlanCode());
 					stmt.setString(colNum++, planName);
+					stmt.setString(colNum++, r.getPlanUrl());
 					stmt.setString(colNum++, r.getRoomCode());
 					stmt.setString(colNum++, r.getRoomName());
 					stmt.setString(colNum++, r.getRoomInfo());
@@ -230,7 +234,7 @@ class Plan extends WebClient {
 			return WebElementUtils.getValue(getFormElement(), by);
 		}
 
-		String getReserveUrl() throws Exception {
+		String getPlanUrl() throws Exception {
 			val params = new ArrayList<String>() {
 				{
 					for (val entry : new LinkedHashMap<String, String>() {

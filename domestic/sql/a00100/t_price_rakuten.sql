@@ -8,6 +8,7 @@ CREATE TABLE t_price_rakuten
 	hotel_name						VARCHAR( 1024 ),
 	plan_code						VARCHAR( 512 ),
 	plan_name						VARCHAR( 1024 ),
+	plan_url						VARCHAR,
 	room_code						VARCHAR( 512 ),
 	room_name						VARCHAR( 1024 ),
 	room_info						VARCHAR,
