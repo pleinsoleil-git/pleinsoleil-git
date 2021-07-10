@@ -86,8 +86,15 @@ class Plan extends WebClient {
 		}
 
 		public WebClient submit() throws Exception {
+			delete();
 			insert();
 			return null;
+		}
+
+		void delete() throws Exception {
+			val conn = getConnection();
+			JDBCUtils.truncateTable(conn, "temp_price_rakuten");
+			JDBCUtils.commit(conn);
 		}
 
 		void insert() throws Exception {
@@ -109,13 +116,13 @@ class Plan extends WebClient {
 							+ "?::VARCHAR AS room_option_meal,\n"
 							+ "?::VARCHAR AS room_option_people,\n"
 							+ "?::VARCHAR AS room_option_payment,\n"
-							+ "?::NUMERIC AS point_rate,\n"
-							+ "?::NUMERIC AS price,\n"
-							+ "?::NUMERIC AS original_price,\n"
-							+ "?::NUMERIC AS discounted_price,\n"
-							+ "?::NUMERIC AS per_person_price\n"
+							+ "?::VARCHAR AS point_rate,\n"
+							+ "?::VARCHAR AS price,\n"
+							+ "?::VARCHAR AS original_price,\n"
+							+ "?::VARCHAR AS discounted_price,\n"
+							+ "?::VARCHAR AS per_person_price\n"
 					+ ")\n"
-					+ "INSERT INTO t_price_rakuten\n"
+					+ "INSERT INTO temp_price_rakuten\n"
 					+ "(\n"
 						+ "hotel_code,\n"
 						+ "hotel_name,\n"

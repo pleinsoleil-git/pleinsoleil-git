@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import a00100.app.job.a00100.rakuten.job.request.process.connection.Connection;
+import common.jdbc.JDBCUtils;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +34,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 		return v;
 	}
 
-	public static WebDriver getWebDriver() {
+	public static WebDriver getWebDriver() throws Exception {
 		return getCurrent().getWebDriver();
 	}
 
@@ -51,7 +53,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 	public static class _Current implements AutoCloseable {
 		WebDriver m_webDriver;
 
-		public WebDriver getWebDriver() {
+		public WebDriver getWebDriver() throws Exception {
 			if (m_webDriver == null) {
 				log.debug("Browser open!!");
 				m_webDriver = new ChromeDriver(new ChromeOptions() {
@@ -70,6 +72,44 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 				log.debug("Browser close!!");
 				//m_webDriver.quit();
 			}
+		}
+
+		void createTempTable() throws Exception {
+			createPrice();
+		}
+
+		void createPrice() throws Exception {
+			String sql;
+			sql = "CREATE LOCAL TEMPORARY TABLE IF NOT EXISTS temp_price_rakuten\n"
+				+ "(\n"
+					+ "id					BIGSERIAL,\n"
+					+ "hotel_code			VARCHAR,\n"
+					+ "hotel_name			VARCHAR,\n"
+					+ "plan_code			VARCHAR,\n"
+					+ "plan_name			ARCHAR,\n"
+					+ "plan_url				VARCHAR,\n"
+					+ "room_code			VARCHAR,\n"
+					+ "room_name			VARCHAR,\n"
+					+ "room_info			VARCHAR,\n"
+					+ "room_remark			VARCHAR,\n"
+					+ "room_option_meal		VARCHAR,\n"
+					+ "room_option_people	VARCHAR,\n"
+					+ "room_option_payment	VARCHAR,\n"
+					+ "point_rate			VARCHAR,\n"
+					+ "price				VARCHAR,\n"
+					+ "original_price		VARCHAR,\n"
+					+ "discounted_price		VARCHAR,\n"
+					+ "per_person_price		VARCHAR\n"
+				+ ")\n"
+				+ "WITH\n"
+				+ "(\n"
+					+ "FILLFACTOR = 100\n"
+				+ ")\n"
+				+ "ON COMMIT DROP\n";
+
+			val conn = Connection.app();
+			JDBCUtils.execute(conn, sql);
+			JDBCUtils.commit(conn);
 		}
 	}
 }
