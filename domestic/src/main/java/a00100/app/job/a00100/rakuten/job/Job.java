@@ -8,6 +8,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import a00100.app.job.a00100.RequestType;
+import a00100.app.job.a00100.rakuten.job.request.Request;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -35,6 +36,9 @@ public class Job {
 
 	public void execute() throws Exception {
 		try {
+			// --------------------------------------------------
+			 delete();
+			// --------------------------------------------------
 			for (val r : query()) {
 				(m_current = r).execute();
 			}
@@ -62,6 +66,8 @@ public class Job {
 		}) {
 			delete(t);
 		}
+
+		log.info(StringUtils.repeat("=", 50));
 	}
 
 	Collection<_Current> query() throws Exception {
@@ -117,6 +123,7 @@ public class Job {
 					if (aborted() == true) {
 						status.setStatus(JobStatus.ABORT);
 					} else {
+						request();
 						status.setStatus(JobStatus.SUCCESS);
 					}
 				} catch (Exception e) {
@@ -125,6 +132,10 @@ public class Job {
 					log.error("", e);
 				}
 			}
+		}
+
+		void request() throws Exception {
+			Request.getInstance().execute();
 		}
 
 		boolean aborted() throws Exception {
