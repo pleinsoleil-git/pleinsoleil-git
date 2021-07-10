@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
+import a00100.app.job.a00100.rakuten.job.request.Connection;
 import a00100.app.job.a00100.rakuten.job.request.Request;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
@@ -37,7 +38,7 @@ public class Process {
 	}
 
 	public void execute() throws Exception {
-		try (val conn = Connection.getInstance()) {
+		try {
 			val executor = Executors.newFixedThreadPool(1);
 			val completion = new ExecutorCompletionService<_Thread>(executor);
 

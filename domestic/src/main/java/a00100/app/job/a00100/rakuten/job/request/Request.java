@@ -34,7 +34,7 @@ public class Request {
 	}
 
 	public void execute() throws Exception {
-		try {
+		try (val conn = Connection.getInstance()) {
 			for (val r : query()) {
 				(m_current = r).execute();
 			}

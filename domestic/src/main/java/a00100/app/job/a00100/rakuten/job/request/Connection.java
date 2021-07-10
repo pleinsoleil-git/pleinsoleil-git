@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.rakuten.job.request.process;
+package a00100.app.job.a00100.rakuten.job.request;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,12 +48,17 @@ public class Connection implements AutoCloseable {
 		JDBCConnection m_app;
 
 		public JDBCConnection getApp() {
-			return (m_app == null ? m_app = new JDBCConnection(App.DEFAULT_DSN) : m_app);
+			return (m_app == null ? m_app = new JDBCConnection(App.DEFAULT_DSN) {
+				{
+					System.out.println("@@@@@@@@@	connection open");
+				}
+			} : m_app);
 		}
 
 		@Override
 		public void close() throws Exception {
 			if (m_app != null) {
+System.out.println("@@@@@@@@@	connection close");
 				m_app.close();
 			}
 		}
