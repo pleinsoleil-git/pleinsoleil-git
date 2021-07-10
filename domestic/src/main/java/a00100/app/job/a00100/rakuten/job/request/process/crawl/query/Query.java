@@ -40,7 +40,7 @@ public class Query extends WebClient {
 	}
 
 	WebClient next() {
-		return Plan.getInstance();
+		return Load.getInstance();
 	}
 
 	static class _00000 extends WebClient {

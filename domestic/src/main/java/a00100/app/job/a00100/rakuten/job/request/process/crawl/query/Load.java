@@ -18,18 +18,18 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 @Accessors(prefix = "m_", chain = false)
-class Plan extends WebClient {
-	static final ThreadLocal<Plan> m_instances = new ThreadLocal<Plan>() {
+class Load extends WebClient {
+	static final ThreadLocal<Load> m_instances = new ThreadLocal<Load>() {
 		@Override
-		protected Plan initialValue() {
-			return new Plan();
+		protected Load initialValue() {
+			return new Load();
 		}
 	};
 
-	Plan() {
+	Load() {
 	}
 
-	static Plan getInstance() {
+	static Load getInstance() {
 		return m_instances.get();
 	}
 
@@ -64,8 +64,6 @@ class Plan extends WebClient {
 							actions.perform();
 						}
 					});
-
-				break;
 				}
 			}
 		};
