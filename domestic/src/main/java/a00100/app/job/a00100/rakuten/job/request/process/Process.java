@@ -81,6 +81,7 @@ public class Process {
 				+ "SELECT ?::BIGINT AS request_id\n"
 			+ ")\n"
 			+ "SELECT j30.id,\n"
+				+ "j20.execution_date AS executionDate,\n"
 				+ "j20.job_type AS jobType,\n"
 				+ "j10.request_type AS requestType,\n"
 				+ "j10.user_id AS userId,\n"
@@ -122,6 +123,7 @@ public class Process {
 	@Data
 	public static class _Current {
 		Long m_id;
+		Date m_executionDate;
 		String m_jobType;
 		String m_requestType;
 		String m_userId;

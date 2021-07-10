@@ -35,16 +35,24 @@ class Load extends WebClient {
 
 	public WebClient execute() throws Exception {
 		try {
+			delete();
+
 			for (val r : query()) {
 				for (WebClient client = r; client != null;) {
 					client = client.execute();
 				}
 			}
 
-			return null;
+			return Entry.getInstance();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	void delete() throws Exception {
+		val conn = getConnection();
+		JDBCUtils.truncateTable(conn, "temp_price_rakuten");
+		JDBCUtils.commit(conn);
 	}
 
 	Collection<_00000> query() throws Exception {
@@ -84,15 +92,8 @@ class Load extends WebClient {
 		}
 
 		public WebClient submit() throws Exception {
-			delete();
 			insert();
 			return null;
-		}
-
-		void delete() throws Exception {
-			val conn = getConnection();
-			JDBCUtils.truncateTable(conn, "temp_price_rakuten");
-			JDBCUtils.commit(conn);
 		}
 
 		void insert() throws Exception {

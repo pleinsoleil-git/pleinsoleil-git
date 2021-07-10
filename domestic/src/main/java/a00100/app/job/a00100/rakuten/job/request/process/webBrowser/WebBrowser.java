@@ -62,7 +62,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 					}
 				});
 
-				createTempTable();
+				//createTempTable();
 			}
 
 			return m_webDriver;
