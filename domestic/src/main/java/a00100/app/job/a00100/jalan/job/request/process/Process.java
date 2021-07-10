@@ -170,7 +170,7 @@ public class Process {
 				if (aborted() == true) {
 					status.setStatus(JobStatus.ABORT);
 				} else {
-					//clawl();
+					clawl();
 					status.setStatus(JobStatus.SUCCESS);
 				}
 			} catch (Exception e) {

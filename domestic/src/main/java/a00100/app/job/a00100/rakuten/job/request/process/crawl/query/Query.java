@@ -72,7 +72,7 @@ public class Query extends WebClient {
 
 		void pushDate() throws Exception {
 			// --------------------------------------------------
-			// 日付未定のチェックを外す
+			// 【日付未定】チェックを外す
 			// --------------------------------------------------
 			val driver = getDriver();
 			val by = By.id("dh-unspecified-date");
