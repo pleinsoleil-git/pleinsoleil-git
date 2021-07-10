@@ -3,7 +3,6 @@ package a00100.app.job.a00100.crawl.job.request;
 import a00100.app.job.a00100.crawl.Connection;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
-import common.jdbc.JDBCUtils;
 import lombok.Data;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -55,14 +54,12 @@ public class Status implements AutoCloseable {
 			+ "ORDER BY j30.status, j30.id\n"
 			+ "LIMIT 1\n";
 
-		val conn = Connection.getCurrent().getDefault();
-		JDBCUtils.execute(conn, sql, new JDBCParameterList() {
+		Connection.App.execute(sql, new JDBCParameterList() {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
 			}
 		});
-		JDBCUtils.commit(conn);
 	}
 
 	void faild() throws Exception {
@@ -87,8 +84,7 @@ public class Status implements AutoCloseable {
 				+ "t10.error_message\n"
 			+ "FROM s_params AS t10\n";
 
-		val conn = Connection.getCurrent().getDefault();
-		JDBCUtils.execute(conn, sql, new JDBCParameterList() {
+		Connection.App.execute(sql, new JDBCParameterList() {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
@@ -97,6 +93,5 @@ public class Status implements AutoCloseable {
 				add(m_errorMessage);
 			}
 		});
-		JDBCUtils.commit(conn);
 	}
 }

@@ -2,6 +2,8 @@ package a00100.app.job.a00100.crawl.job.request.process;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -16,7 +18,6 @@ import a00100.app.job.a00100.crawl.job.request.Request;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.Rakuten;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
-import common.jdbc.JDBCUtils;
 import common.lang.NotSupportedException;
 import lombok.Data;
 import lombok.val;
@@ -33,6 +34,7 @@ public class Process {
 		}
 	};
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
+	Set<Long> m_runningIds;
 
 	Process() {
 	}
@@ -45,26 +47,31 @@ public class Process {
 		return m_currents.get();
 	}
 
+	Set<Long> getRunningIds() {
+		return (m_runningIds == null ? m_runningIds = new HashSet<>() : m_runningIds);
+	}
+
 	public void execute() throws Exception {
 		try {
-			val request = Request.getCurrent();
-			val executor = Executors.newFixedThreadPool(request.getExecutionNums().intValue());
+			val executor = Executors.newFixedThreadPool(1);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
-				int taskNums = 0;
+				val ids = getRunningIds();
 
 				do {
 					for (val r : query()) {
-						taskNums++;
+						ids.add(r.getId());
 						completion.submit(r);
 					}
 
-					if (taskNums > 0) {
-						m_currents.set(completion.take().get());
-						m_currents.get().execute();
+					if (ids.size() > 0) {
+						val process = completion.take().get();
+						m_currents.set(process);
+						process.execute();
+						ids.remove(process.getId());
 					}
-				} while (--taskNums > 0);
+				} while (ids.size() > 0);
 
 				executor.shutdown();
 			} catch (Exception e) {
@@ -72,6 +79,7 @@ public class Process {
 				throw e;
 			}
 		} finally {
+			m_currents.remove();
 			m_instances.remove();
 		}
 	}
@@ -114,9 +122,8 @@ public class Process {
 			+ "ORDER BY j30.priority NULLS LAST,\n"
 				+ "j30.id\n";
 
-		val conn = Connection.getCurrent().getDefault();
 		val rs = new BeanListHandler<_Task>(_Task.class);
-		return JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+		return Connection.App.query(sql, rs, new JDBCParameterList() {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
@@ -210,9 +217,8 @@ public class Process {
 					+ "ON j30.id = j20.foreign_id\n"
 					+ "AND j30.aborted = FALSE\n";
 
-			val conn = Connection.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
-			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+			return BooleanUtils.isTrue(Connection.App.query(sql, rs, new JDBCParameterList() {
 				{
 					add(getId());
 				}

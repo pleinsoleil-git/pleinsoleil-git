@@ -188,7 +188,7 @@ public class Job {
 				if (aborted() == true) {
 					status.setStatus(JobStatus.ABORT);
 				} else {
-					//request();
+					request();
 					status.setStatus(JobStatus.SUCCESS);
 				}
 			} catch (Exception e) {

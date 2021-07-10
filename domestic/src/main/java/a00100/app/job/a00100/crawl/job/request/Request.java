@@ -1,6 +1,8 @@
 package a00100.app.job.a00100.crawl.job.request;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -14,7 +16,6 @@ import a00100.app.job.a00100.crawl.job.Job;
 import a00100.app.job.a00100.crawl.job.request.process.Process;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
-import common.jdbc.JDBCUtils;
 import lombok.Data;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Accessors(prefix = "m_", chain = false)
 public class Request {
+	static int MAX_THREAD_NUM = 5;
 	static final ThreadLocal<Request> m_instances = new ThreadLocal<Request>() {
 		@Override
 		protected Request initialValue() {
@@ -30,6 +32,7 @@ public class Request {
 		}
 	};
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
+	Set<Long> m_runningIds;
 
 	Request() {
 	}
@@ -42,25 +45,31 @@ public class Request {
 		return m_currents.get();
 	}
 
+	Set<Long> getRunningIds() {
+		return (m_runningIds == null ? m_runningIds = new HashSet<>() : m_runningIds);
+	}
+
 	public void execute() throws Exception {
 		try {
-			val executor = Executors.newFixedThreadPool(5);
+			val executor = Executors.newFixedThreadPool(MAX_THREAD_NUM);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
-				int taskNums = 0;
+				val ids = getRunningIds();
 
 				do {
 					for (val r : query()) {
-						taskNums++;
+						ids.add(r.getId());
 						completion.submit(r);
 					}
 
-					if (taskNums > 0) {
-						m_currents.set(completion.take().get());
-						m_currents.get().execute();
+					if (ids.size() > 0) {
+						val request = completion.take().get();
+						m_currents.set(request);
+						request.execute();
+						ids.remove(request.getId());
 					}
-				} while (--taskNums > 0);
+				} while (ids.size() > 0);
 
 				executor.shutdown();
 			} catch (Exception e) {
@@ -68,6 +77,7 @@ public class Request {
 				throw e;
 			}
 		} finally {
+			m_currents.remove();
 			m_instances.remove();
 		}
 	}
@@ -80,8 +90,7 @@ public class Request {
 			+ ")\n"
 			+ "SELECT j20.id,\n"
 				+ "j20.request_type AS requestType,\n"
-				+ "j20.request_name AS requestName,\n"
-				+ "j20.execution_nums AS executionNums\n"
+				+ "j20.request_name AS requestName\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_job AS j10\n"
 				+ "ON j10.id = t10.job_id\n"
@@ -99,9 +108,8 @@ public class Request {
 			+ "ORDER BY j20.priority NULLS LAST,\n"
 				+ "j20.id\n";
 
-		val conn = Connection.getCurrent().getDefault();
 		val rs = new BeanListHandler<_Task>(_Task.class);
-		return JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+		return Connection.App.query(sql, rs, new JDBCParameterList() {
 			{
 				val job = Job.getCurrent();
 				add(job.getId());
@@ -114,7 +122,6 @@ public class Request {
 		Long m_id;
 		String m_requestType;
 		String m_requestName;
-		Long m_executionNums;
 		Status m_status;
 
 		public Status getStatus() {
@@ -134,7 +141,7 @@ public class Request {
 
 			try {
 				m_currents.set(this);
-				_execute();
+				run();
 			} catch (Exception e) {
 				log.error("", e);
 			} finally {
@@ -144,7 +151,7 @@ public class Request {
 			return this;
 		}
 
-		void _execute() {
+		void run() {
 			val status = getStatus();
 
 			try {
@@ -179,9 +186,8 @@ public class Request {
 					+ "ON j20.id = j10.foreign_id\n"
 					+ "AND j20.aborted = FALSE\n";
 
-			val conn = Connection.getCurrent().getDefault();
 			val rs = new ScalarHandler<Boolean>();
-			return BooleanUtils.isTrue(JDBCUtils.query(conn, sql, rs, new JDBCParameterList() {
+			return BooleanUtils.isTrue(Connection.App.query(sql, rs, new JDBCParameterList() {
 				{
 					add(getId());
 				}
