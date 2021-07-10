@@ -12,6 +12,7 @@ import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.rakuten.job.request.Request;
 import a00100.app.job.a00100.rakuten.job.request.process.connection.Connection;
+import a00100.app.job.a00100.rakuten.job.request.process.crawl.Crawl;
 import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebBrowser;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
@@ -167,6 +168,7 @@ public class Process {
 				if (aborted() == true) {
 					status.setStatus(JobStatus.ABORT);
 				} else {
+					clawl();
 					status.setStatus(JobStatus.SUCCESS);
 				}
 			} catch (Exception e) {
@@ -174,6 +176,10 @@ public class Process {
 				status.setErrorMessage(e.getMessage());
 				log.error("", e);
 			}
+		}
+
+		void clawl() throws Exception {
+			Crawl.getInstance().execute();
 		}
 
 		boolean aborted() throws Exception {

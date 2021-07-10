@@ -3,7 +3,7 @@ package a00100.app.job.a00100.rakuten.job.request.process.crawl.login;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
-import a00100.app.job.a00100.crawl.job.request.process.Process;
+import a00100.app.job.a00100.rakuten.job.request.process.Process;
 import a00100.app.job.a00100.rakuten.job.request.process.crawl.query.Query;
 import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebClient;
 import lombok.val;
