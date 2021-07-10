@@ -62,7 +62,7 @@ public class Job {
 				"j_crawl_process_status",
 				"j_crawl_request_status",
 				"j_crawl_job_status",
-				"t_price_rakuten",
+				"domestic_00101.t_pric",
 		}) {
 			delete(t);
 		}
