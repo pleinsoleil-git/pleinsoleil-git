@@ -37,7 +37,7 @@ public class Job {
 	public void execute() throws Exception {
 		try {
 			// --------------------------------------------------
-			 delete();
+			// delete();
 			// --------------------------------------------------
 			for (val r : query()) {
 				(m_current = r).execute();
@@ -62,7 +62,7 @@ public class Job {
 				"j_crawl_process_status",
 				"j_crawl_request_status",
 				"j_crawl_job_status",
-				"domestic_00101.t_pric",
+				"domestic_00101.t_price",
 		}) {
 			delete(t);
 		}
