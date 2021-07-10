@@ -1,11 +1,13 @@
-package a00100.app.job.a00100.rakuten.job.request.process;
+package a00100.app.job.a00100.rakuten.job.request.process.connection;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 import a00100.app.job.a00100.rakuten.App;
 import common.jdbc.JDBCConnection;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Connection implements AutoCloseable {
 	static Connection m_instance;
 	static final ConcurrentHashMap<Long, _Current> m_currents = new ConcurrentHashMap<Long, _Current>();
@@ -50,7 +52,7 @@ public class Connection implements AutoCloseable {
 		public JDBCConnection getApp() {
 			return (m_app == null ? m_app = new JDBCConnection(App.DEFAULT_DSN) {
 				{
-					System.out.println("@@@@@@@@@	connection open");
+					log.debug("Connection open!!");
 				}
 			} : m_app);
 		}
@@ -58,7 +60,7 @@ public class Connection implements AutoCloseable {
 		@Override
 		public void close() throws Exception {
 			if (m_app != null) {
-System.out.println("@@@@@@@@@	connection close");
+				log.debug("Connection close!!");
 				m_app.close();
 			}
 		}

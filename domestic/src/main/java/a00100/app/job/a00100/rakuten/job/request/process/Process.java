@@ -11,6 +11,8 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.rakuten.job.request.Request;
+import a00100.app.job.a00100.rakuten.job.request.process.connection.Connection;
+import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebBrowser;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -38,29 +40,31 @@ public class Process {
 
 	public void execute() throws Exception {
 		try (val conn = Connection.getInstance()) {
-			val executor = Executors.newFixedThreadPool(1);
-			val completion = new ExecutorCompletionService<_Thread>(executor);
+			try (val browser = WebBrowser.getInstance()) {
+				val executor = Executors.newFixedThreadPool(1);
+				val completion = new ExecutorCompletionService<_Thread>(executor);
 
-			try {
-				int threadNums = 0;
+				try {
+					int threadNums = 0;
 
-				do {
-					for (val r : query()) {
-						threadNums++;
-						completion.submit(r);
-					}
+					do {
+						for (val r : query()) {
+							threadNums++;
+							completion.submit(r);
+						}
 
-					if (threadNums > 0) {
-						val process = completion.take().get();
-						m_currents.set(process);
-						process.execute();
-					}
-				} while (--threadNums > 0);
+						if (threadNums > 0) {
+							val process = completion.take().get();
+							m_currents.set(process);
+							process.execute();
+						}
+					} while (--threadNums > 0);
 
-				executor.shutdown();
-			} catch (Exception e) {
-				executor.shutdownNow();
-				throw e;
+					executor.shutdown();
+				} catch (Exception e) {
+					executor.shutdownNow();
+					throw e;
+				}
 			}
 		} finally {
 			m_currents.remove();
