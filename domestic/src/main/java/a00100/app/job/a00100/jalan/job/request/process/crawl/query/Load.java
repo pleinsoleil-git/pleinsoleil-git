@@ -38,6 +38,9 @@ class Load extends WebClient {
 			delete();
 
 			for (val r : query()) {
+				for (WebClient client = r; client != null;) {
+					client = client.execute();
+				}
 			}
 
 			return next();
@@ -79,18 +82,29 @@ class Load extends WebClient {
 		@Getter
 		WebElement m_rootElement;
 
-		String getHotelName() {
-			val by = By.xpath("//a[contains(@class,'rtconds')]");
-			return WebElementUtils.getText(getRootElement(), by);
+		String getHotelCode() throws Exception {
+			val driver = getDriver();
+			val by = By.name("yadNo");
+			return driver.findElement(by).getAttribute("value");
+		}
+
+		String getHotelName() throws Exception {
+			val driver = getDriver();
+			val by = By.xpath("//*[@id='yado_header_hotel_name']//child::*[1]");
+			return driver.findElement(by).getText();
+		}
+
+		String getPlanCode() {
+			return getRootElement().getAttribute("data-plancode");
 		}
 
 		String getPlanName() {
-			val by = By.xpath(".//child::*[1]");
+			val by = By.xpath(".//p[contains(@class,'p-searchResultItem__catchPhrase')]");
 			return WebElementUtils.getText(getRootElement(), by);
 		}
 
 		public WebClient submit() throws Exception {
-			insert();
+			System.out.println(getHotelName());
 			return null;
 		}
 

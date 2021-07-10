@@ -80,12 +80,12 @@ public class Login extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			val crawl = Crawl.getCurrent();
+
 			if (StringUtils.isEmpty(crawl.getUserId()) == true
 					&& StringUtils.isEmpty(crawl.getPassword()) == true) {
 				// --------------------------------------------------
 				// ユーザID、パスワードが指定されていないのでログインの必要なし
 				// --------------------------------------------------
-
 				return null;
 			}
 
