@@ -57,7 +57,7 @@ public class Job {
 			try {
 				val ids = getRunningIds();
 
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < 10; i++) {
 					for (val r : query()) {
 						ids.add(r.getId());
 						completion.submit(r);
@@ -122,12 +122,12 @@ public class Job {
 				+ "AND j10.auto_run = TRUE\n"
 				+ "AND j10.aborted = FALSE\n"
 				+ "AND j10.deleted = FALSE\n"
-			+ "WHERE NOT EXISTS\n"
+			+ "WHERE EXISTS\n"
 			+ "(\n"
 				+ "SELECT NULL\n"
-				+ "FROM j_crawl_job_status AS j900\n"
-				+ "WHERE j900.foreign_id = j10.id\n"
-				+ "AND j900.status = t10.success\n"
+//				+ "FROM j_crawl_job_status AS j900\n"
+//				+ "WHERE j900.foreign_id = j10.id\n"
+//				+ "AND j900.status = t10.success\n"
 			+ ")\n"
 			+ "AND EXISTS\n"
 			+ "(\n"
