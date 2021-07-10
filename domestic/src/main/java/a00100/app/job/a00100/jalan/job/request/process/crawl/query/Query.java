@@ -50,7 +50,7 @@ public class Query extends WebClient {
 
 		@Override
 		public WebClient submit() throws Exception {
-			return null;
+			return new _00100();
 		}
 	}
 
@@ -58,12 +58,12 @@ public class Query extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			pushDate();
-			setCheckin();
-			setCheckout();
-			setRoom();
-			setAdult();
-			setChild();
-			pushQuery();
+			//setCheckin();
+			//setCheckout();
+			//setRoom();
+			//setAdult();
+			//setChild();
+			//pushQuery();
 			return null;
 		}
 
@@ -72,7 +72,7 @@ public class Query extends WebClient {
 			// 【日付未定】チェックを外す
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.id("dh-unspecified-date");
+			val by = By.name("dateUndecided");
 			val element = driver.findElement(by);
 
 			if (element.isSelected() == true) {
