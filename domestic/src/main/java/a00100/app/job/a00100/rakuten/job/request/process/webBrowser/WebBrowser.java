@@ -61,6 +61,8 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 						addArguments("--incognito"); // シークレットモード
 					}
 				});
+
+				createTempTable();
 			}
 
 			return m_webDriver;
@@ -86,7 +88,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 					+ "hotel_code			VARCHAR,\n"
 					+ "hotel_name			VARCHAR,\n"
 					+ "plan_code			VARCHAR,\n"
-					+ "plan_name			ARCHAR,\n"
+					+ "plan_name			VARCHAR,\n"
 					+ "plan_url				VARCHAR,\n"
 					+ "room_code			VARCHAR,\n"
 					+ "room_name			VARCHAR,\n"
@@ -104,8 +106,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 				+ "WITH\n"
 				+ "(\n"
 					+ "FILLFACTOR = 100\n"
-				+ ")\n"
-				+ "ON COMMIT DROP\n";
+				+ ")\n";
 
 			val conn = Connection.app();
 			JDBCUtils.execute(conn, sql);
