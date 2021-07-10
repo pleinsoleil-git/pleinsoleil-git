@@ -8,8 +8,6 @@ CREATE TABLE j_crawl_job
 	job_name						VARCHAR( 1024 ),
 	execution_date					DATE,
 	execution_start_time			TIME,
-	user_id							VARCHAR( 512 ),
-	password						VARCHAR( 512 ),
 	check_in_date					DATE,
 	check_out_date					DATE,
 	room_nums						NUMERIC,
@@ -54,8 +52,6 @@ COMMENT ON COLUMN j_crawl_job.job_type						IS 'ジョブタイプ';
 COMMENT ON COLUMN j_crawl_job.job_name						IS 'ジョブ名';
 COMMENT ON COLUMN j_crawl_job.execution_date				IS '実行日';
 COMMENT ON COLUMN j_crawl_job.execution_start_time			IS '実行開始時間';
-COMMENT ON COLUMN j_crawl_job.user_id						IS 'ユーザID';
-COMMENT ON COLUMN j_crawl_job.password						IS 'パスワード';
 COMMENT ON COLUMN j_crawl_job.check_in_date					IS 'チェックイン日';
 COMMENT ON COLUMN j_crawl_job.check_out_date				IS 'チェックアウト日';
 COMMENT ON COLUMN j_crawl_job.room_nums						IS '部屋数';

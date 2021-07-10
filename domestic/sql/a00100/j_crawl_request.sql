@@ -7,6 +7,8 @@ CREATE TABLE j_crawl_request
 	foreign_id						BIGINT					REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
 	request_type					VARCHAR( 512 ),
 	request_name					VARCHAR( 1024 ),
+	user_id							VARCHAR( 512 ),
+	password						VARCHAR( 512 ),
 	priority						NUMERIC,
 	aborted							BOOLEAN					DEFAULT FALSE,
 	deleted							BOOLEAN					DEFAULT TRUE,
@@ -41,8 +43,10 @@ WITH
 COMMENT ON TABLE j_crawl_request							IS 'クロール';
 COMMENT ON COLUMN j_crawl_request.id						IS '主キー';
 COMMENT ON COLUMN j_crawl_request.foreign_id				IS '外部キー';
-COMMENT ON COLUMN j_crawl_request.request_type				IS 'ジョブタイプ';
-COMMENT ON COLUMN j_crawl_request.request_name				IS 'ジョブ名';
+COMMENT ON COLUMN j_crawl_request.request_type				IS 'リクエストタイプ';
+COMMENT ON COLUMN j_crawl_request.request_name				IS 'リクエスト名';
+COMMENT ON COLUMN j_crawl_request.user_id					IS 'ユーザID';
+COMMENT ON COLUMN j_crawl_request.password					IS 'パスワード';
 COMMENT ON COLUMN j_crawl_request.priority					IS '優先順位';
 COMMENT ON COLUMN j_crawl_request.aborted					IS '中断';
 COMMENT ON COLUMN j_crawl_request.deleted					IS '論理削除';

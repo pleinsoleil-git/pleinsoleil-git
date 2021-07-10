@@ -3,9 +3,12 @@ package a00100.app.job.a00100.rakuten.job;
 import java.util.Collection;
 
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import a00100.app.job.a00100.RequestType;
+import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
 import lombok.Data;
@@ -100,9 +103,48 @@ public class Job {
 		Long m_id;
 		String m_jobType;
 		String m_jobName;
+		Status m_status;
+
+		Status getStatus() {
+			return (m_status == null ? m_status = new Status() : m_status);
+		}
 
 		void execute() throws Exception {
 			log.info(String.format("Job[id=%d type=%s name=%s]", getId(), getJobType(), getJobName()));
+
+			try (val status = getStatus()) {
+				try {
+					if (aborted() == true) {
+						status.setStatus(JobStatus.ABORT);
+					} else {
+						status.setStatus(JobStatus.SUCCESS);
+					}
+				} catch (Exception e) {
+					status.setStatus(JobStatus.FAILD);
+					status.setErrorMessage(e.getMessage());
+					log.error("", e);
+				}
+			}
+		}
+
+		boolean aborted() throws Exception {
+			String sql;
+			sql = "WITH s_params AS\n"
+				+ "(\n"
+					+ "SELECT ?::BIGINT AS job_id\n"
+				+ ")\n"
+				+ "SELECT j10.aborted\n"
+				+ "FROM s_params AS t10\n"
+				+ "INNER JOIN j_crawl_job AS j10\n"
+					+ "ON j10.id = t10.job_id\n"
+					+ "AND j10.aborted = FALSE\n";
+
+			val rs = new ScalarHandler<Boolean>();
+			return BooleanUtils.isTrue(JDBCUtils.query(sql, rs, new JDBCParameterList() {
+				{
+					add(getId());
+				}
+			}));
 		}
 	}
 }
