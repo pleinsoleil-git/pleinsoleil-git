@@ -1,8 +1,8 @@
-package a00100.app.job.a00100.jalan.job.request.process.connection;
+package a00100.app.job.a00100.ikyu.job.request.process.connection;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import a00100.app.job.a00100.jalan.App;
+import a00100.app.job.a00100.ikyu.App;
 import common.jdbc.JDBCConnection;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
