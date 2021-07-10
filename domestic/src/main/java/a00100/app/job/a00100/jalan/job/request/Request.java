@@ -7,7 +7,7 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
 
 import a00100.app.job.a00100.jalan.job.Job;
-import a00100.app.job.a00100.rakuten.job.request.process.Process;
+import a00100.app.job.a00100.jalan.job.request.process.Process;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -98,7 +98,7 @@ public class Request {
 					if (aborted() == true) {
 						status.setStatus(JobStatus.ABORT);
 					} else {
-						//process();
+						process();
 						status.setStatus(JobStatus.SUCCESS);
 					}
 				} catch (Exception e) {
