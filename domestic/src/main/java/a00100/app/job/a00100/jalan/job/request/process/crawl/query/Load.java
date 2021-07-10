@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.rakuten.job.request.process.crawl.query;
+package a00100.app.job.a00100.jalan.job.request.process.crawl.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,8 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebClient;
-import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebElementUtils;
+import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
+import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebElementUtils;
 import common.jdbc.JDBCUtils;
 import common.lang.StringUtils;
 import lombok.Getter;
@@ -38,9 +38,6 @@ class Load extends WebClient {
 			delete();
 
 			for (val r : query()) {
-				for (WebClient client = r; client != null;) {
-					client = client.execute();
-				}
 			}
 
 			return next();
@@ -50,12 +47,12 @@ class Load extends WebClient {
 	}
 
 	WebClient next() {
-		return Entry.getInstance();
+		return null;
 	}
 
 	void delete() throws Exception {
 		val conn = getConnection();
-		JDBCUtils.truncateTable(conn, "temp_price_rakuten");
+		JDBCUtils.truncateTable(conn, "temp_price_jalan");
 		JDBCUtils.commit(conn);
 	}
 
@@ -64,14 +61,11 @@ class Load extends WebClient {
 			{
 				val driver = getDriver();
 				val actions = new Actions(driver);
-				val by = By.xpath("//div[@class='planList']/ul/li");
+				val by = By.xpath("//div[contains(@class,'p-searchResults')]/ul/li[contains(@class,'p-searchResultItem')]");
 
 				for (val element : driver.findElements(by)) {
 					add(new _00000() {
 						{
-							// -------------------------------------------------------
-							// プランまでスクロールしないと金額が取得できない
-							// -------------------------------------------------------
 							actions.moveToElement(m_rootElement = element);
 							actions.perform();
 						}

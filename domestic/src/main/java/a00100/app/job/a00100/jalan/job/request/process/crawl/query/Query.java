@@ -31,10 +31,14 @@ public class Query extends WebClient {
 				client = client.execute();
 			}
 
-			return null;
+			return next();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	WebClient next() {
+		return Load.getInstance();
 	}
 
 	static class _00000 extends WebClient {
