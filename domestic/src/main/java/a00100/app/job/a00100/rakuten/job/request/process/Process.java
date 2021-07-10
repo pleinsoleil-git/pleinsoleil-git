@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Accessors(prefix = "m_", chain = false)
 public class Process {
+	static final int MAX_THREAD_NUMS = 5;
 	static Process m_instance;
 	static final ThreadLocal<_Current> m_currents = new ThreadLocal<_Current>();
 
@@ -41,7 +42,7 @@ public class Process {
 	public void execute() throws Exception {
 		try (val conn = Connection.getInstance()) {
 			try (val browser = WebBrowser.getInstance()) {
-				val executor = Executors.newFixedThreadPool(1);
+				val executor = Executors.newFixedThreadPool(MAX_THREAD_NUMS);
 				val completion = new ExecutorCompletionService<_Thread>(executor);
 
 				try {

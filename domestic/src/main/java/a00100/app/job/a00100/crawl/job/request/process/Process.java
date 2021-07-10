@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Accessors(prefix = "m_", chain = false)
 public class Process {
+	static final int MAX_THREAD_NUMS = 5;
 	static final ThreadLocal<Process> m_instances = new ThreadLocal<Process>() {
 		@Override
 		protected Process initialValue() {
@@ -54,7 +55,7 @@ public class Process {
 
 	public void execute() throws Exception {
 		try {
-			val executor = Executors.newFixedThreadPool(1);
+			val executor = Executors.newFixedThreadPool(MAX_THREAD_NUMS);
 			val completion = new ExecutorCompletionService<_Task>(executor);
 
 			try {
