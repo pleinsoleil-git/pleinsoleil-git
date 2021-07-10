@@ -14,8 +14,8 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
-import a00100.app.job.a00100.crawl.job.JobType;
 import a00100.app.job.a00100.crawl.job.request.Request;
+import a00100.app.job.a00100.crawl.job.request.RequestType;
 import a00100.app.job.a00100.crawl.job.request.process.rakuten.Rakuten;
 import common.app.job.JobStatus;
 import common.jdbc.JDBCParameterList;
@@ -196,7 +196,7 @@ public class Process {
 				if (aborted() == true) {
 					status.setStatus(JobStatus.ABORT);
 				} else {
-					switch (JobType.valueOf(getJobType())) {
+					switch (RequestType.valueOf(getRequestType())) {
 					case RAKUTEN:
 						//rakuten();
 						break;
