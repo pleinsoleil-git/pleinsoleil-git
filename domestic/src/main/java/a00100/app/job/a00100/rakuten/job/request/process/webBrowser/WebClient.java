@@ -6,7 +6,7 @@ import a00100.app.job.a00100.rakuten.job.request.process.connection.Connection;
 import common.jdbc.JDBCConnection;
 
 public class WebClient {
-	public WebDriver getWebDriver() throws Exception {
+	public WebDriver getDriver() throws Exception {
 		return WebBrowser.getWebDriver();
 	}
 
