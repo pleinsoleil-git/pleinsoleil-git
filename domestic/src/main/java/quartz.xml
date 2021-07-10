@@ -6,7 +6,7 @@
 	<schedule>
 		<job>
 			<name>test</name>
-			<job-class>a00100.app.job.a00100.crawl.Action</job-class>
+			<job-class>a00100.app.job.a00100.rakuten.Action</job-class>
 		</job>
 		<trigger>
 			<simple>
