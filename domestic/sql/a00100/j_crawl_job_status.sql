@@ -4,22 +4,14 @@ DROP TABLE j_crawl_job_status CASCADE;
 CREATE TABLE j_crawl_job_status
 (
 	id								BIGSERIAL,
-	foreign_id						BIGINT				REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
+	foreign_id						BIGINT					REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
 	status							NUMERIC,
 	error_code						VARCHAR( 512 ),
 	error_message					VARCHAR,
-	created_at						TIMESTAMP( 0 )		DEFAULT CURRENT_TIMESTAMP,
+	created_at						TIMESTAMP( 0 )			DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY
 	(
 		id
-	)
-	WITH
-	(
-		FILLFACTOR = 100
-	),
-	UNIQUE
-	(
-		foreign_id
 	)
 	WITH
 	(
@@ -30,3 +22,22 @@ WITH
 (
 	FILLFACTOR = 100
 );
+
+
+CREATE INDEX ON j_crawl_job_status
+(
+	foreign_id
+)
+WITH
+(
+	FILLFACTOR = 100
+);
+
+
+COMMENT ON TABLE j_crawl_job_status							IS 'クロール';
+COMMENT ON COLUMN j_crawl_job_status.id						IS '主キー';
+COMMENT ON COLUMN j_crawl_job_status.foreign_id				IS '外部キー';
+COMMENT ON COLUMN j_crawl_job_status.status					IS 'ステータス';
+COMMENT ON COLUMN j_crawl_job_status.error_code				IS 'エラーコード';
+COMMENT ON COLUMN j_crawl_job_status.error_message			IS 'メッセージ';
+COMMENT ON COLUMN j_crawl_job_status.created_at				IS '作成日時';
