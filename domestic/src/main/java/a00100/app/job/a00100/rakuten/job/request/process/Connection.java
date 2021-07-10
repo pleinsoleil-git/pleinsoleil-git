@@ -1,4 +1,4 @@
-package a00100.app.job.a00100.rakuten.job.request;
+package a00100.app.job.a00100.rakuten.job.request.process;
 
 import java.util.concurrent.ConcurrentHashMap;
 
