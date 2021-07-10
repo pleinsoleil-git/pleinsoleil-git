@@ -63,11 +63,9 @@ public class Crawl extends WebClient {
 				+ "TO_CHAR( j30.check_in_date, 'MM' ) AS monthFrom,\n"
 				+ "TO_CHAR( j30.check_in_date, 'DD' ) AS dayFrom,\n"
 				+ "( j30.check_out_date - j30.check_in_date )::VARCHAR stayNums,\n"
-				+ "j30.check_out_date AS checkOutDate,\n"
-				+ "j30.room_nums AS roomNums,\n"
-				+ "j30.adult_nums AS adultNums,\n"
-				+ "j30.upper_grade_nums AS upperGradeNums,\n"
-				+ "j30.lower_grade_nums AS lowerGradeNums,\n"
+				+ "j30.room_nums::VARCHAR AS roomNums,\n"
+				+ "( j30.adult_nums + j30.upper_grade_nums )::VARCHAR AS adultNums,\n"
+				+ "j30.lower_grade_nums::VARCHAR AS lowerGradeNums,\n"
 				+ "j10.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_process AS j10\n"
@@ -96,10 +94,10 @@ public class Crawl extends WebClient {
 		String m_monthFrom;
 		String m_dayFrom;
 		String m_stayNums;
-		Long m_roomNums;
-		Long m_adultNums;
-		Long m_upperGradeNums;
-		Long m_lowerGradeNums;
+		String m_roomNums;
+		String m_adultNums;
+		String m_upperGradeNums;
+		String m_lowerGradeNums;
 		String m_hotelCode;
 
 		void execute() throws Exception {

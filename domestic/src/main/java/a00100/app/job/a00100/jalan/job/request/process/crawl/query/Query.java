@@ -60,9 +60,10 @@ public class Query extends WebClient {
 			setMonthFrom();
 			setDayFrom();
 			setStay();
+			setRoom();
 			setAdult();
-			//setChild();
-			//pushQuery();
+			setChild();
+			pushQuery();
 			return null;
 		}
 
@@ -130,6 +131,20 @@ public class Query extends WebClient {
 			element.selectByValue(crawl.getStayNums());
 		}
 
+		void setRoom() throws Exception {
+			// --------------------------------------------------
+			// 部屋
+			// --------------------------------------------------
+			val crawl = Crawl.getCurrent();
+			if (crawl.getRoomNums() != null) {
+				val driver = getDriver();
+				val by = By.id("dyn_room_num");
+				val element = new Select(driver.findElement(by));
+
+				element.selectByValue(crawl.getRoomNums());
+			}
+		}
+
 		void setAdult() throws Exception {
 			// --------------------------------------------------
 			// 大人人数
@@ -137,38 +152,31 @@ public class Query extends WebClient {
 			val crawl = Crawl.getCurrent();
 			if (crawl.getAdultNums() != null) {
 				val driver = getDriver();
-				val by = By.id("dhAdult1");
+				val by = By.id("dyn_adult_num");
 				val element = new Select(driver.findElement(by));
 
-				element.selectByValue(String.format("%d", crawl.getAdultNums()));
+				element.selectByValue(crawl.getAdultNums());
 			}
 		}
 
 		void setChild() throws Exception {
 			// --------------------------------------------------
 			// 子供人数
+			// 高学年は大人扱い
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.id("chldNum1");
-			val element = driver.findElement(by);
 
-			element.click();
-			setUpperGrade();
-			setLowerGrade();
-			element.click();
-		}
+			try {
+				val by = By.id("dyn_child_num_txt_id1");
+				val element = driver.findElement(by);
 
-		void setUpperGrade() throws Exception {
-			// --------------------------------------------------
-			// 高学年
-			// --------------------------------------------------
-			val crawl = Crawl.getCurrent();
-			if (crawl.getUpperGradeNums() != null) {
-				val driver = getDriver();
-				val by = By.id("dh-s1");
-				val element = new Select(driver.findElement(by));
+				element.click();
+				setLowerGrade();
+			} finally {
+				val by = By.id("panel-close-btn");
+				val element = driver.findElement(by);
 
-				element.selectByValue(String.format("%d", crawl.getUpperGradeNums()));
+				element.click();
 			}
 		}
 
@@ -179,10 +187,10 @@ public class Query extends WebClient {
 			val crawl = Crawl.getCurrent();
 			if (crawl.getLowerGradeNums() != null) {
 				val driver = getDriver();
-				val by = By.id("dh-s2");
+				val by = By.id("panel_child_num_1_1");
 				val element = new Select(driver.findElement(by));
 
-				element.selectByValue(String.format("%d", crawl.getLowerGradeNums()));
+				element.selectByValue(crawl.getLowerGradeNums());
 			}
 		}
 
@@ -191,7 +199,7 @@ public class Query extends WebClient {
 			// 【検索】押下
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.id("dh-submit");
+			val by = By.id("research");
 			val element = driver.findElement(by);
 
 			element.click();
