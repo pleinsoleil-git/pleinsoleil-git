@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import a00100.app.job.a00100.crawl.Connection;
 import a00100.app.job.a00100.crawl.job.JobType;
@@ -118,8 +119,17 @@ public class Process {
 				+ "SELECT NULL\n"
 				+ "FROM j_crawl_process_status AS j900\n"
 				+ "WHERE j900.foreign_id = j30.id\n"
-			+ ")\n"
-			+ "ORDER BY j30.priority NULLS LAST,\n"
+			+ ")\n";
+
+		val ids = getRunningIds();
+		if (ids.isEmpty() == false) {
+			sql += "AND j30.id NOT IN\n"
+				+ "(\n"
+					+ StringUtils.repeat("?::BIGINT", ",\n", ids.size())
+				+ ")\n";
+		}
+
+		sql += "ORDER BY j30.priority NULLS LAST,\n"
 				+ "j30.id\n";
 
 		val rs = new BeanListHandler<_Task>(_Task.class);
@@ -127,6 +137,10 @@ public class Process {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
+
+				for (val id : ids) {
+					add(id);
+				}
 			}
 		});
 	}
