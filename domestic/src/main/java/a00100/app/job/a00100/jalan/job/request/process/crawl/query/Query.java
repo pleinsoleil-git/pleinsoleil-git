@@ -1,11 +1,11 @@
-package a00100.app.job.a00100.rakuten.job.request.process.crawl.query;
+package a00100.app.job.a00100.jalan.job.request.process.crawl.query;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
-import a00100.app.job.a00100.rakuten.job.request.process.Process;
-import a00100.app.job.a00100.rakuten.job.request.process.webBrowser.WebClient;
+import a00100.app.job.a00100.jalan.job.request.process.Process;
+import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
 import common.lang.time.DateFormatUtils;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -33,28 +33,24 @@ public class Query extends WebClient {
 				client = client.execute();
 			}
 
-			return next();
+			return null;
 		} finally {
 			m_instances.remove();
 		}
 	}
 
-	WebClient next() {
-		return Load.getInstance();
-	}
-
 	static class _00000 extends WebClient {
 		@Override
 		public void navigate() throws Exception {
-			val URL = "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/%s";
+			val URL = "https://www.jalan.net/yad%s/plan/?yadNo=%s";
 			val process = Process.getCurrent();
 			val driver = getDriver();
-			driver.get(String.format(URL, process.getHotelCode()));
+			driver.get(String.format(URL, process.getHotelCode(), process.getHotelCode()));
 		}
 
 		@Override
 		public WebClient submit() throws Exception {
-			return new _00100();
+			return null;
 		}
 	}
 

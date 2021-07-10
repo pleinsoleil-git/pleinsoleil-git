@@ -47,3 +47,5 @@ COMMENT ON COLUMN j_crawl_process.deleted					IS '論理削除';
 COMMENT ON COLUMN j_crawl_process.created_at				IS '作成日時';
 COMMENT ON COLUMN j_crawl_process.updated_at				IS '更新日時';
 COMMENT ON COLUMN j_crawl_process.deleted_at				IS '削除日時';
+
+アパホテル〈三田駅前〉	138037	342084

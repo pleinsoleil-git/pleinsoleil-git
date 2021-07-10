@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
 import a00100.app.job.a00100.jalan.job.request.process.Process;
+import a00100.app.job.a00100.jalan.job.request.process.crawl.query.Query;
 import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -31,10 +32,14 @@ public class Login extends WebClient {
 				client = client.execute();
 			}
 
-			return null;
+			return next();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	WebClient next() {
+		return Query.getInstance();
 	}
 
 	static class _00000 extends WebClient {
