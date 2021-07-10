@@ -7,7 +7,7 @@ import common.jdbc.JDBCConnection;
 
 public class WebClient {
 	public WebDriver getWebDriver() throws Exception {
-		return WebBrowser.getCurrent().getWebDriver();
+		return WebBrowser.getWebDriver();
 	}
 
 	public JDBCConnection getConnection() {

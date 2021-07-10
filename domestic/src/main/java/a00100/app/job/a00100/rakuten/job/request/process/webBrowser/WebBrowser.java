@@ -32,6 +32,10 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 		return v;
 	}
 
+	public static WebDriver getWebDriver() {
+		return getCurrent().getWebDriver();
+	}
+
 	@Override
 	public void close() throws Exception {
 		try {
@@ -47,7 +51,7 @@ public class WebBrowser extends common.webBrowser.WebBrowser implements AutoClos
 	public static class _Current implements AutoCloseable {
 		WebDriver m_webDriver;
 
-		public WebDriver getWebDriver() throws Exception {
+		public WebDriver getWebDriver() {
 			if (m_webDriver == null) {
 				log.debug("Browser open!!");
 				m_webDriver = new ChromeDriver(new ChromeOptions() {
