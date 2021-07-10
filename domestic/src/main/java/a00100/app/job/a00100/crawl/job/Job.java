@@ -49,7 +49,7 @@ public class Job {
 	public void execute() throws Exception {
 		try (val browser = WebBrowser.getInstance()) {
 			// --------------------------------------------------
-			// delete();
+			 delete();
 			// --------------------------------------------------
 			val executor = Executors.newFixedThreadPool(MAX_THREAD_NUM);
 			val completion = new ExecutorCompletionService<_Task>(executor);
@@ -57,19 +57,21 @@ public class Job {
 			try {
 				val ids = getRunningIds();
 
-				do {
+				for (int i = 0; i < 5; i++) {
 					for (val r : query()) {
 						ids.add(r.getId());
 						completion.submit(r);
 					}
 
-					if (ids.size() > 0) {
-						val job = completion.take().get();
-						m_currents.set(job);
-						job.execute();
-						ids.remove(job.getId());
+					if (ids.isEmpty() == true) {
+						break;
 					}
-				} while (ids.size() > 0);
+
+					val job = completion.take().get();
+					m_currents.set(job);
+					job.execute();
+					ids.remove(job.getId());
+				}
 
 				executor.shutdown();
 			} catch (Exception e) {
@@ -126,6 +128,20 @@ public class Job {
 				+ "FROM j_crawl_job_status AS j900\n"
 				+ "WHERE j900.foreign_id = j10.id\n"
 				+ "AND j900.status = t10.success\n"
+			+ ")\n"
+			+ "AND EXISTS\n"
+			+ "(\n"
+				+ "SELECT NULL\n"
+				+ "FROM j_crawl_request AS j900\n"
+				+ "WHERE j900.foreign_id = j10.id\n"
+				+ "AND j900.deleted = FALSE\n"
+				+ "AND EXISTS\n"
+				+ "(\n"
+					+ "SELECT NULL\n"
+					+ "FROM j_crawl_process AS j9000\n"
+					+ "WHERE j9000.foreign_id = j900.id\n"
+					+ "AND j9000.deleted = FALSE\n"
+				+ ")\n"
 			+ ")\n";
 
 		val ids = getRunningIds();
