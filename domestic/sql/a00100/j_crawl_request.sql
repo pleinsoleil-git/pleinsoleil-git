@@ -57,3 +57,4 @@ COMMENT ON COLUMN j_crawl_request.deleted_at				IS '削除日時';
 
 INSERT INTO j_crawl_request(request_type,request_name,user_id,password) VALUES ('RAKUTEN','楽天トラベル','money.hideki.nakayama@gmail.com','123Qwe@asd');
 INSERT INTO j_crawl_request(request_type,request_name,user_id,password) VALUES ('JALAN','じゃらん','travel.a.0123456789@gmail.com','123Qwe@asd');
+INSERT INTO j_crawl_request(request_type,request_name,user_id,password) VALUES ('IKYU','一休','travel.a.0123456789@gmail.com','123Qwe@asd');
