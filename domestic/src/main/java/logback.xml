@@ -23,6 +23,34 @@
 		</encoder>
 	</appender>
 
+	<appender name="RAKUTEN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/domestic.rakuten.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/archive/domestic.rakuten.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>10MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{100}:%line %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="JALAN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${catalina.home}/logs/domestic.jalan.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home}/logs/archive/domestic.jalan.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>10MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{100}:%line %msg%n</pattern>
+		</encoder>
+	</appender>
+
 	<logger name="org.quartz" level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SYSTEM" />
@@ -36,6 +64,16 @@
 	<logger name="a00100" level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SYSTEM" />
+	</logger>
+
+	<logger name="a00100.rakuten" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="RAKUTEN" />
+	</logger>
+
+	<logger name="a00100.jalan" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="JALAN" />
 	</logger>
 
 </configuration>
