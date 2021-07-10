@@ -3,7 +3,7 @@ package a00100.app.job.a00100.jalan.job.request.process.crawl.login;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
-import a00100.app.job.a00100.jalan.job.request.process.Process;
+import a00100.app.job.a00100.jalan.job.request.process.crawl.Crawl;
 import a00100.app.job.a00100.jalan.job.request.process.crawl.query.Query;
 import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
 import lombok.val;
@@ -79,9 +79,9 @@ public class Login extends WebClient {
 	static class _00200 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
-			val process = Process.getCurrent();
-			if (StringUtils.isEmpty(process.getUserId()) == true
-					&& StringUtils.isEmpty(process.getPassword()) == true) {
+			val crawl = Crawl.getCurrent();
+			if (StringUtils.isEmpty(crawl.getUserId()) == true
+					&& StringUtils.isEmpty(crawl.getPassword()) == true) {
 				// --------------------------------------------------
 				// ユーザID、パスワードが指定されていないのでログインの必要なし
 				// --------------------------------------------------
@@ -121,26 +121,26 @@ public class Login extends WebClient {
 			// --------------------------------------------------
 			// ユーザID
 			// --------------------------------------------------
-			val process = Process.getCurrent();
+			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
 			val by = By.name("mainEmail");
 			val element = driver.findElement(by);
 
 			element.clear();
-			element.sendKeys(process.getUserId());
+			element.sendKeys(crawl.getUserId());
 		}
 
 		void setPassword() throws Exception {
 			// --------------------------------------------------
 			// パスワード
 			// --------------------------------------------------
-			val process = Process.getCurrent();
+			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
 			val by = By.name("passwd");
 			val element = driver.findElement(by);
 
 			element.clear();
-			element.sendKeys(process.getPassword());
+			element.sendKeys(crawl.getPassword());
 		}
 
 		void pushUserInfo() throws Exception {

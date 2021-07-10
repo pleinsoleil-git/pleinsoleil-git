@@ -1,7 +1,6 @@
 package a00100.app.job.a00100.jalan.job.request.process;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -81,17 +80,6 @@ public class Process {
 				+ "SELECT ?::BIGINT AS request_id\n"
 			+ ")\n"
 			+ "SELECT j30.id,\n"
-				+ "j20.execution_date AS executionDate,\n"
-				+ "j20.job_type AS jobType,\n"
-				+ "j10.request_type AS requestType,\n"
-				+ "j10.user_id AS userId,\n"
-				+ "j10.password,\n"
-				+ "j20.check_in_date AS checkInDate,\n"
-				+ "j20.check_out_date AS checkOutDate,\n"
-				+ "j20.room_nums AS roomNums,\n"
-				+ "j20.adult_nums AS adultNums,\n"
-				+ "j20.upper_grade_nums AS upperGradeNums,\n"
-				+ "j20.lower_grade_nums AS lowerGradeNums,\n"
 				+ "j30.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_request AS j10\n"
@@ -123,17 +111,6 @@ public class Process {
 	@Data
 	public static class _Current {
 		Long m_id;
-		Date m_executionDate;
-		String m_jobType;
-		String m_requestType;
-		String m_userId;
-		String m_password;
-		Date m_checkInDate;
-		Date m_checkOutDate;
-		Long m_roomNums;
-		Long m_adultNums;
-		Long m_upperGradeNums;
-		Long m_lowerGradeNums;
 		String m_hotelCode;
 		Status m_status;
 

@@ -1,12 +1,10 @@
 package a00100.app.job.a00100.jalan.job.request.process.crawl.query;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.Select;
 
-import a00100.app.job.a00100.jalan.job.request.process.Process;
+import a00100.app.job.a00100.jalan.job.request.process.crawl.Crawl;
 import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
-import common.lang.time.DateFormatUtils;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -43,9 +41,9 @@ public class Query extends WebClient {
 		@Override
 		public void navigate() throws Exception {
 			val URL = "https://www.jalan.net/yad%s/plan/?yadNo=%s";
-			val process = Process.getCurrent();
+			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
-			driver.get(String.format(URL, process.getHotelCode(), process.getHotelCode()));
+			driver.get(String.format(URL, crawl.getHotelCode(), crawl.getHotelCode()));
 		}
 
 		@Override
@@ -58,10 +56,11 @@ public class Query extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			pushDate();
-			//setCheckin();
-			//setCheckout();
-			//setRoom();
-			//setAdult();
+			setYearFrom();
+			setMonthFrom();
+			setDayFrom();
+			setStay();
+			setAdult();
 			//setChild();
 			//pushQuery();
 			return null;
@@ -72,7 +71,7 @@ public class Query extends WebClient {
 			// 【日付未定】チェックを外す
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.name("dateUndecided");
+			val by = By.id("datecheck");
 			val element = driver.findElement(by);
 
 			if (element.isSelected() == true) {
@@ -80,61 +79,68 @@ public class Query extends WebClient {
 			}
 		}
 
-		void setCheckin() throws Exception {
+		void setYearFrom() throws Exception {
 			// --------------------------------------------------
-			// チェックイン
+			// 宿泊日　年
 			// --------------------------------------------------
-			val process = Process.getCurrent();
+			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
-			val by = By.id("dh-checkin");
+			val by = By.id("dyn_y_txt");
 			val element = driver.findElement(by);
 
-			element.sendKeys(Keys.ESCAPE);
-			element.sendKeys(Keys.CONTROL, "a");
-			element.sendKeys(Keys.DELETE);
-			element.sendKeys(DateFormatUtils.DATE_NO_T_FORMAT.format(process.getCheckInDate()));
+			element.clear();
+			element.sendKeys(crawl.getYearFrom());
 		}
 
-		void setCheckout() throws Exception {
+		void setMonthFrom() throws Exception {
 			// --------------------------------------------------
-			// チェックアウト
+			// 宿泊日　月
 			// --------------------------------------------------
-			val process = Process.getCurrent();
+			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
-			val by = By.id("dh-checkout");
+			val by = By.id("dyn_m_txt");
 			val element = driver.findElement(by);
 
-			element.sendKeys(Keys.ESCAPE);
-			element.sendKeys(Keys.CONTROL, "a");
-			element.sendKeys(Keys.DELETE);
-			element.sendKeys(DateFormatUtils.DATE_NO_T_FORMAT.format(process.getCheckOutDate()));
+			element.clear();
+			element.sendKeys(crawl.getMonthFrom());
 		}
 
-		void setRoom() throws Exception {
+		void setDayFrom() throws Exception {
 			// --------------------------------------------------
-			// ご利用部屋数
+			// 宿泊日　日
 			// --------------------------------------------------
-			val process = Process.getCurrent();
-			if (process.getRoomNums() != null) {
-				val driver = getDriver();
-				val by = By.id("dh-room");
-				val element = new Select(driver.findElement(by));
+			val crawl = Crawl.getCurrent();
+			val driver = getDriver();
+			val by = By.id("dyn_d_txt");
+			val element = driver.findElement(by);
 
-				element.selectByValue(String.format("%d", process.getRoomNums()));
-			}
+			element.clear();
+			element.sendKeys(crawl.getDayFrom());
+		}
+
+		void setStay() throws Exception {
+			// --------------------------------------------------
+			// 泊
+			// --------------------------------------------------
+			val crawl = Crawl.getCurrent();
+			val driver = getDriver();
+			val by = By.id("dyn_stay_txt");
+			val element = new Select(driver.findElement(by));
+
+			element.selectByValue(crawl.getStayNums());
 		}
 
 		void setAdult() throws Exception {
 			// --------------------------------------------------
 			// 大人人数
 			// --------------------------------------------------
-			val process = Process.getCurrent();
-			if (process.getAdultNums() != null) {
+			val crawl = Crawl.getCurrent();
+			if (crawl.getAdultNums() != null) {
 				val driver = getDriver();
 				val by = By.id("dhAdult1");
 				val element = new Select(driver.findElement(by));
 
-				element.selectByValue(String.format("%d", process.getAdultNums()));
+				element.selectByValue(String.format("%d", crawl.getAdultNums()));
 			}
 		}
 
@@ -156,13 +162,13 @@ public class Query extends WebClient {
 			// --------------------------------------------------
 			// 高学年
 			// --------------------------------------------------
-			val process = Process.getCurrent();
-			if (process.getUpperGradeNums() != null) {
+			val crawl = Crawl.getCurrent();
+			if (crawl.getUpperGradeNums() != null) {
 				val driver = getDriver();
 				val by = By.id("dh-s1");
 				val element = new Select(driver.findElement(by));
 
-				element.selectByValue(String.format("%d", process.getUpperGradeNums()));
+				element.selectByValue(String.format("%d", crawl.getUpperGradeNums()));
 			}
 		}
 
@@ -170,13 +176,13 @@ public class Query extends WebClient {
 			// --------------------------------------------------
 			// 低学年
 			// --------------------------------------------------
-			val process = Process.getCurrent();
-			if (process.getLowerGradeNums() != null) {
+			val crawl = Crawl.getCurrent();
+			if (crawl.getLowerGradeNums() != null) {
 				val driver = getDriver();
 				val by = By.id("dh-s2");
 				val element = new Select(driver.findElement(by));
 
-				element.selectByValue(String.format("%d", process.getLowerGradeNums()));
+				element.selectByValue(String.format("%d", crawl.getLowerGradeNums()));
 			}
 		}
 
