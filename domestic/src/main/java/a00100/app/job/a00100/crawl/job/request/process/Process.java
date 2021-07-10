@@ -93,14 +93,14 @@ public class Process {
 			+ "SELECT j30.id,\n"
 				+ "j20.job_type AS jobType,\n"
 				+ "j10.request_type AS requestType,\n"
-				+ "j10.user_id AS userId,\n"
-				+ "j10.password,\n"
-				+ "j10.check_in_date AS checkInDate,\n"
-				+ "j10.check_out_date AS checkOutDate,\n"
-				+ "j10.room_nums AS roomNums,\n"
-				+ "j10.adult_nums AS adultNums,\n"
-				+ "j10.upper_grade_nums AS upperGradeNums,\n"
-				+ "j10.lower_grade_nums AS lowerGradeNums,\n"
+				+ "j20.user_id AS userId,\n"
+				+ "j20.password,\n"
+				+ "j20.check_in_date AS checkInDate,\n"
+				+ "j20.check_out_date AS checkOutDate,\n"
+				+ "j20.room_nums AS roomNums,\n"
+				+ "j20.adult_nums AS adultNums,\n"
+				+ "j20.upper_grade_nums AS upperGradeNums,\n"
+				+ "j20.lower_grade_nums AS lowerGradeNums,\n"
 				+ "j30.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
 			+ "INNER JOIN j_crawl_request AS j10\n"
@@ -164,7 +164,7 @@ public class Process {
 
 			try {
 				m_currents.set(this);
-				_execute();
+				run();
 			} finally {
 				m_currents.remove();
 			}
@@ -172,7 +172,7 @@ public class Process {
 			return this;
 		}
 
-		void _execute() {
+		void run() {
 			val status = getStatus();
 
 			try {
@@ -181,7 +181,7 @@ public class Process {
 				} else {
 					switch (JobType.valueOf(getJobType())) {
 					case RAKUTEN:
-						rakuten();
+						//rakuten();
 						break;
 					default:
 						throw new NotSupportedException();

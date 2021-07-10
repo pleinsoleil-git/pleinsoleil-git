@@ -4,24 +4,15 @@ DROP TABLE j_crawl_request CASCADE;
 CREATE TABLE j_crawl_request
 (
 	id								BIGSERIAL,
-	foreign_id						BIGINT				REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
+	foreign_id						BIGINT					REFERENCES j_crawl_job( id ) ON DELETE CASCADE,
 	request_type					VARCHAR( 512 ),
 	request_name					VARCHAR( 1024 ),
-	execution_nums					NUMERIC,
-	user_id							VARCHAR( 512 ),
-	password						VARCHAR( 512 ),
-	check_in_date					DATE,
-	check_out_date					DATE,
-	room_nums						NUMERIC,
-	adult_nums						NUMERIC,
-	upper_grade_nums				NUMERIC,
-	lower_grade_nums				NUMERIC,
 	priority						NUMERIC,
-	aborted							BOOLEAN			DEFAULT FALSE,
-	deleted							BOOLEAN			DEFAULT TRUE,
-	created_at						TIMESTAMP( 0 )		DEFAULT CURRENT_TIMESTAMP,
-	updated_at						TIMESTAMP( 0 ),
-	deleted_at						TIMESTAMP( 0 ),
+	aborted							BOOLEAN					DEFAULT FALSE,
+	deleted							BOOLEAN					DEFAULT TRUE,
+	created_at						TIMESTAMP( 0 )			DEFAULT CURRENT_TIMESTAMP,
+	updated_at						TIMESTAMP,
+	deleted_at						TIMESTAMP,
 	PRIMARY KEY
 	(
 		id
@@ -45,3 +36,16 @@ WITH
 (
 	FILLFACTOR = 100
 );
+
+
+COMMENT ON TABLE j_crawl_request							IS 'クロール';
+COMMENT ON COLUMN j_crawl_request.id						IS '主キー';
+COMMENT ON COLUMN j_crawl_request.foreign_id				IS '外部キー';
+COMMENT ON COLUMN j_crawl_request.request_type				IS 'ジョブタイプ';
+COMMENT ON COLUMN j_crawl_request.request_name				IS 'ジョブ名';
+COMMENT ON COLUMN j_crawl_request.priority					IS '優先順位';
+COMMENT ON COLUMN j_crawl_request.aborted					IS '中断';
+COMMENT ON COLUMN j_crawl_request.deleted					IS '論理削除';
+COMMENT ON COLUMN j_crawl_request.created_at				IS '作成日時';
+COMMENT ON COLUMN j_crawl_request.updated_at				IS '更新日時';
+COMMENT ON COLUMN j_crawl_request.deleted_at				IS '削除日時';
