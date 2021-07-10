@@ -87,7 +87,8 @@ public class Request {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
-				+ "SELECT ?::BIGINT AS job_id\n"
+				+ "SELECT ?::BIGINT AS job_id,\n"
+					+ "?::NUMERIC AS success\n"
 			+ ")\n"
 			+ "SELECT j20.id,\n"
 				+ "j20.request_type AS requestType,\n"
@@ -105,6 +106,7 @@ public class Request {
 				+ "SELECT NULL\n"
 				+ "FROM j_crawl_request_status AS j900\n"
 				+ "WHERE j900.foreign_id = j20.id\n"
+				+ "AND j900.status = t10.success\n"
 			+ ")\n";
 
 		val ids = getRunningIds();
@@ -123,6 +125,7 @@ public class Request {
 			{
 				val job = Job.getCurrent();
 				add(job.getId());
+				add(JobStatus.SUCCESS.original());
 
 				for (val id : ids) {
 					add(id);

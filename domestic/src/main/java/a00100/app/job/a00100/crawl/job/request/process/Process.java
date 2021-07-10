@@ -89,7 +89,8 @@ public class Process {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
-				+ "SELECT ?::BIGINT AS request_id\n"
+				+ "SELECT ?::BIGINT AS request_id,\n"
+					+ "?::NUMERIC AS success\n"
 			+ ")\n"
 			+ "SELECT j30.id,\n"
 				+ "j20.job_type AS jobType,\n"
@@ -119,6 +120,7 @@ public class Process {
 				+ "SELECT NULL\n"
 				+ "FROM j_crawl_process_status AS j900\n"
 				+ "WHERE j900.foreign_id = j30.id\n"
+				+ "AND j900.status = t10.success\n"
 			+ ")\n";
 
 		val ids = getRunningIds();
@@ -137,6 +139,7 @@ public class Process {
 			{
 				val request = Request.getCurrent();
 				add(request.getId());
+				add(JobStatus.SUCCESS.original());
 
 				for (val id : ids) {
 					add(id);

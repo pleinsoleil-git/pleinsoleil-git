@@ -107,7 +107,8 @@ public class Job {
 		String sql;
 		sql = "WITH s_params AS\n"
 			+ "(\n"
-				+ "SELECT CURRENT_TIMESTAMP( 0 ) AS execution_time\n"
+				+ "SELECT CURRENT_TIMESTAMP( 0 ) AS execution_time,\n"
+					+ "?::NUMERIC AS success\n"
 			+ ")\n"
 			+ "SELECT j10.id,\n"
 				+ "j10.job_type AS jobType,\n"
@@ -124,6 +125,7 @@ public class Job {
 				+ "SELECT NULL\n"
 				+ "FROM j_crawl_job_status AS j900\n"
 				+ "WHERE j900.foreign_id = j10.id\n"
+				+ "AND j900.status = t10.success\n"
 			+ ")\n";
 
 		val ids = getRunningIds();
@@ -141,6 +143,8 @@ public class Job {
 		val rs = new BeanListHandler<_Task>(_Task.class);
 		return Connection.App.query(sql, rs, new JDBCParameterList() {
 			{
+				add(JobStatus.SUCCESS.original());
+
 				for (val id : ids) {
 					add(id);
 				}
