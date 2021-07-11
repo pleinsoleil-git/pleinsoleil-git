@@ -111,7 +111,7 @@ class Load extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			for (val r : query()) {
-
+				r.execute();
 			}
 
 			return null;
@@ -141,6 +141,25 @@ class Load extends WebClient {
 		@Getter
 		WebElement m_rootElement;
 
+		public _00300 submit() throws Exception {
+			pushMore();
+			return null;
+		}
+
+		void pushMore() throws Exception {
+			// --------------------------------------------------
+			// お部屋をすべてみる
+			// --------------------------------------------------
+			val driver = getDriver();
+			val actions = new Actions(driver);
+			val by = By.xpath(".//button[contains(@class,'btnShowMore')]");
+
+			for (val element : getRootElement().findElements(by)) {
+				actions.moveToElement(element);
+				actions.perform();
+				element.click();
+			}
+		}
 	}
 
 	Collection<_00800> query() throws Exception {
