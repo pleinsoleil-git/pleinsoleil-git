@@ -59,12 +59,11 @@ public class Crawl extends WebClient {
 			+ "SELECT j30.execution_date AS executionDate,\n"
 				+ "j20.user_id AS userId,\n"
 				+ "j20.password,\n"
-				+ "TO_CHAR( j30.check_in_date, 'YYYY' ) AS yearFrom,\n"
-				+ "TO_CHAR( j30.check_in_date, 'MM' ) AS monthFrom,\n"
-				+ "TO_CHAR( j30.check_in_date, 'DD' ) AS dayFrom,\n"
-				+ "( j30.check_out_date - j30.check_in_date )::VARCHAR stayNums,\n"
+				+ "TO_CHAR( j30.check_in_date, 'YYYYMMDD' ) AS checkInDate,\n"
+				+ "TO_CHAR( j30.check_out_date, 'YYYYMMDD' ) AS checkOutDate,\n"
 				+ "j30.room_nums::VARCHAR AS roomNums,\n"
-				+ "( j30.adult_nums + j30.upper_grade_nums )::VARCHAR AS adultNums,\n"
+				+ "j30.adult_nums::VARCHAR AS adultNums,\n"
+				+ "j30.upper_grade_nums::VARCHAR AS upperGradeNums,\n"
 				+ "j30.lower_grade_nums::VARCHAR AS lowerGradeNums,\n"
 				+ "j10.hotel_code AS hotelCode\n"
 			+ "FROM s_params AS t10\n"
@@ -90,10 +89,8 @@ public class Crawl extends WebClient {
 		Date m_executionDate;
 		String m_userId;
 		String m_password;
-		String m_yearFrom;
-		String m_monthFrom;
-		String m_dayFrom;
-		String m_stayNums;
+		String m_checkInDate;
+		String m_checkOutDate;
 		String m_roomNums;
 		String m_adultNums;
 		String m_upperGradeNums;
