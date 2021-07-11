@@ -1,10 +1,13 @@
 package a00100.app.job.a00100.ikyu.job.request.process.crawl.login;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
 import a00100.app.job.a00100.ikyu.job.request.process.crawl.Crawl;
+import a00100.app.job.a00100.ikyu.job.request.process.crawl.query.Query;
 import a00100.app.job.a00100.ikyu.job.request.process.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
@@ -32,10 +35,14 @@ public class Login extends WebClient {
 				client = client.execute();
 			}
 
-			return null;
+			return next();
 		} finally {
 			m_instances.remove();
 		}
+	}
+
+	WebClient next() {
+		return Query.getInstance();
 	}
 
 	static class _00000 extends WebClient {
@@ -112,23 +119,39 @@ public class Login extends WebClient {
 			try {
 				// --------------------------------------------------
 				// 【ログイン】ポップアップに切替
+				// 会員IDが表示されるまで待機
 				// --------------------------------------------------
-				for (val h : driver.getWindowHandles()) {
-					driver.switchTo().window(h);
+				for (int i = 0; i < 5; i++) {
+					for (val h : driver.getWindowHandles()) {
+						driver.switchTo().window(h);
 
-					val by = By.id("text_member_id");
+						val by = By.id("text_member_id");
+						if (driver.findElements(by).isEmpty() == false) {
+							setUserId();
+							setPassword();
+							pushKeepLoggedIn();
+							pushLogin();
+							return null;
+						}
+
+						TimeUnit.SECONDS.sleep(1);
+					}
+				}
+			} finally {
+				// --------------------------------------------------
+				// 元ウィンドウに切替
+				// 会員メニューが表示されるまで待機
+				// --------------------------------------------------
+				driver.switchTo().window(handle);
+
+				for (int i = 0; i < 5; i++) {
+					val by = By.id("member-name-and-menu");
 					if (driver.findElements(by).isEmpty() == false) {
 						break;
 					}
-				}
 
-				setUserId();
-				setPassword();
-				pushKeepLoggedIn();
-				pushLogin();
-			} finally {
-				// 元ウィンドウに戻す
-				driver.switchTo().window(handle);
+					TimeUnit.SECONDS.sleep(1);
+				}
 			}
 
 			return null;
@@ -136,7 +159,7 @@ public class Login extends WebClient {
 
 		void setUserId() throws Exception {
 			// --------------------------------------------------
-			// ユーザID
+			// 会員ID
 			// --------------------------------------------------
 			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
