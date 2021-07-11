@@ -117,22 +117,31 @@ class Load extends WebClient {
 			return null;
 		}
 
-		Collection<_00800> query() throws Exception {
-			return new ArrayList<_00800>() {
+		Collection<_00300> query() throws Exception {
+			return new ArrayList<_00300>() {
 				{
 					val driver = getDriver();
 					val actions = new Actions(driver);
 					val by = By.xpath("//div[contains(@class,'PlanList')]/ul/li");
 
 					for (val element : driver.findElements(by)) {
-						actions.moveToElement(element);
-						actions.perform();
+						add(new _00300() {
+							{
+								actions.moveToElement(m_rootElement = element);
+								actions.perform();
+							}
+						});
 					}
 				}
 			};
 		}
 	}
 
+	static class _00300 extends WebClient {
+		@Getter
+		WebElement m_rootElement;
+
+	}
 
 	Collection<_00800> query() throws Exception {
 		val driver = getDriver();
