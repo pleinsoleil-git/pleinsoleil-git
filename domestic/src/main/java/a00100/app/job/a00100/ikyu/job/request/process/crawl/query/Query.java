@@ -52,8 +52,7 @@ public class Query extends WebClient {
 
 		@Override
 		public WebClient submit() throws Exception {
-			//return new _00100();
-			return null;
+			return new _00100();
 		}
 	}
 
@@ -61,14 +60,14 @@ public class Query extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
 			pushDate();
-			setYearFrom();
-			setMonthFrom();
-			setDayFrom();
-			setStay();
-			setRoom();
-			setAdult();
-			setChild();
-			pushQuery();
+			//setYearFrom();
+			//setMonthFrom();
+			//setDayFrom();
+			//setStay();
+			//setRoom();
+			//setAdult();
+			//setChild();
+			//pushQuery();
 			return null;
 		}
 
@@ -77,12 +76,10 @@ public class Query extends WebClient {
 			// 【日付未定】チェックを外す
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.id("datecheck");
+			val by = By.xpath("//button[@type='button' and contains(@class,'_calendarBox')]");
 			val element = driver.findElement(by);
 
-			if (element.isSelected() == true) {
-				element.click();
-			}
+			element.click();
 		}
 
 		void setYearFrom() throws Exception {
