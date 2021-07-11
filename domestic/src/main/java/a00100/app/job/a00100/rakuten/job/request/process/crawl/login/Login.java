@@ -46,7 +46,7 @@ public class Login extends WebClient {
 		@Override
 		public void navigate() throws Exception {
 			val driver = getDriver();
-			driver.get("https://travel.rakuten.co.jp/");
+			driver.get("https://travel.rakuten.co.jp");
 		}
 
 		@Override

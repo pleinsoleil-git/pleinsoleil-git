@@ -1,11 +1,11 @@
-package a00100.app.job.a00100.jalan.job.request.process.crawl.login;
+package a00100.app.job.a00100.ikyu.job.request.process.crawl.login;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
-import a00100.app.job.a00100.jalan.job.request.process.crawl.Crawl;
-import a00100.app.job.a00100.jalan.job.request.process.crawl.query.Query;
-import a00100.app.job.a00100.jalan.job.request.process.webBrowser.WebClient;
+import a00100.app.job.a00100.ikyu.job.request.process.crawl.Crawl;
+import a00100.app.job.a00100.ikyu.job.request.process.webBrowser.WebClient;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -32,21 +32,17 @@ public class Login extends WebClient {
 				client = client.execute();
 			}
 
-			return next();
+			return null;
 		} finally {
 			m_instances.remove();
 		}
-	}
-
-	WebClient next() {
-		return Query.getInstance();
 	}
 
 	static class _00000 extends WebClient {
 		@Override
 		public void navigate() throws Exception {
 			val driver = getDriver();
-			driver.get("https://www.jalan.net");
+			driver.get("https://www.ikyu.com");
 		}
 
 		@Override
@@ -110,10 +106,31 @@ public class Login extends WebClient {
 	static class _00300 extends WebClient {
 		@Override
 		public WebClient submit() throws Exception {
-			setUserId();
-			setPassword();
-			pushUserInfo();
-			pushLogin();
+			val driver = getDriver();
+			val handle = driver.getWindowHandle();
+
+			try {
+				// --------------------------------------------------
+				// 【ログイン】ポップアップに切替
+				// --------------------------------------------------
+				for (val h : driver.getWindowHandles()) {
+					driver.switchTo().window(h);
+
+					val by = By.id("text_member_id");
+					if (driver.findElements(by).isEmpty() == false) {
+						break;
+					}
+				}
+
+				setUserId();
+				setPassword();
+				pushKeepLoggedIn();
+				pushLogin();
+			} finally {
+				// 元ウィンドウに戻す
+				driver.switchTo().window(handle);
+			}
+
 			return null;
 		}
 
@@ -123,7 +140,7 @@ public class Login extends WebClient {
 			// --------------------------------------------------
 			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
-			val by = By.name("mainEmail");
+			val by = By.id("text_member_id");
 			val element = driver.findElement(by);
 
 			element.clear();
@@ -136,22 +153,22 @@ public class Login extends WebClient {
 			// --------------------------------------------------
 			val crawl = Crawl.getCurrent();
 			val driver = getDriver();
-			val by = By.name("passwd");
+			val by = By.id("password_member_password");
 			val element = driver.findElement(by);
 
 			element.clear();
 			element.sendKeys(crawl.getPassword());
 		}
 
-		void pushUserInfo() throws Exception {
+		void pushKeepLoggedIn() throws Exception {
 			// --------------------------------------------------
-			// 【リクルートIDを記憶させる】チェックを外す
+			// 【ログイン状態を保持】チェックを外す
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.name("userInfoCookieChk");
+			val by = By.xpath("//input[@type='checkbox' and contains(@class,'checkbox_IwesW')]");
 			val element = driver.findElement(by);
 
-			if (element.isSelected() == true) {
+			if (BooleanUtils.toBoolean(element.getAttribute("value")) == true) {
 				element.click();
 			}
 		}
@@ -161,7 +178,7 @@ public class Login extends WebClient {
 			// 【ログイン】押下
 			// --------------------------------------------------
 			val driver = getDriver();
-			val by = By.name("fn_input");
+			val by = By.id("button_auth_member");
 			val element = driver.findElement(by);
 
 			element.click();

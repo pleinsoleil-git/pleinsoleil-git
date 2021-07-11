@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import a00100.app.job.a00100.ikyu.job.request.process.Process;
+import a00100.app.job.a00100.ikyu.job.request.process.crawl.login.Login;
 import a00100.app.job.a00100.ikyu.job.request.process.webBrowser.WebClient;
 import common.jdbc.JDBCParameterList;
 import common.jdbc.JDBCUtils;
@@ -100,6 +101,9 @@ public class Crawl extends WebClient {
 		String m_hotelCode;
 
 		void execute() throws Exception {
+			for (WebClient client = Login.getInstance(); client != null;) {
+				client = client.execute();
+			}
 		}
 	}
 }
